@@ -4,7 +4,21 @@ Este guia instrui o Antigravity (ou qualquer nova sessão de desenvolvimento) a 
 
 ---
 
-## 1. Verificação Imediata da Instalação
+## ⚡ Comando Rápido para o Antigravity ("Leia e Execute")
+
+Copie e envie o bloco abaixo em qualquer conversa no Antigravity aberta nesta pasta:
+
+```text
+Leia e execute as extensões do GAU v5 deste workspace:
+1. Carregue a regra always-on em .agents/rules/gau-v5.md e a skill gau-goal.
+2. Inspecione o catálogo de 69 ideias em .gau/registry.json e execute o diagnóstico com "python .gau/runtime/gau.py doctor".
+3. Confirme os 16 perfis de subagentes nativos em .agents/agents/gau-*.md.
+4. Conduza todo pedido de engenharia e /goal sob o protocolo do GAU: baseline de requisitos, governança de compute, worktrees Git, e aprovação estrita com evidência atual no gate do GAU.
+```
+
+---
+
+## 1. Verificação Imediata da Instalação (Diagnóstico Completo)
 
 Abra uma conversa no Antigravity com a pasta deste projeto (`GAU-v5`) selecionada e envie o seguinte prompt de diagnóstico:
 

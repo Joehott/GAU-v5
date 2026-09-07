@@ -1,12 +1,27 @@
 # GAU v5 — Cognitive Orchestration Layer para Antigravity
 
 [![Antigravity](https://img.shields.io/badge/Antigravity-Ready-brightgreen)](https://antigravity.google)
+[![GitHub](https://img.shields.io/badge/GitHub-Joehott%2FGAU--v5-181717?logo=github)](https://github.com/Joehott/GAU-v5)
 [![Skills](https://img.shields.io/badge/Skills-72-blue)](#)
 [![Agents](https://img.shields.io/badge/Agents-16-orange)](#)
 [![Tests](https://img.shields.io/badge/Tests-16%20passing-success)](#)
 [![License](https://img.shields.io/badge/License-MIT-purple)](#)
 
 O **GAU v5** (Grande Arquitetura Unificada) é um framework autônomo e verificável de engenharia de software para o Google Antigravity. Ele dota o comando `/goal` de governança cognitiva com 69 ideias integradas, 16 perfis de subagentes nativos, tolerância zero a conclusões sem prova, e isolamento de tarefas concorrentes em Git worktrees.
+
+---
+
+## 🚀 Comando do Antigravity ("Leia e Execute")
+
+Copie e cole este comando diretamente no chat de qualquer nova conversa no Antigravity para inicializar e ativar imediatamente o GAU v5:
+
+```text
+Leia e execute as extensões do GAU v5 deste workspace:
+1. Carregue a regra always-on em .agents/rules/gau-v5.md e a skill gau-goal.
+2. Inspecione o catálogo de 69 ideias em .gau/registry.json e execute o diagnóstico com "python .gau/runtime/gau.py doctor".
+3. Confirme os 16 perfis de subagentes nativos em .agents/agents/gau-*.md.
+4. Conduza todo pedido de engenharia e /goal sob o protocolo do GAU: baseline de requisitos, governança de compute, worktrees Git, e aprovação estrita com evidência atual no gate do GAU.
+```
 
 ---
 
