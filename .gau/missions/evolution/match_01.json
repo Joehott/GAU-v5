@@ -1,0 +1,21 @@
+{
+  "id": "DUEL-001-IMPLEMENTER",
+  "evidence": [
+    "evidence-a5cb65848087"
+  ],
+  "conditions": "Validacao de deployment automatizado sem erros 404 e suites de teste",
+  "pairs": [
+    {
+      "dimension": "agent",
+      "a": "gau-implementer",
+      "b": "baseline-agent",
+      "score_a": 1.0
+    },
+    {
+      "dimension": "skill",
+      "a": "gau-goal",
+      "b": "unassisted-prompt",
+      "score_a": 1.0
+    }
+  ]
+}

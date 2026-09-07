@@ -1,0 +1,10 @@
+{
+  "text": "A configuracao outputDirectory: site em vercel.json e os 4 cenarios interativos no Mission Lab eliminam 404 e simulam o ecossistema GAU v5",
+  "source": "site/index.html, site/app.js, site/styles.css, vercel.json",
+  "scope": "frontend_and_deploy",
+  "files": [
+    "vercel.json",
+    "site/index.html",
+    "site/app.js"
+  ]
+}

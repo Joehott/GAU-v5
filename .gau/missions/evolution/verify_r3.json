@@ -1,0 +1,10 @@
+{
+  "requirements": [
+    "R3"
+  ],
+  "criterion": "Doctor OK e suite completa de testes de invariantes aprovada com rankings e brain ativos",
+  "verifier": "gau-verifier",
+  "implementer": "gau-implementer",
+  "session": "3bc7c6e3-a3c1-4a2e-b103-c74d5f5cc4ad",
+  "independent": true
+}

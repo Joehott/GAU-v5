@@ -1,0 +1,11 @@
+{
+  "requirements": [
+    "R1",
+    "R2"
+  ],
+  "criterion": "Integridade e rotas do site e Mission Lab validadas com 100% de sucesso",
+  "verifier": "gau-verifier",
+  "implementer": "gau-implementer",
+  "session": "3bc7c6e3-a3c1-4a2e-b103-c74d5f5cc4ad",
+  "independent": true
+}

@@ -123,7 +123,16 @@
           </div>
           <div class="console-grid">
             <div class="mission-panel">
-              <label for="missionInput">OBJETIVO</label>
+              <div class="scenario-selector">
+                <span class="scenario-label">CENÁRIOS INTERATIVOS</span>
+                <div class="scenario-pills" id="scenarioPills">
+                  <button type="button" class="scenario-pill active" data-scenario="auth-bug">⚡ Bug Auth</button>
+                  <button type="button" class="scenario-pill" data-scenario="arch-refactor">🏗️ Arquitetura</button>
+                  <button type="button" class="scenario-pill" data-scenario="swarm-feature">🚀 Swarm Feature</button>
+                  <button type="button" class="scenario-pill" data-scenario="security-audit">🛡️ Adversarial</button>
+                </div>
+              </div>
+              <label for="missionInput">OBJETIVO DA MISSÃO</label>
               <textarea id="missionInput" rows="3">Corrigir um bug intermitente de autenticação sem introduzir regressões.</textarea>
               <div class="mission-actions">
                 <button class="button primary" id="runMission">Rodar missão</button>

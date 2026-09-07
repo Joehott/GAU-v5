@@ -1,0 +1,21 @@
+test_budget_and_closed_parent (test_gau.IntegrationTests.test_budget_and_closed_parent) ... ok
+test_checkpoint_branch_and_stale (test_gau.IntegrationTests.test_checkpoint_branch_and_stale) ... ok
+test_cli_verify_argument_order (test_gau.IntegrationTests.test_cli_verify_argument_order) ... ok
+test_council_round_cap (test_gau.IntegrationTests.test_council_round_cap) ... ok
+test_critical_claim_blocks_until_resolution (test_gau.IntegrationTests.test_critical_claim_blocks_until_resolution) ... ok
+test_failure_requires_explicit_resolution (test_gau.IntegrationTests.test_failure_requires_explicit_resolution) ... ok
+test_false_independence_structure_rejected (test_gau.IntegrationTests.test_false_independence_structure_rejected) ... ok
+test_installer_preserves_user_content (test_gau.IntegrationTests.test_installer_preserves_user_content) ... ok
+test_log_tamper_invalidates_proof (test_gau.IntegrationTests.test_log_tamper_invalidates_proof) ... ok
+test_match_dedup_and_cold_start (test_gau.IntegrationTests.test_match_dedup_and_cold_start) ... ok
+test_missing_proof_then_pass_then_stale (test_gau.IntegrationTests.test_missing_proof_then_pass_then_stale) ... ok
+test_registry_exact_69_and_references (test_gau.IntegrationTests.test_registry_exact_69_and_references) ... ok
+test_repeated_strategy_blocked (test_gau.IntegrationTests.test_repeated_strategy_blocked) ... ok
+test_routing_only_available_and_failed_excluded (test_gau.IntegrationTests.test_routing_only_available_and_failed_excluded) ... ok
+test_symlink_storage_rejected (test_gau.IntegrationTests.test_symlink_storage_rejected) ... skipped 'Symlinks unavailable'
+test_task_evidence_and_dependencies_revalidate (test_gau.IntegrationTests.test_task_evidence_and_dependencies_revalidate) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 2.199s
+
+OK (skipped=1)

@@ -1,0 +1,25 @@
+{
+  "goal": "Evolucao integrada do GAU v5: busca e filtros no Atlas das 69 ideias, cenarios interativos no Mission Lab, e inicializacao do sistema Elo e Project Brain",
+  "domain": "frontend_and_runtime",
+  "risk": "low",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Atlas das 69 ideias no site possui busca em tempo real e filtros funcionais por categoria com contador dinamico",
+      "min_level": 2,
+      "independent": true
+    },
+    {
+      "id": "R2",
+      "text": "Mission Lab possui seletor interativo de cenarios operacionais demonstrando councils e swarms",
+      "min_level": 2,
+      "independent": true
+    },
+    {
+      "id": "R3",
+      "text": "Sistema de rankings Elo e Project Brain inicializado com registros no banco SQLite e doctor OK",
+      "min_level": 2,
+      "independent": true
+    }
+  ]
+}
