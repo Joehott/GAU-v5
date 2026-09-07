@@ -1,0 +1,11 @@
+{
+  "source": "consumer",
+  "target": "producer",
+  "relation_type": "calls",
+  "evidence": [
+    "EVIDENCE-ID-REAL"
+  ],
+  "files": [
+    "src/example.py"
+  ]
+}

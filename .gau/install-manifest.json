@@ -1,0 +1,462 @@
+{
+  "version": "5.0.0",
+  "layout": "modern",
+  "files": {
+    ".agents/agents/gau-adversarial.md": {
+      "installed_hash": "e5a8b7b5837c85e723a1183c0f33cfe8dc0cb91a66f4fcb3e8bfada67fb10942",
+      "owned": true
+    },
+    ".agents/agents/gau-architect.md": {
+      "installed_hash": "5e85f6db1ef62ddeff2c420f787c940b741ede8970d4fad9fac1f69b32634aad",
+      "owned": true
+    },
+    ".agents/agents/gau-database.md": {
+      "installed_hash": "885917163917221735b60b6f68269a649bd87daad3f7d9fb6712ab7b00cc1f5a",
+      "owned": true
+    },
+    ".agents/agents/gau-evidence.md": {
+      "installed_hash": "bc5626df82ec21f18448306c38fbb9a946d1e83a111cf4f9d0bb43241529e4b0",
+      "owned": true
+    },
+    ".agents/agents/gau-implementer.md": {
+      "installed_hash": "9cb9ad13d7eb1a92c386deaac6bc6f4ca5fe236de25dc05d7d9430c022eb21cf",
+      "owned": true
+    },
+    ".agents/agents/gau-integration.md": {
+      "installed_hash": "14b2e21fcfc5f9539535d84dadcb32df14e635d781f1b14d73bb3dce126a472a",
+      "owned": true
+    },
+    ".agents/agents/gau-investigator.md": {
+      "installed_hash": "a2fdf1006f3ce502f528e7657d8c30ad8a108e4d2b0b1c2e267b05e3c3231d5c",
+      "owned": true
+    },
+    ".agents/agents/gau-judge.md": {
+      "installed_hash": "055325432e661424a25da3b6a025a41df8dbda3f63c8f8643dfefd58022a5c44",
+      "owned": true
+    },
+    ".agents/agents/gau-memory.md": {
+      "installed_hash": "716bea1dd0a5326a9a4a20dd8bfffdd893467f204c0bb093b6ce85d19ff78dbd",
+      "owned": true
+    },
+    ".agents/agents/gau-orchestrator.md": {
+      "installed_hash": "afbd3d56acf46d5c70b6860c2a837aaee784045b4d6940b26902f53ab61d09e9",
+      "owned": true
+    },
+    ".agents/agents/gau-performance.md": {
+      "installed_hash": "a4220b32d8b69ddf75fb1dcfefb148e4a7e5bffe16b566ea0daeaf7b1ae0d47c",
+      "owned": true
+    },
+    ".agents/agents/gau-requirements.md": {
+      "installed_hash": "6b9b15ffd7ab11aa33bb154f42d089301b12c414ce83026f4f7b46f8c09c25d0",
+      "owned": true
+    },
+    ".agents/agents/gau-research.md": {
+      "installed_hash": "ca6d7a6d275bf3b8bc0c9461aca2d6332519a6d44322e795ebda919fd36b8cbc",
+      "owned": true
+    },
+    ".agents/agents/gau-security.md": {
+      "installed_hash": "28c9b30f87c36201d5fded9120c0832174d4516ca1fbee23f3b6ae47f1588837",
+      "owned": true
+    },
+    ".agents/agents/gau-ux.md": {
+      "installed_hash": "a8653313c4e19b22023c6c72a18239463a13b1771b7d63136e9be346ed8b4185",
+      "owned": true
+    },
+    ".agents/agents/gau-verifier.md": {
+      "installed_hash": "7bef20d1db41361da0b19fbd52b51195c48dc212ed670b48fdfd8137cb0325a1",
+      "owned": true
+    },
+    ".gau/config.json": {
+      "installed_hash": "7324d07bb340a514f559c6cda116cbdd9459181c327709e41d0dce301fa31d2f",
+      "owned": true
+    },
+    ".gau/docs/CONTRATOS.md": {
+      "installed_hash": "a75973f3a564a5a6e9c5d9431caf8f132fcc5590833b545efcbcde5069530bc7",
+      "owned": true
+    },
+    ".gau/docs/DELEGACAO.md": {
+      "installed_hash": "dcf476a72a54cda740c21c755732998b8a2e7039901e1e870600c6854d7fd569",
+      "owned": true
+    },
+    ".gau/docs/OPERACAO.md": {
+      "installed_hash": "5263974357204a55c1c9c8c0bf21517523988da6923a6324423ab50ae83718de",
+      "owned": true
+    },
+    ".gau/examples/attempt.json": {
+      "installed_hash": "0169857e5a8fc589e4081cbe6e02a9ed0fdb34d11376cd3b0f806f8a12aa11d9",
+      "owned": true
+    },
+    ".gau/examples/attestation.json": {
+      "installed_hash": "9a9b551912e83a7c3761465cefbb3fe7c0bc63d9cae76895e25ec8e19a2023f8",
+      "owned": true
+    },
+    ".gau/examples/checkpoint.json": {
+      "installed_hash": "a96140291ac3d0f2a9d3c8e97ab42d905b44ebc695e9c1125fbe11f2e772f4fa",
+      "owned": true
+    },
+    ".gau/examples/claim.json": {
+      "installed_hash": "3efd2bfc4ab1899158a8b39de7bf9ad88adae8a85d880ecaf84ec15a7aa4c401",
+      "owned": true
+    },
+    ".gau/examples/consensus.json": {
+      "installed_hash": "111aed83754e376df7bc0abc0ff4a94352c10b6329a721a2bfeb6d683aa69f96",
+      "owned": true
+    },
+    ".gau/examples/context.json": {
+      "installed_hash": "69a9427f15c157380e8853d5fa7b38cabb7205a762379f56a3370cb7f8452ad1",
+      "owned": true
+    },
+    ".gau/examples/edge.json": {
+      "installed_hash": "b3ca8ca4ec27c25c37c85bc4af390021ca61407948ef1e82c53d13b16b04e0ee",
+      "owned": true
+    },
+    ".gau/examples/fact.json": {
+      "installed_hash": "8c77a197fb5041d4ce9ede7b29a79848e68b9cbd6ad6d54772e3fc1ea7907386",
+      "owned": true
+    },
+    ".gau/examples/finding.json": {
+      "installed_hash": "b04fc28a48b826b7a6d450e4cd58fd4e3d29d408d957c45f18ded5225943b253",
+      "owned": true
+    },
+    ".gau/examples/hypothesis.json": {
+      "installed_hash": "ec8bcd3550261711fcb6a2918a3a796e3671686f5544c58bd20e653679f05111",
+      "owned": true
+    },
+    ".gau/examples/match.json": {
+      "installed_hash": "962fe2f483cc9a370fd036768bef9b7efd96157e094307dc9b7c3e1fd85778fb",
+      "owned": true
+    },
+    ".gau/examples/mission.json": {
+      "installed_hash": "e8e1f371e5ac1636516f809e2432239bedb1a1cae4e4fef40022c9676cd6e9ca",
+      "owned": true
+    },
+    ".gau/examples/reservation.json": {
+      "installed_hash": "c07def1b7969485e5db2cfe7b8fa28f248ae5e0d994e6c51a9315c3b484bfd58",
+      "owned": true
+    },
+    ".gau/examples/round.json": {
+      "installed_hash": "f68a9bebb8ed805c3754622c818890428d42338dd856aa4b038d9cf6c283fc90",
+      "owned": true
+    },
+    ".gau/examples/route.json": {
+      "installed_hash": "10f803fc859dae4c799194dde4ba1a52e87289c840217073eb29a02b8930698b",
+      "owned": true
+    },
+    ".gau/examples/task.json": {
+      "installed_hash": "645e42f7c00c4cabd7a650a6bc54c60239edb82a86a644f41494d7b99ec0c753",
+      "owned": true
+    },
+    ".gau/examples/usage.json": {
+      "installed_hash": "a8671360d4164bee0cd0c06b99658e8f3958ff652c4b07b373a05422ce09dd5f",
+      "owned": true
+    },
+    ".gau/examples/verification.json": {
+      "installed_hash": "873c18d1bf6e097fa370ce7ead669f754a0de265ec4b36ada8d22c39e6af6219",
+      "owned": true
+    },
+    ".gau/registry.json": {
+      "installed_hash": "a556b4f75e7d681ac537cc3b93fa27e903e88b1159b041ba5752c4d75be53d20",
+      "owned": true
+    },
+    ".agents/rules/gau-v5.md": {
+      "installed_hash": "200293124e830d165b939e3e02e15d3fe7d009befebc7e35867a21f37745f336",
+      "owned": true
+    },
+    ".gau/runtime/gau.py": {
+      "installed_hash": "8366aa137727cf2f5c6d112aaeecd66d3f6f2c68eaec9ee022a0a1614b17e33d",
+      "owned": true
+    },
+    ".agents/skills/gau-01-adaptive-model-router-3-0/SKILL.md": {
+      "installed_hash": "ab5368d9daf9e880f44c383fbf139aa440392d331effd077e39fe59b12d13432",
+      "owned": true
+    },
+    ".agents/skills/gau-02-multi-model-debate/SKILL.md": {
+      "installed_hash": "635ae6228cf0a7910affc729493d3cc32aac4a0e16185cb1237d8f1f0a66a720",
+      "owned": true
+    },
+    ".agents/skills/gau-03-solution-tournament/SKILL.md": {
+      "installed_hash": "06f351c854b3b2bae89c606783ae6c367b63b37cbf27ab0b153d09b190d10269",
+      "owned": true
+    },
+    ".agents/skills/gau-04-supreme-judge-council/SKILL.md": {
+      "installed_hash": "5058165480ae021fce77a946c61ff3f1396aaaeeba1de52dce5500aea0473f6d",
+      "owned": true
+    },
+    ".agents/skills/gau-05-adversarial-council/SKILL.md": {
+      "installed_hash": "4bf00e16e4e0689d5518c5cfe6ecd400c9225b88fae3db1f4dd95d7221331e73",
+      "owned": true
+    },
+    ".agents/skills/gau-06-hypothesis-laboratory/SKILL.md": {
+      "installed_hash": "2d4cdba6258a15f3b7bc148e17b031aa24ee3d5e9f70147eb04e42db0d88153e",
+      "owned": true
+    },
+    ".agents/skills/gau-07-architecture-council/SKILL.md": {
+      "installed_hash": "6531d796d326ee933b026efb045e9b8aadb191b4a3c1675ba2272fcbfafaecee",
+      "owned": true
+    },
+    ".agents/skills/gau-08-coding-swarm/SKILL.md": {
+      "installed_hash": "10f4784943d56a171158dc7fb7765eed63971b4a968eb06114f39168126f1f5e",
+      "owned": true
+    },
+    ".agents/skills/gau-09-verification-swarm/SKILL.md": {
+      "installed_hash": "be14e33c9a31415c4e94b3873e6e925f5316a35c3d8c9cfc9b011ef0c5eaf544",
+      "owned": true
+    },
+    ".agents/skills/gau-10-reasoning-ensemble/SKILL.md": {
+      "installed_hash": "91c9e9151086b3886c04e109ead2fb2c9e65856ae76e187b15dc48db8b11b069",
+      "owned": true
+    },
+    ".agents/skills/gau-11-weighted-consensus/SKILL.md": {
+      "installed_hash": "833cc2411458b56286bd4cbb3675e03997ffbad9ee9e4568419b69a61b0cb5c4",
+      "owned": true
+    },
+    ".agents/skills/gau-12-model-elo-ranking/SKILL.md": {
+      "installed_hash": "8454c58a710a58596627836db7dcadfba5fd1e56d3dbda0286c23d16422c7231",
+      "owned": true
+    },
+    ".agents/skills/gau-13-agent-elo-ranking/SKILL.md": {
+      "installed_hash": "8da0ee53b268aea4e8d681bc3d4295784ecfc9660bb1be10062cc91fd63e58d9",
+      "owned": true
+    },
+    ".agents/skills/gau-14-skill-elo-ranking/SKILL.md": {
+      "installed_hash": "36aedfb795c5cca5f98aa57b370372ba85db4493f52fc241579e3b79d9bef919",
+      "owned": true
+    },
+    ".agents/skills/gau-15-project-brain/SKILL.md": {
+      "installed_hash": "55bd8fd8d595dfe136d8961bb155a7a6158279ec65813b66fc3effc5dbeae0ee",
+      "owned": true
+    },
+    ".agents/skills/gau-16-semantic-code-graph/SKILL.md": {
+      "installed_hash": "82398c3565c5a931696d61c3f7d9870d1c9292d9f1281d7173621336af8c5a06",
+      "owned": true
+    },
+    ".agents/skills/gau-17-context-compiler/SKILL.md": {
+      "installed_hash": "c2f7bc8666387b45b671a6b52fd87320f7a0e76a0dcde4d3abd12510380189a9",
+      "owned": true
+    },
+    ".agents/skills/gau-18-memory-jury/SKILL.md": {
+      "installed_hash": "8c862ea0e1adea20472b24b56757b305d4ec78869f8f14c1c7c8d0449dcfefd6",
+      "owned": true
+    },
+    ".agents/skills/gau-19-automatic-replanning-council/SKILL.md": {
+      "installed_hash": "f413132b162e67396bb113e895cd501bab633d418075bd7c53d0c79101fa66bc",
+      "owned": true
+    },
+    ".agents/skills/gau-20-uncertainty-council/SKILL.md": {
+      "installed_hash": "4d67e582432d25259494759e278f1c54dd5cecadb3c91c9b9976450a83ad7f5e",
+      "owned": true
+    },
+    ".agents/skills/gau-21-contradiction-detector/SKILL.md": {
+      "installed_hash": "7204a676982b2a58bf594703e96555aec8729ff5d7a4ae784f19fd83043aa59e",
+      "owned": true
+    },
+    ".agents/skills/gau-22-evidence-court/SKILL.md": {
+      "installed_hash": "c1038a833207f2396a35f71cf787f29632dc08afc1aa4909a5c59d637fc73f7b",
+      "owned": true
+    },
+    ".agents/skills/gau-23-loop-breaker-council/SKILL.md": {
+      "installed_hash": "431c15ad273fd0050c1605dd612bf290ca6b34634be24e4e369525ff84377fa0",
+      "owned": true
+    },
+    ".agents/skills/gau-24-research-swarm/SKILL.md": {
+      "installed_hash": "405a7f472e8a6f6fceda3ed9e9f2381c73a70b413916103428fd057338cb6dfc",
+      "owned": true
+    },
+    ".agents/skills/gau-25-security-council/SKILL.md": {
+      "installed_hash": "b66feed346ee428e66c74b019a147577722482bc4299785602cb8f2da5388ab8",
+      "owned": true
+    },
+    ".agents/skills/gau-26-performance-council/SKILL.md": {
+      "installed_hash": "76172133e44b869ba814fc2f648880cdeebe8847f6d50dd1788049c36de66422",
+      "owned": true
+    },
+    ".agents/skills/gau-27-ux-council/SKILL.md": {
+      "installed_hash": "0d5e19b2684da214f9c882665a4c14e5e5b187c995d3b17b595c1092543e06bd",
+      "owned": true
+    },
+    ".agents/skills/gau-28-database-council/SKILL.md": {
+      "installed_hash": "6b4e70b7fa525b9b1dd00ecf4a630d0fceb78c843c3739efba4c05a020237935",
+      "owned": true
+    },
+    ".agents/skills/gau-29-integration-council/SKILL.md": {
+      "installed_hash": "01b4ae73c1e96b1faea3256f92a5f646301615fba64427215830454e6ef587e2",
+      "owned": true
+    },
+    ".agents/skills/gau-30-requirement-council/SKILL.md": {
+      "installed_hash": "7c21a9adb55a1f427fc83283e05b75a7ac24cf78e0673dc3bf9588d7f618d554",
+      "owned": true
+    },
+    ".agents/skills/gau-31-explanation-council/SKILL.md": {
+      "installed_hash": "8fb2a408e0328eb42b10f9d685486ceb1d52a966acd2d89ddd42d5bccbea1b73",
+      "owned": true
+    },
+    ".agents/skills/gau-32-algorithm-council/SKILL.md": {
+      "installed_hash": "b48c25697064b6c1661ac128e18a28134072f054ca04c0829805eec48d155b49",
+      "owned": true
+    },
+    ".agents/skills/gau-33-tool-council/SKILL.md": {
+      "installed_hash": "6a896f4a32cbdd89b7ec1eea507d7e15eb6663b1998999d2bd051c2b9649cf35",
+      "owned": true
+    },
+    ".agents/skills/gau-34-parallel-worktree-swarm/SKILL.md": {
+      "installed_hash": "86ed6f294738a0868e8a1e60b445d34a337f39638ccb15282d1f84f4570373a2",
+      "owned": true
+    },
+    ".agents/skills/gau-35-regression-hunters/SKILL.md": {
+      "installed_hash": "7be280fbb733ca949b3c67b5b7c263c2dff98318c3214de71c042881498e5cf1",
+      "owned": true
+    },
+    ".agents/skills/gau-36-final-completion-tribunal/SKILL.md": {
+      "installed_hash": "f2616842737f96570a2ba93a55b7bd65f17838da0d08f42bc7dd2ded1d414047",
+      "owned": true
+    },
+    ".agents/skills/gau-37-rollback-brain/SKILL.md": {
+      "installed_hash": "4866b02d59153ecbb944c50e23106ac7d9d1ace2847965aec095ed631d690358",
+      "owned": true
+    },
+    ".agents/skills/gau-38-compute-governor/SKILL.md": {
+      "installed_hash": "246e83a62f8679bd1f04eec2ef405cef73dd93fc29b1df90831f002c5042288e",
+      "owned": true
+    },
+    ".agents/skills/gau-39-meta-orchestrator/SKILL.md": {
+      "installed_hash": "5283dade7343d8c53c4574b54c47f0842a874209627c01647c2ff3561b3ac946",
+      "owned": true
+    },
+    ".agents/skills/gau-40-supreme-orchestrator/SKILL.md": {
+      "installed_hash": "f5967f595b9cb1044ef9293a19cb5a3964e64cad40a4038118868e4ba7ec8dcc",
+      "owned": true
+    },
+    ".agents/skills/gau-41-recursive-intelligence/SKILL.md": {
+      "installed_hash": "9907c003b95e276c934a099d2e9f2762ec8476e09f0c78a16bb3d7abffd1ad79",
+      "owned": true
+    },
+    ".agents/skills/gau-42-cognitive-specialization/SKILL.md": {
+      "installed_hash": "a51a7b9f0bac8267c218d9edac86c1a4212197c3dcaa28e429d82ed2afdb28f0",
+      "owned": true
+    },
+    ".agents/skills/gau-43-cognitive-cross-examination/SKILL.md": {
+      "installed_hash": "3494e6f0daa162dd8e3bb6842c04e9a36391d8caceda08985427c54c9842e833",
+      "owned": true
+    },
+    ".agents/skills/gau-44-same-model-diversity/SKILL.md": {
+      "installed_hash": "b3e334904498f4dc0cbd37d902527a27254d9fb3bf1c0b7b3a59649881b6c365",
+      "owned": true
+    },
+    ".agents/skills/gau-45-intelligence-tournament-bracket/SKILL.md": {
+      "installed_hash": "f8d368d181c7ebb384ea5240a8053b412da03b7774622acb1019682d77a7f399",
+      "owned": true
+    },
+    ".agents/skills/gau-46-dynamic-council-size/SKILL.md": {
+      "installed_hash": "79859433b45d78ffe4de959d3f4c459de797aae74bdf22e24f7225db56acdb56",
+      "owned": true
+    },
+    ".agents/skills/gau-47-expert-spawning/SKILL.md": {
+      "installed_hash": "ff9b97ef2e18483390e4afe03ee28216cbf1b6c954ee1eb49b90dfa9263fe1ec",
+      "owned": true
+    },
+    ".agents/skills/gau-48-knowledge-decomposition/SKILL.md": {
+      "installed_hash": "0b9cc8b60948d5ffb89d508b59856decea64f0969110edd2c0dcf26aceceda4d",
+      "owned": true
+    },
+    ".agents/skills/gau-49-cross-agent-teaching/SKILL.md": {
+      "installed_hash": "720b79d03d4223b53c4ddb36a6c660845c3458fca9d5903938da90e8e9dc58ea",
+      "owned": true
+    },
+    ".agents/skills/gau-50-agent-contradiction-memory/SKILL.md": {
+      "installed_hash": "94e5e455182af90e122f37a546aced420cf1eb91cdc3a122cc14c18163e94223",
+      "owned": true
+    },
+    ".agents/skills/gau-51-failure-pattern-memory/SKILL.md": {
+      "installed_hash": "c40f7a51b69fe439eeb5fd03dfd40f3aeafd32a279e3035be1fd7d8aa4c76219",
+      "owned": true
+    },
+    ".agents/skills/gau-52-reasoning-checkpointing/SKILL.md": {
+      "installed_hash": "0dee583ed5c6d6468fb9efbc298889e2cb94983c2764576b1eb24018ab3ded9b",
+      "owned": true
+    },
+    ".agents/skills/gau-53-independent-verification-tree/SKILL.md": {
+      "installed_hash": "e22e2713f90f1b3438a53fe02f3f67e942cb8587a74807c5e58424872b1e157f",
+      "owned": true
+    },
+    ".agents/skills/gau-54-model-fallback-graph/SKILL.md": {
+      "installed_hash": "da416e1eecbd3f9789127089bb3f9354090a17b885075effa9d7858eaf949b2c",
+      "owned": true
+    },
+    ".agents/skills/gau-55-council-timeout/SKILL.md": {
+      "installed_hash": "74f88e46c676a1790bbd69d0affee7f277a68a8e18d0c04bd61b4fbd392636f7",
+      "owned": true
+    },
+    ".agents/skills/gau-56-consensus-confidence/SKILL.md": {
+      "installed_hash": "a69a20c98d351b6c653c5e43896ccf325276b0559ad3a0de2ee578beedd7ff3d",
+      "owned": true
+    },
+    ".agents/skills/gau-57-evidence-freshness-engine/SKILL.md": {
+      "installed_hash": "825c78e8b818c8e41cc4c4cfc2d1e4faf830019c0c57cdf582b08a2c5a813e99",
+      "owned": true
+    },
+    ".agents/skills/gau-58-hypothesis-decay/SKILL.md": {
+      "installed_hash": "d32f3da0216c1901aa0885f0a1eeca79baddb66f6b1090480620e409b6cc68df",
+      "owned": true
+    },
+    ".agents/skills/gau-59-novelty-detector/SKILL.md": {
+      "installed_hash": "e94594b28e270fd2610ca1045663a1764fc127cbd64e5e1b09f78886756f6a69",
+      "owned": true
+    },
+    ".agents/skills/gau-60-minority-preservation/SKILL.md": {
+      "installed_hash": "41466b96530a81e7def48553d40cbeaa0081f847485e6581ad8be80f9257844b",
+      "owned": true
+    },
+    ".agents/skills/gau-61-risk-based-compute/SKILL.md": {
+      "installed_hash": "147081b61d7b9dd9348fbaae3ff4064178785b0a1857aeda62a33c41188c30ea",
+      "owned": true
+    },
+    ".agents/skills/gau-62-autonomous-escalation-de-escalation/SKILL.md": {
+      "installed_hash": "f6a663858410980fe5e66a0a2b5e29941091f8aaa4343e5df8f345e2d13704e6",
+      "owned": true
+    },
+    ".agents/skills/gau-63-project-specific-councils/SKILL.md": {
+      "installed_hash": "b0ec74c133ec80fb07f9d4006ddfe8690fcf39e073c4310aee88042a782a1906",
+      "owned": true
+    },
+    ".agents/skills/gau-64-historical-benchmark-memory/SKILL.md": {
+      "installed_hash": "80b5e9727b452854186d4813599bc692a4f4ef35e9f6a4f599c30dd113e18377",
+      "owned": true
+    },
+    ".agents/skills/gau-65-self-generated-evals/SKILL.md": {
+      "installed_hash": "1d6f4e268e80ec0feee0b117fe0d2ba92dd244ae6580233499086972cfbb87d3",
+      "owned": true
+    },
+    ".agents/skills/gau-66-self-generated-adversarial-cases/SKILL.md": {
+      "installed_hash": "07c2e0ce29a97da96124217727ebbaa4e377b8a874a2a542b6f93f3c4478c7bb",
+      "owned": true
+    },
+    ".agents/skills/gau-67-counterexample-generator/SKILL.md": {
+      "installed_hash": "ed58f50e4d091c1544999c4ce2f8ed56718cfff62f009e7847e8bb5c61c62d8a",
+      "owned": true
+    },
+    ".agents/skills/gau-68-proof-obligation-system/SKILL.md": {
+      "installed_hash": "4aee2e1f2790c6396db1d6b7580aaae78d3d1dfb0eb3a116a00c4ee5e6288600",
+      "owned": true
+    },
+    ".agents/skills/gau-69-self-evolving-router/SKILL.md": {
+      "installed_hash": "7fa88dd929cbf783ab176829929c5da1f8939288184c38f736683f1d69640b25",
+      "owned": true
+    },
+    ".agents/skills/gau-council/SKILL.md": {
+      "installed_hash": "518cdaae0e0cce936801e1c1687f13c30dd3aec69d710587a4312a981ddc483e",
+      "owned": true
+    },
+    ".agents/skills/gau-goal/SKILL.md": {
+      "installed_hash": "8d610aecc22548f0b41f27bba4ca9c23cc3e246c900b90b114a7e5d79837a627",
+      "owned": true
+    },
+    ".agents/skills/gau-maintain/SKILL.md": {
+      "installed_hash": "0a623b550abc25a7f5e670fb51a8d1cf4d1b445eb265a6aa99bdd1faea9e898f",
+      "owned": true
+    },
+    ".gau/source/GAU_v5_ideias_aprovadas.md": {
+      "installed_hash": "ebce2ed4f2f48bff7ba82240938f3b00ae15c7d464eefd096617248f1eced06c",
+      "owned": true
+    }
+  }
+}

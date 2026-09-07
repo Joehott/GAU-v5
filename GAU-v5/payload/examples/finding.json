@@ -1,0 +1,6 @@
+{
+  "text": "Achado com reprodução concreta",
+  "severity": "HIGH",
+  "source": "comando/trace",
+  "scope": "módulo"
+}

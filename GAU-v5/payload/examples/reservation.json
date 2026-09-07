@@ -1,0 +1,6 @@
+{
+  "parent": "MISSION-ID-REAL",
+  "question": "Qual causa explica a reprodução?",
+  "expected_gain": "Eliminar uma hipótese",
+  "stop_condition": "Causa reproduzida ou orçamento atingido"
+}

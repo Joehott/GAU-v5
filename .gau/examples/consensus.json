@@ -1,0 +1,16 @@
+{
+  "votes": [
+    {
+      "agent": "sessao-A",
+      "choice": "hipotese-A",
+      "independence_group": "sessao-A",
+      "evidence": []
+    },
+    {
+      "agent": "sessao-B",
+      "choice": "hipotese-B",
+      "independence_group": "sessao-B",
+      "evidence": []
+    }
+  ]
+}

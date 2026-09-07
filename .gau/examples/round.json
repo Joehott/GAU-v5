@@ -1,0 +1,5 @@
+{
+  "council": "security",
+  "question": "Que falhas relevantes ainda não foram testadas?",
+  "expected_gain": "Eliminar uma lacuna concreta de evidência"
+}

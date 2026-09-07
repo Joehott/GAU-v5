@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.pytest_cache/
+.venv/
+venv/
+
+# GAU runtime transient
+.gau/worktrees/
+.gau/state.sqlite3-wal
+.gau/state.sqlite3-shm
+*.gau-tmp-*
+
+# Archives & Build Outputs
+*.zip
+dist/
+
+# OS
+Thumbs.db
+.DS_Store

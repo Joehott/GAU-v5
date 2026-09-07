@@ -1,0 +1,19 @@
+{
+  "goal": "Corrigir o bug descrito pelo usuário",
+  "domain": "debugging",
+  "risk": "medium",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Reprodução do bug passa depois da correção",
+      "min_level": 2,
+      "independent": false
+    },
+    {
+      "id": "R2",
+      "text": "Comportamento legado preservado pelos testes relevantes",
+      "min_level": 2,
+      "independent": false
+    }
+  ]
+}

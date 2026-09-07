@@ -1,0 +1,8 @@
+{
+  "text": "Fato observado no código",
+  "source": "arquivo e linhas inspecionadas",
+  "scope": "módulo",
+  "files": [
+    "src/example.py"
+  ]
+}

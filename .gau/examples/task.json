@@ -1,0 +1,8 @@
+{
+  "text": "Subtarefa delimitada",
+  "owner": "gau-implementer",
+  "dependencies": [],
+  "files": [
+    "src/example.py"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "DUEL-ID-UNICO",
+  "evidence": [
+    "EVIDENCE-ID-REAL"
+  ],
+  "conditions": "Mesma tarefa e testes; versões exatas; métricas medidas",
+  "pairs": [
+    {
+      "dimension": "model",
+      "a": "MODELO-VERSAO-A",
+      "b": "MODELO-VERSAO-B",
+      "score_a": 1.0
+    }
+  ]
+}

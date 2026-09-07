@@ -1,0 +1,8 @@
+{
+  "text": "Hipótese causal",
+  "confidence": 0.5,
+  "discriminating_test": "Experimento que diferencia causas",
+  "files": [
+    "src/example.py"
+  ]
+}

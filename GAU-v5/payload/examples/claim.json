@@ -1,0 +1,6 @@
+{
+  "text": "O bug não ocorre no cenário concorrente",
+  "critical": true,
+  "source": "R1",
+  "scope": "concorrência"
+}

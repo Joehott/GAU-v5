@@ -1,0 +1,12 @@
+{
+  "requirements": [
+    "R1"
+  ],
+  "criterion": "Inspeção visual da jornada solicitada",
+  "verifier": "real-reviewer",
+  "implementer": "real-coder",
+  "session": "ID-REAL-DA-SESSAO",
+  "independent": true,
+  "artifact": ".gau/missions/example/inspection.md",
+  "result": "PASS"
+}

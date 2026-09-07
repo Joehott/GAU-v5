@@ -1,0 +1,8 @@
+{
+  "requirements": [
+    "R1"
+  ],
+  "criterion": "Reprodução relevante falha antes e passa depois",
+  "verifier": "main-agent",
+  "independent": false
+}
