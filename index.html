@@ -26,6 +26,7 @@
     <nav class="nav" aria-label="Navegação principal">
       <a href="#architecture">Arquitetura</a>
       <a href="#lab">Laboratório</a>
+      <a href="#leaderboard">Leaderboard</a>
       <a href="#ideas">69 ideias</a>
       <a href="#goal">/goal</a>
       <a href="#deploy">Instalação</a>
@@ -137,6 +138,7 @@
               <div class="mission-actions">
                 <button class="button primary" id="runMission">Rodar missão</button>
                 <button class="button ghost small" id="resetMission">Resetar</button>
+                <button class="button ghost small" id="exportDossier" title="Exportar Dossiê de Auditoria da Missão em Markdown">📑 Exportar Dossiê de Auditoria</button>
               </div>
               <div class="mission-stats">
                 <div><small>COMPUTE</small><strong id="statCompute">SMART</strong></div>
@@ -161,6 +163,25 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="section-shell section-block" id="leaderboard">
+      <div class="section-heading reveal split-heading">
+        <div>
+          <div class="eyebrow"><span class="pulse-dot"></span> AGENT ELO LEADERBOARD</div>
+          <h2>Ranking dos Agentes Especializados</h2>
+          <p>Avaliação empírica do desempenho de cada agente em duelos de resolução de tarefas (<code>gau match</code>). Ratings provisórios padrão (1500) até a consolidação estatística com histórico de vitórias.</p>
+        </div>
+        <div class="leaderboard-meta">
+          <span class="leaderboard-badge">Base: 1500 Elo (Provisório &lt; 5 duelos)</span>
+        </div>
+      </div>
+
+      <div class="leaderboard-podium reveal" id="leaderboardPodium"></div>
+
+      <div class="filter-row" id="agentLeaderboardFilters" aria-label="Filtros de Agentes"></div>
+
+      <div class="agents-grid" id="agentLeaderboardGrid"></div>
     </section>
 
     <section class="section-shell section-block" id="ideas">
