@@ -8,3 +8,68 @@
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(128,255,212,.4)}70%{box-shadow:0 0 0 8px rgba(128,255,212,0)}100%{box-shadow:0 0 0 0 rgba(128,255,212,0)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes stepIn{to{opacity:1;transform:none}}
 @media(max-width:980px){.nav{display:none}.hero{grid-template-columns:1fr;min-height:auto;padding-top:95px}.hero-copy{text-align:center}.hero-lead{margin-inline:auto}.hero-actions,.hero-proof{justify-content:center}.hero-visual{max-width:650px;width:100%;margin:auto}.metrics-strip{grid-template-columns:repeat(2,1fr)}.metrics-strip>div:nth-child(odd){border-left:0}.metrics-strip>div:last-child{grid-column:1/-1;border-top:1px solid var(--line)}.layer-grid,.ideas-grid{grid-template-columns:repeat(2,1fr)}.console-grid,.goal-grid,.deploy-card{grid-template-columns:1fr}.mission-panel{border-right:0;border-bottom:1px solid var(--line)}.split-heading{display:block}.idea-search-wrap{min-width:0;max-width:500px;margin-top:25px}.deploy-notice{grid-column:auto}.goal-grid{gap:48px}}@media(max-width:620px){.section-shell{width:min(var(--max),calc(100% - 28px))}.section-block{padding:88px 0}.topbar{top:8px;margin-top:8px}.mini-cta{display:none}.hero{padding-top:76px}.hero h1{font-size:48px}.hero-lead{font-size:15px}.hero-actions{flex-direction:column;align-items:stretch}.hero-proof{gap:10px 16px}.brain-stage{height:360px}.orbit-3{width:330px;height:330px}.satellite{min-width:72px;font-size:9px}.layer-grid,.ideas-grid{grid-template-columns:1fr}.layer-card{min-height:250px}.metrics-strip{width:calc(100% - 14px)}.metrics-strip strong{font-size:20px}.console-grid{min-height:0}.mission-panel,.timeline-panel{padding:17px}.mission-stats{grid-template-columns:repeat(2,1fr)}.timeline-step{grid-template-columns:27px 1fr}.timeline-state{display:none}.goal-section{padding:88px 0}.deploy-card{padding:24px}.footer{flex-direction:column;align-items:flex-start}.signal-row>div{padding:12px}.s1{left:5%}.s2{right:6%}.s3{right:2%}.s4{right:9%}.s5{left:7%}.s6{left:2%}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+
+
+/* Scenario Selector Styles */
+.scenario-selector {
+  margin-bottom: 1rem;
+}
+.scenario-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.scenario-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.scenario-pill {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.scenario-pill:hover {
+  background: rgba(154, 124, 255, 0.12);
+  border-color: rgba(154, 124, 255, 0.35);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+.scenario-pill.active {
+  background: rgba(154, 124, 255, 0.22);
+  border-color: var(--violet);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(154, 124, 255, 0.25);
+}
+
+/* Enhanced Idea Card styles */
+.idea-card {
+  cursor: default;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.idea-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(154, 124, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.idea-skill-tag {
+  display: inline-block;
+  font-size: 0.68rem;
+  color: var(--cyan);
+  background: rgba(98, 230, 255, 0.08);
+  border: 1px solid rgba(98, 230, 255, 0.2);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-top: 0.6rem;
+  font-family: monospace;
+}
