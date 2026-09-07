@@ -2,7 +2,7 @@
 # GAU v5 One-Line Installer for Linux / macOS
 set -e
 PROJECT="${1:-$PWD}"
-URL="${GAU_URL:-https://gau-v5.vercel.app/downloads/GAU-v5.zip}"
+URL="${GAU_URL:-https://joehott.github.io/GAU-v5/downloads/GAU-v5.zip}"
 
 echo "=== GAU v5 Installer ==="
 echo "Target Project: $PROJECT"

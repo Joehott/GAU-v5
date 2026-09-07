@@ -2,7 +2,7 @@
 [CmdletBinding()]
 param(
     [string]$Project = $PWD,
-    [string]$Url = "https://gau-v5.vercel.app/downloads/GAU-v5.zip"
+    [string]$Url = "https://joehott.github.io/GAU-v5/downloads/GAU-v5.zip"
 )
 
 $ErrorActionPreference = "Stop"

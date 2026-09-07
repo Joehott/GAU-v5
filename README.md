@@ -30,13 +30,13 @@ Leia e execute as extensões do GAU v5 deste workspace:
 ### Instalar no seu projeto via PowerShell (Linha Única)
 
 ```powershell
-iwr -useb https://gau-v5.vercel.app/install.ps1 | iex
+iwr -useb https://joehott.github.io/GAU-v5/install.ps1 | iex
 ```
 
 ### Instalar no seu projeto via Bash (Linux / macOS)
 
 ```bash
-curl -fsSL https://gau-v5.vercel.app/install.sh | bash
+curl -fsSL https://joehott.github.io/GAU-v5/install.sh | bash
 ```
 
 ### Instalar localmente (deste repositório)
