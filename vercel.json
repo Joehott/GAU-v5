@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "site",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -29,22 +30,16 @@
       ]
     }
   ],
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/site/index.html"
-    },
+  "redirects": [
     {
       "source": "/site",
-      "destination": "/site/index.html"
+      "destination": "/",
+      "permanent": true
     },
     {
-      "source": "/site/(.*)",
-      "destination": "/site/$1"
-    },
-    {
-      "source": "/((?!site/).*)",
-      "destination": "/site/$1"
+      "source": "/site/:path*",
+      "destination": "/:path*",
+      "permanent": true
     }
   ]
 }

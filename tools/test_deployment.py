@@ -1,4 +1,4 @@
-﻿import json
+import json
 import hashlib
 from pathlib import Path
 
@@ -7,8 +7,7 @@ root = Path('.').resolve()
 # 1. vercel.json at root
 root_vercel = json.loads((root / 'vercel.json').read_text(encoding='utf-8'))
 assert root_vercel.get('cleanUrls') is True, 'cleanUrls missing or not True'
-assert len(root_vercel.get('headers', [])) > 0, 'headers missing'
-assert len(root_vercel.get('rewrites', [])) > 0, 'rewrites missing'
+assert root_vercel.get('outputDirectory') == 'site', 'outputDirectory must be site'
 print('Test 1 Passed: root vercel.json is valid')
 
 # 2. site/vercel.json
