@@ -19,6 +19,13 @@ import sys
 import time
 import uuid
 
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
+
 VERSION = '5.0.0'
 SKIP = {'.git', '.gau', '.agents', '.agent', 'node_modules', '.venv', 'venv',
         '__pycache__', '.pytest_cache', 'dist', 'build', '.next', 'coverage'}
@@ -440,6 +447,195 @@ def blast(s,mid,node):
                 reached.add(e['source']); changed=True
     return {'affected':sorted(reached),'limits':'Só relações documentadas no grafo; ausência não prova isolamento.'}
 
+KNOWN_AGENTS = [
+    ('gau-implementer', 'Implementação TDD, refatoração atômica, isolamento em worktrees'),
+    ('gau-verifier', 'Verificação independente, integridade de snapshots, testes de aceitação'),
+    ('gau-investigator', 'Laboratório de hipóteses, isolamento de causa raiz, testes discriminatórios'),
+    ('gau-architect', 'Decisões arquiteturais, DAG de tarefas, diagramas e migrações'),
+    ('gau-security', 'Auditoria adversarial, modelagem de ameaças, superfícies de ataque'),
+    ('gau-adversarial', 'Red teaming, quebra de hipóteses, contraexemplos e fuzzing'),
+    ('gau-performance', 'Benchmarks, profiling de latência e concorrência, otimização WAL'),
+    ('gau-database', 'Schemas relacionais, transações ACID, integridade referencial'),
+    ('gau-integration', 'Contratos de API, barramentos assíncronos, backpressure e resiliência'),
+    ('gau-ux', 'Design systems, jornadas do usuário, acessibilidade e microinterações'),
+    ('gau-orchestrator', 'Governança de compute, alocação de cérebros, resolução de impasses'),
+    ('gau-memory', 'Project Brain, auditoria de memória, conciliação de contradições'),
+    ('gau-judge', 'Tribunais de consenso ponderado, avaliação sem viés de maioria'),
+    ('gau-requirements', 'Baseline de requisitos verificáveis, critérios de aceitação rigorosos'),
+    ('gau-evidence', 'Rastreabilidade forense de provas, cadeia de custódia e logs imutáveis'),
+    ('gau-research', 'Pesquisa técnica externa, documentação viva, análise comparativa'),
+]
+
+def timeline(s, mid):
+    m = s.mission(mid)
+    relevant_kinds = {'fact', 'hypothesis', 'decision', 'evidence', 'checkpoint', 'completion', 'lesson'}
+    items = [x for x in s.items(mid) if x.get('kind') in relevant_kinds]
+    items.sort(key=lambda x: x.get('timestamp', ''))
+
+    events = []
+    tree_lines = [f"Mission: {mid} [{m.get('status', 'UNKNOWN')}] - {m.get('goal', '')}"]
+
+    active_cp = None
+    for idx, item in enumerate(items):
+        kind = item.get('kind', '').upper()
+        iid = item.get('id', '')
+        ts = item.get('timestamp', '')
+
+        if kind == 'FACT':
+            summary = item.get('text', '')
+        elif kind == 'HYPOTHESIS':
+            summary = f"{item.get('text', '')} (conf: {item.get('confidence', 0.5)})"
+        elif kind == 'DECISION':
+            summary = item.get('text', '')
+        elif kind == 'EVIDENCE':
+            res = item.get('result', '')
+            reqs = ','.join(item.get('requirements', []))
+            cmd = ' '.join(item.get('command', [])) if item.get('command') else item.get('artifact', '')
+            summary = f"[{res}] {cmd} (reqs: {reqs})"
+        elif kind == 'CHECKPOINT':
+            summary = f"Plan: {len(item.get('current_plan', []))} steps, {len(item.get('evidence', []))} proofs"
+            if item.get('parent'): summary += f" (parent: {item['parent']})"
+            active_cp = iid
+        elif kind == 'COMPLETION':
+            summary = f"Status: {item.get('status', '')}, {len(item.get('requirements', []))} reqs verified"
+        elif kind == 'LESSON':
+            summary = item.get('text', '')
+        else:
+            summary = item.get('text', iid)
+
+        events.append({
+            'seq': idx + 1,
+            'id': iid,
+            'kind': item.get('kind'),
+            'timestamp': ts,
+            'summary': summary,
+            'parent_checkpoint': item.get('parent') if kind == 'CHECKPOINT' else (active_cp if kind not in ('CHECKPOINT', 'COMPLETION') else None),
+            'data': item
+        })
+
+        is_last = (idx == len(items) - 1)
+        prefix = "└── " if is_last else "├── "
+        indent = "│   " if active_cp and kind not in ('CHECKPOINT', 'COMPLETION') else ""
+        tree_lines.append(f"{indent}{prefix}[{ts}] [{kind}] {iid}: {summary}")
+
+    return {
+        'mission': mid,
+        'goal': m.get('goal'),
+        'status': m.get('status'),
+        'total_events': len(events),
+        'events': events,
+        'tree': '\n'.join(tree_lines)
+    }
+
+def leaderboard(s, dimension='all', min_duels=5):
+    rows = s.db.execute('SELECT data FROM outcomes').fetchall()
+    outcomes = [json.loads(r['data']) for r in rows]
+
+    entities = {}
+    for agent_id, spec in KNOWN_AGENTS:
+        entities[('agent', agent_id)] = {
+            'dimension': 'agent', 'name': agent_id, 'specialty': spec,
+            'duels': 0, 'wins': 0, 'losses': 0, 'draws': 0, 'raw_elo': 1500.0
+        }
+
+    for out in outcomes:
+        for p in out.get('pairs', []):
+            dim = p.get('dimension', 'unknown')
+            for name in (p.get('a'), p.get('b')):
+                if name and (dim, name) not in entities:
+                    entities[(dim, name)] = {
+                        'dimension': dim, 'name': name, 'specialty': 'Descoberto em duelos',
+                        'duels': 0, 'wins': 0, 'losses': 0, 'draws': 0, 'raw_elo': 1500.0
+                    }
+
+    for out in outcomes:
+        for p in out.get('pairs', []):
+            dim = p.get('dimension')
+            a = p.get('a')
+            b = p.get('b')
+            if not a or not b or (dim, a) not in entities or (dim, b) not in entities:
+                continue
+            score_a = float(p.get('score_a', 0.5))
+            score_b = 1.0 - score_a
+
+            ent_a = entities[(dim, a)]
+            ent_b = entities[(dim, b)]
+
+            ra = ent_a['raw_elo']
+            rb = ent_b['raw_elo']
+            ea = 1.0 / (1.0 + 10.0 ** ((rb - ra) / 400.0))
+            eb = 1.0 - ea
+            ent_a['raw_elo'] += 32.0 * (score_a - ea)
+            ent_b['raw_elo'] += 32.0 * (score_b - eb)
+
+            if score_a > 0.5:
+                ent_a['wins'] += 1
+                ent_b['losses'] += 1
+            elif score_a < 0.5:
+                ent_b['wins'] += 1
+                ent_a['losses'] += 1
+            else:
+                ent_a['draws'] += 1
+                ent_b['draws'] += 1
+            ent_a['duels'] += 1
+            ent_b['duels'] += 1
+
+    results_by_dim = {'agent': [], 'skill': [], 'model': []}
+    for (dim, name), ent in entities.items():
+        if dimension != 'all' and dim != dimension:
+            continue
+        is_provisional = ent['duels'] < min_duels
+        display_rating = 1500.0 if is_provisional else round(ent['raw_elo'], 1)
+        win_rate = round((ent['wins'] / ent['duels'] * 100), 1) if ent['duels'] > 0 else 0.0
+
+        entry = {
+            'entity': ent['name'],
+            'dimension': dim,
+            'rating': display_rating,
+            'raw_elo': round(ent['raw_elo'], 1),
+            'duels': ent['duels'],
+            'wins': ent['wins'],
+            'losses': ent['losses'],
+            'draws': ent['draws'],
+            'win_rate': win_rate,
+            'status': 'PROVISIONAL' if is_provisional else 'ESTABLISHED',
+            'specialty': ent['specialty']
+        }
+        if dim not in results_by_dim:
+            results_by_dim[dim] = []
+        results_by_dim[dim].append(entry)
+
+    table_lines = [f"=== GAU v5 ELO LEADERBOARD (Min Duelos para Rating Estabelecido: {min_duels}) ==="]
+    for dim in sorted(results_by_dim.keys()):
+        dim_rows = results_by_dim[dim]
+        if not dim_rows:
+            continue
+        dim_rows.sort(key=lambda x: (x['rating'], x['wins'], x['duels'], -len(x['entity'])), reverse=True)
+        for rank, r in enumerate(dim_rows, 1):
+            r['rank'] = rank
+
+        table_lines.append(f"\n[ {dim.upper()}S ]")
+        header = "+------+----------------------+--------+-------+------+--------+-------+-------------+"
+        title  = "| Rank | Entity               | Rating | Duels | Wins | Losses | Draws | Status      |"
+        table_lines.extend([header, title, header])
+        for r in dim_rows:
+            name_col = (r['entity'][:20]).ljust(20)
+            rat_col = str(int(r['rating']) if isinstance(r['rating'], float) and r['rating'].is_integer() else r['rating']).rjust(6)
+            table_lines.append(
+                f"| {str(r['rank']).rjust(4)} | {name_col} | {rat_col} | {str(r['duels']).rjust(5)} | "
+                f"{str(r['wins']).rjust(4)} | {str(r['losses']).rjust(6)} | {str(r['draws']).rjust(5)} | "
+                f"{r['status'].ljust(11)} |"
+            )
+        table_lines.append(header)
+
+    return {
+        'min_duels_threshold': min_duels,
+        'agents': results_by_dim.get('agent', []),
+        'skills': results_by_dim.get('skill', []),
+        'models': results_by_dim.get('model', []),
+        'table': '\n'.join(table_lines)
+    }
+
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--project',default='.')
@@ -449,9 +645,15 @@ def main(argv=None):
     for name in ('route','record','checkpoint','task-add','reserve','novelty','consensus','match','context','graph-add','usage','council-round'):
         a=subs.add_parser(name); a.add_argument('mission'); a.add_argument('--spec',required=True)
         if name=='record': a.add_argument('--kind',choices=sorted(KINDS),required=True)
-    for name in ('status','gate','close','list','ready'):
+    for name in ('status','gate','close','list','ready','timeline'):
         a=subs.add_parser(name); a.add_argument('mission')
         if name=='list': a.add_argument('--kind')
+        if name=='timeline': a.add_argument('--tree', action='store_true', help='Exibir apenas arvore ASCII')
+    lb=subs.add_parser('leaderboard')
+    lb.add_argument('mission', nargs='?', default=None, help='Missao opcional')
+    lb.add_argument('--dimension', choices=['all','agent','skill','model'], default='all')
+    lb.add_argument('--min-duels', type=int, default=5)
+    lb.add_argument('--table', action='store_true', help='Exibir tabela formatada')
     a=subs.add_parser('verify'); a.add_argument('mission'); a.add_argument('--spec',required=True)
     a.add_argument('--timeout',type=int,default=300); a.add_argument('--command',nargs=argparse.REMAINDER,required=True)
     a=subs.add_parser('attest'); a.add_argument('mission'); a.add_argument('--spec',required=True)
@@ -484,6 +686,31 @@ def main(argv=None):
             if args.cmd=='close':
                 with s.tx():
                     m=s.mission(mid); m['status']=result['status']; s.save_mission(m); s.put(mid,'completion',result)
+                    passed_reqs = [r['requirement'] for r in result.get('requirements',[]) if r.get('passed')]
+                    total_reqs = [r.get('id') for r in m.get('requirements',[])]
+                    all_ev = s.items(mid, 'evidence')
+                    ev_ids = [e['id'] for e in all_ev]
+                    pass_ev_ids = [e['id'] for e in all_ev if e.get('result')=='PASS']
+                    blockers = result.get('blockers', [])
+                    summary_text = (
+                        f"Post-Mortem Autônomo ({result['status']}): "
+                        f"Requisitos cumpridos: {len(passed_reqs)}/{len(total_reqs)} ({', '.join(passed_reqs) if passed_reqs else 'nenhum'}). "
+                        f"Evidências geradas: {len(ev_ids)} (PASS: {len(pass_ev_ids)}). "
+                        + (f"Bloqueios pendentes: {'; '.join(blockers)}." if blockers else "Todos os requisitos foram comprovados sem bloqueios.")
+                    )
+                    lesson_data = {
+                        'text': summary_text,
+                        'autonomous': True,
+                        'post_mortem': True,
+                        'status': result['status'],
+                        'fulfilled_requirements': passed_reqs,
+                        'total_requirements': total_reqs,
+                        'evidences_generated': ev_ids,
+                        'passed_evidences': pass_ev_ids,
+                        'blockers': blockers
+                    }
+                    lesson = s.put(mid, 'lesson', lesson_data)
+                    result['lesson'] = lesson['id']
         elif args.cmd=='status':
             m=s.mission(mid); result=dict(m,computed_status=s.gate(mid)['status'])
         elif args.cmd=='list': s.mission(mid); result=s.items(mid,args.kind)
@@ -552,6 +779,14 @@ def main(argv=None):
             directory=s.path('.gau/worktrees/'+args.name); directory.parent.mkdir(exist_ok=True)
             subprocess.run(['git','worktree','add','-b','gau/'+mid+'/'+args.name,str(directory),'HEAD'],cwd=s.root,check=True)
             result={'path':str(directory),'base':'HEAD','warning':'Mudanças não commitadas não são copiadas. Não há merge automático.'}
+        elif args.cmd=='timeline':
+            result=timeline(s,mid)
+            if getattr(args,'tree',False):
+                print(result['tree']); return 0
+        elif args.cmd=='leaderboard':
+            result=leaderboard(s,dimension=args.dimension,min_duels=args.min_duels)
+            if getattr(args,'table',False):
+                print(result['table']); return 0
         else: fail('Comando não implementado.')
         print(dumps(result))
         if args.cmd in ('gate','close') and result['status']!='COMPLETE': return 2

@@ -1,0 +1,25 @@
+{
+  "goal": "Mega Evolucao GAU v5: Comandos CLI timeline e leaderboard, Leaderboard Elo no site, e CI/CD via GitHub Actions",
+  "domain": "full_stack_agentic",
+  "risk": "medium",
+  "requirements": [
+    {
+      "id": "R1",
+      "text": "Comandos CLI gau timeline e gau leaderboard implementados e funcionais no runtime Python",
+      "min_level": 2,
+      "independent": true
+    },
+    {
+      "id": "R2",
+      "text": "Leaderboard Elo e Inspetor de Missoes integrados no site e Mission Lab",
+      "min_level": 2,
+      "independent": true
+    },
+    {
+      "id": "R3",
+      "text": "Workflow de CI/CD para GitHub Actions configurado e testes 100% verdes",
+      "min_level": 2,
+      "independent": true
+    }
+  ]
+}

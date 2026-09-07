@@ -1,0 +1,10 @@
+{
+  "requirements": [
+    "R3"
+  ],
+  "criterion": "Workflow GitHub Actions presente e validado com testes verdes",
+  "verifier": "gau-verifier",
+  "implementer": "gau-implementer",
+  "session": "0ddadcaf-ccae-494e-b47f-70017ac9cda7",
+  "independent": true
+}

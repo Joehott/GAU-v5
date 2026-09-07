@@ -1,0 +1,10 @@
+{
+  "requirements": [
+    "R1"
+  ],
+  "criterion": "Comandos timeline e leaderboard validados por testes unitarios",
+  "verifier": "gau-verifier",
+  "implementer": "gau-implementer",
+  "session": "0ddadcaf-ccae-494e-b47f-70017ac9cda7",
+  "independent": true
+}

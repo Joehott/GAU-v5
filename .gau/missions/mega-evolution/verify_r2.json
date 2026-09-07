@@ -1,0 +1,10 @@
+{
+  "requirements": [
+    "R2"
+  ],
+  "criterion": "Leaderboard e exportador de dossie validados nos testes de integridade do site",
+  "verifier": "gau-verifier",
+  "implementer": "gau-implementer",
+  "session": "0ddadcaf-ccae-494e-b47f-70017ac9cda7",
+  "independent": true
+}

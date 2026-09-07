@@ -1,0 +1,12 @@
+{
+  "uncertainty": 0.1,
+  "divergence": 0,
+  "subagents_available": true,
+  "available_models": [
+    "inherit"
+  ],
+  "preferred_model": "inherit",
+  "failed_models": [],
+  "parallel_tasks": true,
+  "competing_solutions": false
+}

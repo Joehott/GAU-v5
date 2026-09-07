@@ -122,5 +122,46 @@ class IntegrationTests(unittest.TestCase):
             for line in agent.read_text().splitlines():
                 if line.startswith('  - skills/'):
                     self.assertTrue((ROOT/'payload'/line.strip()[2:] / 'SKILL.md').exists())
+    def test_timeline_displays_chronological_events_and_tree(self):
+        g.register(self.s,self.mid,'fact',{'text':'Base fact registered'})
+        e=self.evidence()
+        r=self.cli('timeline',self.mid)
+        self.assertEqual(r.returncode,0,r.stderr)
+        data=json.loads(r.stdout)
+        self.assertIn('events',data)
+        self.assertIn('tree',data)
+        self.assertTrue(len(data['events'])>=2)
+        r_tree=self.cli('timeline',self.mid,'--tree')
+        self.assertEqual(r_tree.returncode,0)
+        self.assertIn('Mission:',r_tree.stdout)
+        self.assertIn('[FACT]',r_tree.stdout)
+        self.assertIn('[EVIDENCE]',r_tree.stdout)
+    def test_leaderboard_elo_and_default_provisional_rating(self):
+        e=self.evidence()
+        spec={'id':'match-test-1','evidence':[e['id']],'pairs':[{'dimension':'agent','a':'gau-implementer','b':'baseline-agent','score_a':1.0}]}
+        g.match(self.s,self.mid,spec)
+        r=self.cli('leaderboard')
+        self.assertEqual(r.returncode,0,r.stderr)
+        data=json.loads(r.stdout)
+        agents={a['entity']:a for a in data['agents']}
+        self.assertIn('gau-implementer',agents)
+        self.assertEqual(agents['gau-implementer']['rating'],1500.0)
+        self.assertEqual(agents['gau-implementer']['wins'],1)
+        self.assertEqual(agents['gau-implementer']['status'],'PROVISIONAL')
+        r_tbl=self.cli('leaderboard','--table')
+        self.assertEqual(r_tbl.returncode,0)
+        self.assertIn('GAU v5 ELO LEADERBOARD',r_tbl.stdout)
+        self.assertIn('gau-implementer',r_tbl.stdout)
+    def test_close_records_autonomous_post_mortem_lesson(self):
+        self.evidence()
+        r=self.cli('close',self.mid)
+        self.assertEqual(r.returncode,0,r.stderr)
+        lessons=self.s.items(self.mid,'lesson')
+        self.assertTrue(len(lessons)>=1)
+        pm=lessons[-1]
+        self.assertTrue(pm.get('autonomous'))
+        self.assertTrue(pm.get('post_mortem'))
+        self.assertIn('R1',pm.get('fulfilled_requirements',[]))
+        self.assertIn('Post-Mortem Autônomo',pm.get('text',''))
 
 if __name__=='__main__':unittest.main()

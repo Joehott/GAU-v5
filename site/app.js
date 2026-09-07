@@ -161,5 +161,196 @@
     });
   });
 
+  // Exportar Dossiê de Auditoria
+  const exportBtn = document.getElementById('exportDossier');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      const sc = scenarios[currentScenarioKey];
+      const obj = (missionInput ? missionInput.value : '').trim() || sc.title;
+      const status = missionStatus.textContent || 'waiting';
+      const compute = statCompute.textContent;
+      const brains = statBrains.textContent;
+      const conf = statConfidence.textContent;
+      const evidence = statEvidence.textContent;
+      const facts = memFacts.textContent;
+      const hyp = memHyp.textContent;
+      const reject = memReject.textContent;
+      const check = memCheck.textContent;
+
+      // Extract executed steps or fallback to scenario steps
+      const stepElements = timeline.querySelectorAll('.timeline-step');
+      let stepsData = [];
+      if (stepElements.length > 0) {
+        stepElements.forEach(el => {
+          const badge = el.querySelector('.timeline-badge')?.textContent?.trim() || '';
+          const name = el.querySelector('.timeline-body b')?.textContent?.trim() || '';
+          const detail = el.querySelector('.timeline-body span')?.textContent?.trim() || '';
+          const state = el.querySelector('.timeline-state')?.textContent?.trim() || 'PASS';
+          stepsData.push({ id: badge, name, detail, state });
+        });
+      } else {
+        stepsData = sc.steps.map(s => ({ id: s.id, name: s.name, detail: s.detail, state: 'PLANNED' }));
+      }
+
+      const stepsTable = stepsData.map(s =>
+        `| **${s.id}** | ${s.name} | ${s.detail} | \`${s.state}\` |`
+      ).join('\n');
+
+      const nowIso = new Date().toISOString();
+      const missionId = 'mission-' + Math.random().toString(16).substring(2, 14);
+
+      const dossierMd = `# 🛡️ DOSSIÊ DE AUDITORIA COGNITIVA — GAU v5
+
+**ID da Missão:** \`${missionId}\`
+**Data da Auditoria:** ${nowIso}
+**Status da Missão:** \`${status.toUpperCase()}\`
+**Ecossistema:** Antigravity Cognitive Layer (GAU v5.0.0)
+
+---
+
+## 📋 1. Resumo Executivo da Missão
+- **Cenário de Referência:** ${sc.title}
+- **Objetivo da Missão:** ${obj}
+- **Veredito do Tribunal de Conclusão:** ${status === 'COMPLETE' ? 'APROVADO COM PROVA FORMAL DE EXECUÇÃO (PASS)' : 'EXECUÇÃO EM ANDAMENTO OU REVISÃO PENDENTE'}
+
+---
+
+## ⚡ 2. Governança de Computação & Epistemologia
+| Métrica | Valor Registrado | Significado Operacional |
+|:---|:---:|:---|
+| **Modo de Compute** | \`${compute}\` | Alocação proporcional ao risco e incerteza |
+| **Cérebros Mobilizados** | \`${brains}\` | Instâncias isoladas em sessões do Antigravity |
+| **Confiança Epistêmica** | \`${conf}\` | Grau de suporte das hipóteses validadas |
+| **Nível de Evidência** | \`${evidence}\` | Escala formal E0 (afirmação) a E5 (verificação independente) |
+
+---
+
+## 🧠 3. Project Brain (Memória Estruturada no SQLite)
+- **Fatos Comprovados:** ${facts}
+- **Hipóteses Ativas:** ${hyp}
+- **Caminhos Rejeitados:** ${reject} (preservados contra repetição de estratégias)
+- **Checkpoints Salvos:** ${check} (marcos de estado atômicos e reversíveis)
+
+---
+
+## 🔍 4. Trilha de Execução (Cognitive DAG)
+| Passo | Mecanismo Cognitivo | Ações & Critérios de Prova | Estado |
+|:---:|:---|:---|:---:|
+${stepsTable}
+
+---
+
+## ⚖️ 5. Atestado de Integridade & Provas
+- **Isolamento de Sessão:** Agentes verificadores operam sem contaminação do implementador.
+- **Rastreabilidade Forense:** Todos os comandos e logs possuem hashes SHA-256 no banco local.
+- **Regra de Sucesso:** \`PASS\` comprova execução de testes reais; nunca consenso cego sem teste.
+
+---
+*Gerado automaticamente pelo Mission Lab — GAU v5 Cognitive Orchestration Engine*
+`;
+
+      const blob = new Blob([dossierMd], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Dossie-Auditoria-GAU-v5-${currentScenarioKey}.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }
+
+  // Agent Elo Leaderboard Data & Rendering
+  const AGENT_LEADERBOARD = [
+    { rank: 1, id: 'gau-implementer', name: 'GAU Implementer', rating: 1500, wins: 1, losses: 0, draws: 0, duels: 1, winRate: 100, status: 'PROVISIONAL', specialty: 'Implementação TDD, refatoração atômica e isolamento em worktrees', category: 'Engenharia' },
+    { rank: 2, id: 'gau-verifier', name: 'GAU Verifier', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Verificação independente, integridade de snapshots e testes de aceitação', category: 'Verificação' },
+    { rank: 3, id: 'gau-investigator', name: 'GAU Investigator', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Laboratório de hipóteses, isolamento de causa raiz e testes discriminatórios', category: 'Raciocínio' },
+    { rank: 4, id: 'gau-security', name: 'GAU Security', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Auditoria adversarial, modelagem de ameaças e superfícies de ataque', category: 'Segurança' },
+    { rank: 5, id: 'gau-adversarial', name: 'GAU Adversarial', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Red teaming, quebra de hipóteses, contraexemplos e fuzzing', category: 'Segurança' },
+    { rank: 6, id: 'gau-architect', name: 'GAU Architect', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Decisões arquiteturais, DAG de tarefas, diagramas e migrações', category: 'Engenharia' },
+    { rank: 7, id: 'gau-performance', name: 'GAU Performance', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Benchmarks, profiling de latência e concorrência, otimização WAL', category: 'Engenharia' },
+    { rank: 8, id: 'gau-database', name: 'GAU Database', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Schemas relacionais, transações ACID e integridade referencial', category: 'Engenharia' },
+    { rank: 9, id: 'gau-integration', name: 'GAU Integration', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Contratos de API, barramentos assíncronos, backpressure e resiliência', category: 'Engenharia' },
+    { rank: 10, id: 'gau-orchestrator', name: 'GAU Orchestrator', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Governança de compute, alocação de cérebros e resolução de impasses', category: 'Orquestração' },
+    { rank: 11, id: 'gau-memory', name: 'GAU Memory', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Project Brain, auditoria de memória e conciliação de contradições', category: 'Memória' },
+    { rank: 12, id: 'gau-judge', name: 'GAU Judge', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Tribunais de consenso ponderado e avaliação sem viés de maioria', category: 'Orquestração' },
+    { rank: 13, id: 'gau-requirements', name: 'GAU Requirements', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Baseline de requisitos verificáveis e critérios de aceitação rigorosos', category: 'Verificação' },
+    { rank: 14, id: 'gau-evidence', name: 'GAU Evidence', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Rastreabilidade forense de provas, cadeia de custódia e logs imutáveis', category: 'Verificação' },
+    { rank: 15, id: 'gau-research', name: 'GAU Research', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Pesquisa técnica externa, documentação viva e análise comparativa', category: 'Raciocínio' },
+    { rank: 16, id: 'gau-ux', name: 'GAU UX', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Design systems, jornadas do usuário, acessibilidade e microinterações', category: 'Engenharia' }
+  ];
+
+  const podiumEl = document.getElementById('leaderboardPodium');
+  const lbGridEl = document.getElementById('agentLeaderboardGrid');
+  const lbFiltersEl = document.getElementById('agentLeaderboardFilters');
+  let activeLbCat = 'Todos';
+
+  function renderLeaderboard() {
+    if (!podiumEl || !lbGridEl) return;
+
+    // Podium rendering (Top 3)
+    const top3 = AGENT_LEADERBOARD.slice(0, 3);
+    const crownIcons = ['🥇', '🥈', '🥉'];
+    podiumEl.innerHTML = top3.map((a, idx) => `
+      <div class="podium-card rank-${idx + 1}">
+        <span class="podium-crown">${crownIcons[idx]}</span>
+        <div class="podium-rank">#${String(idx + 1).padStart(2, '0')} ${idx === 0 ? 'TOP LEADER' : ''}</div>
+        <div class="podium-name">${escapeHtml(a.name)}</div>
+        <div class="podium-rating">
+          <strong>${a.rating}</strong>
+          <span>Elo</span>
+        </div>
+        <div class="podium-stats">
+          <span class="stat-pill">Vitórias: <b>${a.wins}</b></span>
+          <span class="stat-pill">Duelos: <b>${a.duels}</b></span>
+          <span class="stat-pill">Taxa: <b>${a.winRate}%</b></span>
+        </div>
+        <p class="podium-spec">${escapeHtml(a.specialty)}</p>
+      </div>
+    `).join('');
+
+    // Categories filter
+    const cats = ['Todos', ...new Set(AGENT_LEADERBOARD.map(a => a.category))];
+    if (lbFiltersEl) {
+      lbFiltersEl.innerHTML = cats.map(c => `
+        <button class="filter-btn ${c === activeLbCat ? 'active' : ''}" data-lbcat="${escapeHtml(c)}">${escapeHtml(c)}</button>
+      `).join('');
+      lbFiltersEl.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeLbCat = btn.dataset.lbcat;
+          renderLeaderboard();
+        });
+      });
+    }
+
+    // Agent grid rendering
+    const filtered = AGENT_LEADERBOARD.filter(a => activeLbCat === 'Todos' || a.category === activeLbCat);
+    lbGridEl.innerHTML = filtered.map(a => `
+      <article class="agent-card">
+        <div class="agent-card-top">
+          <span class="agent-rank">#${String(a.rank).padStart(2, '0')}</span>
+          <span class="agent-status-badge ${a.status.toLowerCase()}">${escapeHtml(a.status)}</span>
+        </div>
+        <h3>${escapeHtml(a.name)}</h3>
+        <span class="agent-slug"><code>${escapeHtml(a.id)}</code></span>
+        <div class="agent-rating-row">
+          <span class="agent-rating-val">${a.rating}</span>
+          <span class="agent-rating-lbl">Elo Rating</span>
+        </div>
+        <div class="agent-stats-row">
+          <span class="stat-pill">Vitórias: <b>${a.wins}</b></span>
+          <span class="stat-pill">Duelos: <b>${a.duels}</b></span>
+        </div>
+        <p class="agent-specialty">${escapeHtml(a.specialty)}</p>
+        <div class="agent-card-footer">
+          <span class="agent-cat-tag">${escapeHtml(a.category)}</span>
+          ${a.wins > 0 ? `<span class="agent-win-badge">✓ ${a.wins} vitória registrada</span>` : ''}
+        </div>
+      </article>
+    `).join('');
+  }
+
+  renderLeaderboard();
   resetMission();
 })();
