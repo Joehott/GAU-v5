@@ -59,7 +59,13 @@ GAU-v5/
 │   ├── index.html            # Página principal com Mission Lab interativo
 │   └── vercel.json           # Configurações de deploy e segurança na Vercel
 ├── tools/
-│   └── package_release.py    # Script de automação para empacotar releases e scripts
+│   ├── package_release.py    # Script de automação para empacotar releases e scripts
+│   └── test_deployment.py    # Teste de integridade de deploy para Vercel e GitHub Pages
+├── .nojekyll                 # Garante deploy estático direto no GitHub Pages sem Jekyll
+├── downloads/                # Espelhamento de downloads para raiz no GitHub Pages
+├── index.html                # Redirecionador imediato e redundância total para site/
+├── install.ps1 & install.sh  # Instaladores de linha única disponíveis na raiz
+├── vercel.json               # Configuração mestre Vercel na raiz (cleanUrls, headers, rewrites)
 ├── HANDOFF.md                # Este documento de passagem
 └── README-ANTIGRAVITY.md     # Guia rápido de bootstrap no Antigravity
 ```
@@ -119,6 +125,11 @@ Isso atualiza automaticamente `site/downloads/GAU-v5.zip`, calcula o SHA-256 e g
 
 ### 5.3. Testar o Site Localmente
 ```powershell
+# A partir da raiz (testa o redirecionador e links gerais)
+py -3 -m http.server 8000
+# Acesse: http://localhost:8000 -> redireciona para http://localhost:8000/site/
+
+# Ou servindo diretamente a pasta site
 cd site
 py -3 -m http.server 8080
 # Acesse: http://localhost:8080
@@ -126,6 +137,15 @@ py -3 -m http.server 8080
 
 ### 5.4. Publicar na Vercel
 ```powershell
+# Publicação a partir da raiz (usa vercel.json raiz com rewrites automáticos)
+vercel --prod
+
+# Ou publicando apenas a pasta site
 cd site
 vercel --prod
+```
+
+### 5.5. Testes de Integridade de Deploy
+```powershell
+py -3 tools\test_deployment.py
 ```

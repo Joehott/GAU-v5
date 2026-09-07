@@ -12,6 +12,8 @@ venv/
 
 # Archives & Build Outputs
 *.zip
+!site/downloads/*.zip
+!downloads/*.zip
 dist/
 
 # OS

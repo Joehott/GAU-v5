@@ -8,12 +8,14 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 GAU_SRC = ROOT / 'GAU-v5'
+ROOT_DOWNLOADS = ROOT / 'downloads'
 SITE = ROOT / 'site'
 DOWNLOADS = SITE / 'downloads'
 DIST = ROOT / 'dist'
 
 def main():
     DOWNLOADS.mkdir(parents=True, exist_ok=True)
+    ROOT_DOWNLOADS.mkdir(parents=True, exist_ok=True)
     DIST.mkdir(parents=True, exist_ok=True)
     
     print('[1/4] Running build_package.py to ensure payload freshness...')
@@ -23,7 +25,7 @@ def main():
     subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tests'], cwd=str(GAU_SRC), check=True)
     
     print('[3/4] Packaging GAU-v5.zip...')
-    zip_destinations = [DOWNLOADS / 'GAU-v5.zip', DIST / 'GAU-v5.zip']
+    zip_destinations = [DOWNLOADS / 'GAU-v5.zip', ROOT_DOWNLOADS / 'GAU-v5.zip', DIST / 'GAU-v5.zip']
     
     for zip_path in zip_destinations:
         with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as z:
@@ -97,6 +99,8 @@ def main():
     ps1_content = '\n'.join(ps1_lines)
     (SITE / 'install.ps1').write_text(ps1_content, encoding='utf-8')
     (SITE / 'downloads' / 'install.ps1').write_text(ps1_content, encoding='utf-8')
+    (ROOT / 'install.ps1').write_text(ps1_content, encoding='utf-8')
+    (ROOT_DOWNLOADS / 'install.ps1').write_text(ps1_content, encoding='utf-8')
     
     sh_lines = [
         '#!/usr/bin/env bash',
@@ -131,8 +135,10 @@ def main():
     sh_content = '\n'.join(sh_lines)
     (SITE / 'install.sh').write_text(sh_content, encoding='utf-8')
     (SITE / 'downloads' / 'install.sh').write_text(sh_content, encoding='utf-8')
+    (ROOT / 'install.sh').write_text(sh_content, encoding='utf-8')
+    (ROOT_DOWNLOADS / 'install.sh').write_text(sh_content, encoding='utf-8')
     
-    print('Release package complete! Artifacts created in site/downloads and dist/.')
+    print('Release package complete! Artifacts created in site/downloads, downloads/ and dist/.')
 
 if __name__ == '__main__':
     main()
