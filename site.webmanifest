@@ -1,7 +1,7 @@
 {
   "name": "GAU v5",
   "short_name": "GAU v5",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#070910",
   "theme_color": "#080b12",
