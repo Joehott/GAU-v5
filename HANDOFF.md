@@ -52,7 +52,7 @@ GAU-v5/
 ├── GAU-v5/                   # Código-fonte gerador do pacote e testes unitários
 │   ├── build_package.py      # Meta-compilador do payload
 │   ├── install.py            # Instalador idempotente com detecção de conflitos
-│   └── tests/test_gau.py     # Suíte de 16 testes de invariantes do runtime
+│   └── tests/test_gau.py     # Suíte de 34 testes de invariantes do runtime
 ├── site/                     # Landing Page & Interface Web (pronta para Vercel)
 │   ├── downloads/            # Pacote GAU-v5.zip, checksum SHA-256 e scripts
 │   ├── app.js & ideas.js     # Motor da UI e catálogo das 69 ideias

@@ -38,10 +38,18 @@ def ident(prefix): return prefix + '-' + uuid.uuid4().hex[:12]
 def load_file(path): return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 def fail(message): raise ValueError(message)
 
+def load_config(root):
+    p = Path(root) / '.gau' / 'config.json'
+    if p.is_file():
+        try: return json.loads(p.read_text(encoding='utf-8-sig'))
+        except Exception: return {}
+    return {}
+
 class Store:
     def __init__(self, project):
         self.root = Path(project).resolve()
         if not self.root.is_dir(): fail('Projeto inexistente.')
+        self.config = load_config(self.root)
         self.base = self.path('.gau')
         self.base.mkdir(exist_ok=True)
         for name in ('state.sqlite3','state.sqlite3-wal','state.sqlite3-shm'):
@@ -62,6 +70,8 @@ class Store:
         ''')
         self.db.commit()
     def close(self): self.db.close()
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc_val, exc_tb): self.close()
     @contextlib.contextmanager
     def tx(self):
         self.db.execute('BEGIN IMMEDIATE')
@@ -84,6 +94,7 @@ class Store:
         return p
     def snapshot(self, files=None):
         if files is not None:
+            if isinstance(files, str): files = [files]
             return {f: sha(self.path(f).read_bytes()) if self.path(f).is_file() else None
                     for f in sorted(set(files))}
         output = {}
@@ -97,6 +108,7 @@ class Store:
                 if p.is_file(): output[p.relative_to(self.root).as_posix()] = sha(p.read_bytes())
         return output
     def snapshot_record(self, files=None):
+        if isinstance(files, str): files = [files]
         return {'scope': 'project' if files is None else 'files', 'hashes': self.snapshot(files),
                 'excluded_directories': sorted(SKIP) if files is None else []}
     def fresh(self, evidence):
@@ -128,8 +140,11 @@ class Store:
     def items(self, mid, kind=None):
         q, args = 'SELECT data FROM items WHERE mission=?', [mid]
         if kind: q += ' AND kind=?'; args.append(kind)
+        q += ' ORDER BY rowid ASC'
         return [json.loads(x['data']) for x in self.db.execute(q,args)]
     def check_evidence(self, mid, ids):
+        if ids is None: fail('Evidência obrigatória.')
+        if isinstance(ids, str): ids = [ids]
         for iid in ids:
             e = self.item(iid)
             if e['mission'] != mid or e['kind'] != 'evidence': fail('Evidência de outra missão ou tipo.')
@@ -138,15 +153,26 @@ class Store:
         m = self.mission(mid)
         blocks = []
         rows = []
+        if m.get('status') == 'REOPEN_REQUIRED':
+            blocks.append({'type': 'status', 'detail': 'Missão requer reabertura após restauração de checkpoint.'})
         if not m['requirements']: blocks.append('Nenhum requisito registrado.')
         for req in m['requirements']:
-            candidates = [e for e in self.items(mid,'evidence') if req['id'] in e.get('requirements',[])]
+            candidates = []
+            for e in self.items(mid, 'evidence'):
+                e_reqs = e.get('requirements', [])
+                req_list = [e_reqs] if isinstance(e_reqs, str) else list(e_reqs or [])
+                if req['id'] in req_list:
+                    candidates.append(e)
             fresh = [e for e in candidates if self.fresh(e)]
-            passes = [e for e in fresh if e['result']=='PASS' and e['level']>=req['min_level']
-                      and (not req['independent'] or e['independent'])]
+            passes = [e for e in fresh if e.get('result')=='PASS' and e.get('level', 2)>=req['min_level']
+                      and (not req.get('independent') or e.get('independent'))]
             # A later pass does not silently erase an unresolved failing observation.
-            covered_failures = {fid for e in passes for fid in e.get('resolves',[])}
-            failures = [e['id'] for e in fresh if e['result']=='FAIL' and e['id'] not in covered_failures]
+            covered_failures = set()
+            for e in passes:
+                e_res = e.get('resolves') or []
+                res_list = [e_res] if isinstance(e_res, str) else list(e_res)
+                covered_failures.update(res_list)
+            failures = [e['id'] for e in fresh if e.get('result')=='FAIL' and e['id'] not in covered_failures]
             ok = bool(passes) and not failures
             if not ok: blocks.append('Requisito sem prova válida: '+req['id'])
             rows.append({'requirement':req['id'],'passed':ok,'evidence':[e['id'] for e in passes],
@@ -160,6 +186,26 @@ class Store:
                         try: self.check_evidence(mid,r['evidence']); valid=True
                         except ValueError: pass
                     if not valid: blocks.append('Pendência crítica: '+item['id'])
+        for item in self.items(mid, 'failure'):
+            resolutions = [r for r in self.items(mid, 'resolution') if r.get('target') == item['id']]
+            valid = False
+            for r in resolutions:
+                try:
+                    self.check_evidence(mid, r['evidence'])
+                    valid = True
+                    break
+                except ValueError:
+                    pass
+            if not valid:
+                for e in self.items(mid, 'evidence'):
+                    if e.get('result') == 'PASS' and self.fresh(e):
+                        e_res = e.get('resolves') or []
+                        res_list = [e_res] if isinstance(e_res, str) else list(e_res)
+                        if item['id'] in res_list:
+                            valid = True
+                            break
+            if not valid:
+                blocks.append('Falha não resolvida: ' + item['id'])
         open_tasks = [t['id'] for t in self.items(mid,'task') if self.task_status(mid,t['id']) != 'DONE']
         if open_tasks: blocks.append('Tarefas abertas: '+', '.join(open_tasks))
         proof = {'mission':mid,'status':'COMPLETE' if not blocks else 'INCOMPLETE',
@@ -169,15 +215,32 @@ class Store:
     def task_status(self, mid, tid):
         updates=[x for x in self.items(mid,'task_status') if x['task']==tid]
         if not updates: return 'PENDING'
+        updates.sort(key=lambda x: x.get('timestamp') or '')
         update=updates[-1]
         if update['status']!='DONE': return update['status']
         try: self.check_evidence(mid,update['evidence'])
         except ValueError: return 'STALE'
         task=self.item(tid)
-        if any(self.task_status(mid,d)!='DONE' for d in task['dependencies']): return 'STALE'
+        deps = task.get('dependencies', [])
+        if isinstance(deps, str): deps = [deps]
+        elif deps is None: deps = []
+        if any(self.task_status(mid,d)!='DONE' for d in deps): return 'STALE'
         return 'DONE'
 
 def new_mission(s, spec):
+    cfg = getattr(s, 'config', {})
+    budget_defaults = dict(cfg.get('budget', {}))
+    for k in ('max_depth', 'max_children', 'max_rounds', 'max_seconds', 'max_tool_calls', 'max_tokens'):
+        if k in cfg and k not in budget_defaults:
+            budget_defaults[k] = cfg[k]
+    if 'default_max_brains' in cfg and 'max_brains' not in budget_defaults:
+        budget_defaults['max_brains'] = cfg['default_max_brains']
+    if 'max_brains' in cfg and 'max_brains' not in budget_defaults:
+        budget_defaults['max_brains'] = cfg['max_brains']
+
+    config_defaults = cfg.get('defaults', {})
+    for k, v in config_defaults.items():
+        spec.setdefault(k, v)
     goal = spec.get('goal','').strip()
     if not goal: fail('goal obrigatório.')
     requirements = spec.get('requirements',[])
@@ -185,13 +248,22 @@ def new_mission(s, spec):
     for r in requirements:
         if not r.get('id') or r['id'] in seen or not r.get('text'): fail('Requisito sem ID/texto ou duplicado.')
         seen.add(r['id'])
-        r.setdefault('min_level',2); r.setdefault('independent',False)
-        if r['min_level'] not in range(6): fail('min_level deve ser 0..5.')
+        raw_min = r.get('min_level')
+        if raw_min is None: min_level = 2
+        else:
+            try: min_level = int(raw_min)
+            except (ValueError, TypeError): fail('min_level deve ser 0..5.')
+        if min_level not in range(6): fail('min_level deve ser 0..5.')
+        r['min_level'] = min_level
+        r.setdefault('independent',False)
     mid = ident('mission')
+    base_budget = {'max_brains':8,'max_depth':2,'max_children':6,'max_rounds':3,
+                   'max_seconds':7200,'max_tool_calls':500,'max_tokens':250000}
+    base_budget.update(budget_defaults)
+    base_budget.update(spec.get('budget',{}))
     m = {'id':mid,'goal':goal,'requirements':requirements,'domain':spec.get('domain','general'),
          'risk':spec.get('risk','medium'),'created':now(),'status':'ACTIVE',
-         'budget':dict({'max_brains':8,'max_depth':2,'max_children':6,'max_rounds':3,
-                        'max_seconds':7200,'max_tool_calls':500,'max_tokens':250000},**spec.get('budget',{}))}
+         'budget':base_budget}
     if m['risk'] not in ('low','medium','high','critical'): fail('Risco inválido.')
     for key,value in m['budget'].items():
         if not isinstance(value,int) or value<1: fail('Orçamento inválido: '+key)
@@ -199,11 +271,19 @@ def new_mission(s, spec):
     return m
 
 def register(s,mid,kind,data):
-    s.mission(mid)
+    m = s.mission(mid)
+    if m.get('status') == 'COMPLETE':
+        fail('Missão já finalizada (COMPLETE). Reabra a missão para registrar novas ações.')
     if kind not in KINDS: fail('Tipo inválido.')
     if not data.get('text'): fail('text obrigatório.')
-    if data.get('evidence'): s.check_evidence(mid,data['evidence'])
-    if 'files' in data: data['snapshot']=s.snapshot_record(data['files'])
+    ev = data.get('evidence')
+    if isinstance(ev, str):
+        data['evidence'] = [ev]
+        ev = data['evidence']
+    if ev: s.check_evidence(mid, ev)
+    if 'files' in data:
+        if isinstance(data['files'], str): data['files'] = [data['files']]
+        data['snapshot']=s.snapshot_record(data['files'])
     if kind=='hypothesis':
         if not data.get('discriminating_test'): fail('Hipótese precisa de discriminating_test.')
         data.setdefault('confidence',0.5)
@@ -212,7 +292,10 @@ def register(s,mid,kind,data):
 
 def verify(s,mid,spec,command=None,timeout=300):
     m=s.mission(mid)
+    if m.get('status') == 'COMPLETE':
+        fail('Missão já finalizada (COMPLETE). Reabra a missão para registrar novas ações.')
     reqs = spec.get('requirements',[])
+    if isinstance(reqs, str): reqs = [reqs]; spec['requirements'] = reqs
     known={x['id'] for x in m['requirements']}
     if not reqs or not set(reqs)<=known: fail('Indique requisitos válidos.')
     if not spec.get('verifier') or not spec.get('criterion'): fail('verifier e criterion obrigatórios.')
@@ -221,12 +304,25 @@ def verify(s,mid,spec,command=None,timeout=300):
                         spec['verifier']==spec['implementer']):
         fail('Verificação independente exige implementer diferente e ID da sessão real.')
     resolves=spec.get('resolves',[])
+    if isinstance(resolves, str): resolves = [resolves]; spec['resolves'] = resolves
     for fid in resolves:
         old=s.item(fid)
-        if old['mission']!=mid or old['kind']!='evidence' or old['result']!='FAIL':
+        if old['mission']!=mid:
             fail('resolves deve referenciar falhas desta missão.')
-    snap=s.snapshot_record(spec.get('files'))
+        is_failing_evidence = (old['kind']=='evidence' and old.get('result')=='FAIL')
+        is_failure_item = (old['kind']=='failure')
+        if not (is_failing_evidence or is_failure_item):
+            fail('resolves deve referenciar falhas desta missão.')
+    files = spec.get('files')
+    if isinstance(files, str): files = [files]; spec['files'] = files
+    snap=s.snapshot_record(files)
     evidence=dict(spec,snapshot=snap, independent=independent, resolves=resolves)
+    raw_level = spec.get('level')
+    if raw_level is None: level = 2
+    else:
+        try: level = int(raw_level)
+        except (ValueError, TypeError): fail('level deve ser 0..5.')
+    if level not in range(6): fail('level deve ser 0..5.')
     if command:
         start=time.monotonic()
         logdir=s.path('.gau/logs'); logdir.mkdir(exist_ok=True)
@@ -242,14 +338,14 @@ def verify(s,mid,spec,command=None,timeout=300):
         evidence.update(command=command,exit_code=code,seconds=time.monotonic()-start,
                         log=logfile.relative_to(s.root).as_posix(),log_hash=sha(logfile.read_bytes()),
                         result='PASS' if code==0 and unchanged and not timed_out else 'FAIL',
-                        level=2, snapshot_unchanged=unchanged, timed_out=timed_out,
+                        level=level, snapshot_unchanged=unchanged, timed_out=timed_out,
                         provenance='executed-command')
     else:
         if spec.get('result') not in ('PASS','FAIL'): fail('Atestado exige result PASS/FAIL.')
         if not spec.get('artifact'): fail('Atestado exige artifact local verificável.')
         artifact=s.path(spec['artifact'])
         if not artifact.is_file(): fail('Artefato ausente.')
-        evidence.update(level=2,provenance='agent-attestation',artifact_hash=sha(artifact.read_bytes()))
+        evidence.update(level=level,provenance='agent-attestation',artifact_hash=sha(artifact.read_bytes()))
     with s.tx():
         e=s.put(mid,'evidence',evidence); s.event(mid,'verification',{'id':e['id'],'result':e['result']})
     return e
@@ -289,15 +385,19 @@ def route(s,mid,spec):
     if spec.get('large_mission'): extra += [40,41]
     # Model availability is declared by the host. Labels from old chats are never API IDs.
     available=spec.get('available_models',['inherit'])
+    if isinstance(available, str): available = [available]
     if not available or any(not isinstance(x,str) for x in available): fail('Modelos disponíveis inválidos.')
-    failed=set(spec.get('failed_models',[])); candidates=[x for x in available if x not in failed]
+    failed=spec.get('failed_models',[])
+    if isinstance(failed, str): failed = [failed]
+    failed_set=set(failed); candidates=[x for x in available if x not in failed_set]
     if not candidates: return {'status':'BLOCKED_EXTERNALLY','reason':'Sem modelo disponível.'}
-    scores={x:1000.0 for x in candidates}
+    scores={x:1500.0 for x in candidates}
+    min_samples = getattr(s, 'config', {}).get('routing_min_samples', 10)
     for r in s.db.execute('SELECT * FROM ratings WHERE domain=? AND dimension=?',(m['domain'],'model')):
-        if r['entity'] in scores and r['samples']>=10:
+        if r['entity'] in scores and r['samples']>=min_samples:
             age=max(0,time.time()-r['updated'])/86400
-            scores[r['entity']]=1000+(r['rating']-1000)*2**(-age/90)
-    preferred=spec.get('preferred_model','inherit')
+            scores[r['entity']]=1500.0+(r['rating']-1500.0)*2**(-age/90)
+    preferred=spec.get('preferred_model', getattr(s, 'config', {}).get('native_model_tier', 'inherit'))
     # Stable tie handling preserves chosen Flash/current model in cold start.
     ordered=sorted(candidates,key=lambda x:(scores[x],x==preferred),reverse=True)
     result={'status':'READY','brains':count,'desired_brains':need,'model':ordered[0],
@@ -309,13 +409,22 @@ def route(s,mid,spec):
     return result
 
 def task_add(s,mid,spec):
-    s.mission(mid)
+    m = s.mission(mid)
+    if m.get('status') == 'COMPLETE':
+        fail('Missão já finalizada (COMPLETE). Reabra a missão para registrar novas ações.')
     if not spec.get('text') or not spec.get('owner'): fail('Tarefa exige text e owner.')
     deps=spec.get('dependencies',[])
+    if deps is None: deps = []
+    elif isinstance(deps, str): deps = [deps]
+    spec['dependencies'] = deps
     for tid in deps:
         t=s.item(tid)
         if t['mission']!=mid or t['kind']!='task': fail('Dependência inválida.')
-    for f in spec.get('files',[]): s.path(f)
+    files = spec.get('files', [])
+    if files is None: files = []
+    elif isinstance(files, str): files = [files]
+    spec['files'] = files
+    for f in files: s.path(f)
     # New nodes may depend only on existing nodes, making cycles impossible.
     with s.tx(): return s.put(mid,'task',dict(spec,dependencies=deps))
 
@@ -382,7 +491,9 @@ def consensus(s,mid,spec):
 def match(s,mid,spec):
     m=s.mission(mid)
     if not spec.get('id') or not spec.get('evidence'): fail('Resultado exige id único e evidence.')
-    s.check_evidence(mid,spec['evidence'])
+    ev = spec['evidence']
+    if isinstance(ev, str): spec['evidence'] = [ev]; ev = spec['evidence']
+    s.check_evidence(mid, ev)
     pairs=spec.get('pairs',[])
     if not pairs: fail('pairs obrigatório.')
     with s.tx():
@@ -397,10 +508,10 @@ def match(s,mid,spec):
                                  (m['domain'],p['dimension'],entity)).fetchone()
                 if row:
                     age=max(0,time.time()-row['updated'])/86400
-                    rating=1000+(row['rating']-1000)*2**(-age/90)
+                    rating=1500.0+(row['rating']-1500.0)*2**(-age/90)
                     rows.append((rating,row['samples']))
-                else: rows.append((1000,0))
-            expected=1/(1+10**((rows[1][0]-rows[0][0])/400)); delta=16*(score-expected)
+                else: rows.append((1500.0,0))
+            expected=1/(1+10**((rows[1][0]-rows[0][0])/400)); delta=32*(score-expected)
             for entity,r,change in zip((a,bb),rows,(delta,-delta)):
                 s.db.execute('INSERT OR REPLACE INTO ratings VALUES (?,?,?,?,?,?)',
                              (m['domain'],p['dimension'],entity,r[0]+change,r[1]+1,time.time()))
@@ -433,8 +544,12 @@ def graph_add(s,mid,spec):
     s.mission(mid)
     for key in ('source','target','relation_type','evidence'):
         if not spec.get(key): fail('Grafo exige '+key)
-    s.check_evidence(mid,spec['evidence'])
-    spec['snapshot']=s.snapshot_record(spec.get('files'))
+    ev = spec['evidence']
+    if isinstance(ev, str): spec['evidence'] = [ev]; ev = spec['evidence']
+    s.check_evidence(mid, ev)
+    files = spec.get('files')
+    if isinstance(files, str): files = [files]; spec['files'] = files
+    spec['snapshot']=s.snapshot_record(files)
     with s.tx(): return s.put(mid,'edge',spec)
 
 def blast(s,mid,node):
@@ -446,6 +561,55 @@ def blast(s,mid,node):
             if e['target'] in reached and e['source'] not in reached:
                 reached.add(e['source']); changed=True
     return {'affected':sorted(reached),'limits':'Só relações documentadas no grafo; ausência não prova isolamento.'}
+
+def attest(s, mid, spec):
+    return verify(s, mid, spec)
+
+def resolve(s, mid, target, evidence):
+    m = s.mission(mid)
+    if m.get('status') == 'COMPLETE':
+        fail('Missão já finalizada (COMPLETE). Reabra a missão para registrar novas ações.')
+    t = s.item(target)
+    if t['mission'] != mid or t['kind'] not in KINDS: fail('Alvo inválido.')
+    if isinstance(evidence, str): evidence = [evidence]
+    s.check_evidence(mid, evidence)
+    with s.tx(): return s.put(mid, 'resolution', {'target': target, 'evidence': evidence})
+
+def task_done(s, mid, task, evidence):
+    m = s.mission(mid)
+    if m.get('status') == 'COMPLETE':
+        fail('Missão já finalizada (COMPLETE). Reabra a missão para registrar novas ações.')
+    t = s.item(task)
+    if t['mission'] != mid or t['kind'] != 'task': fail('Tarefa inválida.')
+    deps = t.get('dependencies', [])
+    if isinstance(deps, str): deps = [deps]
+    elif deps is None: deps = []
+    if any(s.task_status(mid, d) != 'DONE' for d in deps): fail('Dependências pendentes.')
+    if isinstance(evidence, str): evidence = [evidence]
+    s.check_evidence(mid, evidence)
+    with s.tx(): return s.put(mid, 'task_status', {'task': task, 'status': 'DONE', 'evidence': evidence})
+
+def reopen(s, mid):
+    with s.tx():
+        m = s.mission(mid)
+        m['status'] = 'ACTIVE'
+        s.save_mission(m)
+        s.event(mid, 'reopened', {'status': 'ACTIVE'})
+        return {'mission': mid, 'status': 'ACTIVE'}
+
+def get_hypotheses(s, mid):
+    s.mission(mid); result=[]
+    for h in s.items(mid,'hypothesis'):
+        days=max(0,(dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(h['timestamp'])).total_seconds()/86400)
+        supported=False
+        ev = h.get('evidence')
+        if isinstance(ev, str): ev = [ev]
+        if ev:
+            try: s.check_evidence(mid,ev); supported=True
+            except ValueError: pass
+        result.append(dict(h,priority=h['confidence']*(1 if supported else 2**(-days/7)),
+                           refuted_by_age=False))
+    return result
 
 KNOWN_AGENTS = [
     ('gau-implementer', 'Implementação TDD, refatoração atômica, isolamento em worktrees'),
@@ -469,8 +633,24 @@ KNOWN_AGENTS = [
 def timeline(s, mid):
     m = s.mission(mid)
     relevant_kinds = {'fact', 'hypothesis', 'decision', 'evidence', 'checkpoint', 'completion', 'lesson'}
-    items = [x for x in s.items(mid) if x.get('kind') in relevant_kinds]
-    items.sort(key=lambda x: x.get('timestamp', ''))
+    items = [dict(x, _source='item') for x in s.items(mid) if x.get('kind') in relevant_kinds]
+
+    op_rows = s.db.execute('SELECT seq, timestamp, kind, data FROM events WHERE mission=? ORDER BY seq ASC', (mid,)).fetchall()
+    item_evidence_ids = {x.get('id') for x in items if x.get('kind') == 'evidence'}
+    for r in op_rows:
+        ekind = r['kind']
+        edata = json.loads(r['data'])
+        if ekind == 'verification' and edata.get('id') in item_evidence_ids:
+            continue
+        items.append({
+            '_source': 'event',
+            'id': f"event-{r['seq']}",
+            'kind': ekind,
+            'timestamp': r['timestamp'],
+            'data': edata
+        })
+
+    items.sort(key=lambda x: (x.get('timestamp') or '', 0 if x.get('_source') == 'event' else 1))
 
     events = []
     tree_lines = [f"Mission: {mid} [{m.get('status', 'UNKNOWN')}] - {m.get('goal', '')}"]
@@ -481,7 +661,23 @@ def timeline(s, mid):
         iid = item.get('id', '')
         ts = item.get('timestamp', '')
 
-        if kind == 'FACT':
+        if item.get('_source') == 'event':
+            if item['kind'] in ('created', 'mission_created'):
+                kind = 'MISSION_CREATED'
+                summary = f"Missão criada: {item.get('data', {}).get('goal', '')}"
+            elif item['kind'] == 'checkpoint-selected':
+                kind = 'CHECKPOINT-SELECTED'
+                summary = f"Checkpoint restaurado: {item.get('data', {}).get('id', '')}"
+            elif item['kind'] == 'reopened':
+                kind = 'MISSION_REOPENED'
+                summary = "Missão reaberta"
+            elif item['kind'] == 'verification':
+                kind = 'VERIFICATION'
+                summary = f"Verificação: {item.get('data', {}).get('id', '')} [{item.get('data', {}).get('result', '')}]"
+            else:
+                kind = item['kind'].upper()
+                summary = f"Evento [{item['kind']}]: {dumps(item.get('data', {}))}"
+        elif kind == 'FACT':
             summary = item.get('text', '')
         elif kind == 'HYPOTHESIS':
             summary = f"{item.get('text', '')} (conf: {item.get('confidence', 0.5)})"
@@ -510,7 +706,7 @@ def timeline(s, mid):
             'timestamp': ts,
             'summary': summary,
             'parent_checkpoint': item.get('parent') if kind == 'CHECKPOINT' else (active_cp if kind not in ('CHECKPOINT', 'COMPLETION') else None),
-            'data': item
+            'data': item.get('data') if item.get('_source') == 'event' else item
         })
 
         is_last = (idx == len(items) - 1)
@@ -580,7 +776,10 @@ def leaderboard(s, dimension='all', min_duels=5):
             ent_a['duels'] += 1
             ent_b['duels'] += 1
 
-    results_by_dim = {'agent': [], 'skill': [], 'model': []}
+    results_by_dim = {
+        'agent': [], 'skill': [], 'model': [],
+        'tool': [], 'pipeline': [], 'combination': []
+    }
     for (dim, name), ent in entities.items():
         if dimension != 'all' and dim != dimension:
             continue
@@ -633,6 +832,10 @@ def leaderboard(s, dimension='all', min_duels=5):
         'agents': results_by_dim.get('agent', []),
         'skills': results_by_dim.get('skill', []),
         'models': results_by_dim.get('model', []),
+        'tools': results_by_dim.get('tool', []),
+        'pipelines': results_by_dim.get('pipeline', []),
+        'combinations': results_by_dim.get('combination', []),
+        'by_dimension': results_by_dim,
         'table': '\n'.join(table_lines)
     }
 
@@ -645,13 +848,13 @@ def main(argv=None):
     for name in ('route','record','checkpoint','task-add','reserve','novelty','consensus','match','context','graph-add','usage','council-round'):
         a=subs.add_parser(name); a.add_argument('mission'); a.add_argument('--spec',required=True)
         if name=='record': a.add_argument('--kind',choices=sorted(KINDS),required=True)
-    for name in ('status','gate','close','list','ready','timeline'):
+    for name in ('status','gate','close','list','ready','timeline','reopen'):
         a=subs.add_parser(name); a.add_argument('mission')
         if name=='list': a.add_argument('--kind')
         if name=='timeline': a.add_argument('--tree', action='store_true', help='Exibir apenas arvore ASCII')
     lb=subs.add_parser('leaderboard')
     lb.add_argument('mission', nargs='?', default=None, help='Missao opcional')
-    lb.add_argument('--dimension', choices=['all','agent','skill','model'], default='all')
+    lb.add_argument('--dimension', choices=['all','agent','skill','model','tool','pipeline','combination'], default='all')
     lb.add_argument('--min-duels', type=int, default=5)
     lb.add_argument('--table', action='store_true', help='Exibir tabela formatada')
     a=subs.add_parser('verify'); a.add_argument('mission'); a.add_argument('--spec',required=True)
@@ -660,6 +863,7 @@ def main(argv=None):
     a=subs.add_parser('release'); a.add_argument('mission'); a.add_argument('reservation')
     a=subs.add_parser('resolve'); a.add_argument('mission'); a.add_argument('target'); a.add_argument('--evidence',nargs='+',required=True)
     a=subs.add_parser('task-done'); a.add_argument('mission'); a.add_argument('task'); a.add_argument('--evidence',nargs='+',required=True)
+    a=subs.add_parser('task-status'); a.add_argument('mission'); a.add_argument('task')
     a=subs.add_parser('restore-checkpoint'); a.add_argument('mission'); a.add_argument('checkpoint')
     a=subs.add_parser('blast'); a.add_argument('mission'); a.add_argument('node')
     a=subs.add_parser('hypotheses'); a.add_argument('mission')
@@ -692,11 +896,12 @@ def main(argv=None):
                     ev_ids = [e['id'] for e in all_ev]
                     pass_ev_ids = [e['id'] for e in all_ev if e.get('result')=='PASS']
                     blockers = result.get('blockers', [])
+                    blocker_strs = [b['detail'] if isinstance(b, dict) else str(b) for b in blockers]
                     summary_text = (
                         f"Post-Mortem Autônomo ({result['status']}): "
                         f"Requisitos cumpridos: {len(passed_reqs)}/{len(total_reqs)} ({', '.join(passed_reqs) if passed_reqs else 'nenhum'}). "
                         f"Evidências geradas: {len(ev_ids)} (PASS: {len(pass_ev_ids)}). "
-                        + (f"Bloqueios pendentes: {'; '.join(blockers)}." if blockers else "Todos os requisitos foram comprovados sem bloqueios.")
+                        + (f"Bloqueios pendentes: {'; '.join(blocker_strs)}." if blockers else "Todos os requisitos foram comprovados sem bloqueios.")
                     )
                     lesson_data = {
                         'text': summary_text,
@@ -717,6 +922,10 @@ def main(argv=None):
         elif args.cmd=='checkpoint': result=checkpoint(s,mid,spec)
         elif args.cmd=='route': result=route(s,mid,spec)
         elif args.cmd=='task-add': result=task_add(s,mid,spec)
+        elif args.cmd=='task-status':
+            result={'mission':mid,'task':args.task,'status':s.task_status(mid,args.task)}
+        elif args.cmd=='reopen':
+            result=reopen(s,mid)
         elif args.cmd=='reserve': result=reserve(s,mid,spec)
         elif args.cmd=='novelty': result=novelty(s,mid,spec)
         elif args.cmd=='consensus': result=consensus(s,mid,spec)
@@ -742,20 +951,19 @@ def main(argv=None):
                 if rounds and not spec.get('expected_gain'): fail('Nova rodada exige ganho esperado.')
                 result=s.put(mid,'council_round',dict(spec,round=len(rounds)+1))
         elif args.cmd=='resolve':
-            t=s.item(args.target)
-            if t['mission']!=mid or t['kind'] not in KINDS: fail('Alvo inválido.')
-            s.check_evidence(mid,args.evidence)
-            with s.tx(): result=s.put(mid,'resolution',{'target':args.target,'evidence':args.evidence})
+            result=resolve(s, mid, args.target, args.evidence)
         elif args.cmd=='task-done':
-            t=s.item(args.task)
-            if t['mission']!=mid or t['kind']!='task': fail('Tarefa inválida.')
-            if any(s.task_status(mid,d)!='DONE' for d in t['dependencies']): fail('Dependências pendentes.')
-            s.check_evidence(mid,args.evidence)
-            with s.tx(): result=s.put(mid,'task_status',{'task':args.task,'status':'DONE','evidence':args.evidence})
+            result=task_done(s, mid, args.task, args.evidence)
         elif args.cmd=='ready':
             s.mission(mid)
-            result=[t for t in s.items(mid,'task') if s.task_status(mid,t['id'])!='DONE'
-                    and all(s.task_status(mid,d)=='DONE' for d in t['dependencies'])]
+            result=[]
+            for t in s.items(mid, 'task'):
+                if s.task_status(mid, t['id']) != 'DONE':
+                    deps = t.get('dependencies', [])
+                    if isinstance(deps, str): deps = [deps]
+                    elif deps is None: deps = []
+                    if all(s.task_status(mid, d) == 'DONE' for d in deps):
+                        result.append(t)
         elif args.cmd=='restore-checkpoint':
             cp=s.item(args.checkpoint)
             if cp['mission']!=mid or cp['kind']!='checkpoint': fail('Checkpoint inválido.')
@@ -764,15 +972,7 @@ def main(argv=None):
                 m=s.mission(mid); m['active_checkpoint']=cp['id']; m['status']='REOPEN_REQUIRED'
                 s.save_mission(m); s.event(mid,'checkpoint-selected',{'id':cp['id']})
         elif args.cmd=='hypotheses':
-            s.mission(mid); result=[]
-            for h in s.items(mid,'hypothesis'):
-                days=max(0,(dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(h['timestamp'])).total_seconds()/86400)
-                supported=False
-                if h.get('evidence'):
-                    try: s.check_evidence(mid,h['evidence']); supported=True
-                    except ValueError: pass
-                result.append(dict(h,priority=h['confidence']*(1 if supported else 2**(-days/7)),
-                                   refuted_by_age=False))
+            result=get_hypotheses(s,mid)
         elif args.cmd=='worktree':
             s.mission(mid)
             if not re.fullmatch(r'[a-z0-9][a-z0-9-]{0,40}',args.name): fail('Nome de worktree inválido.')

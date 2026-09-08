@@ -10,6 +10,13 @@ import shutil
 import sys
 import uuid
 
+if hasattr(sys.stdout, 'reconfigure'):
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
+
 ROOT=Path(__file__).resolve().parent
 def digest(data): return hashlib.sha256(data).hexdigest()
 def write(p,data):

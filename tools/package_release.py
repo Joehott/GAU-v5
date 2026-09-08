@@ -3,6 +3,7 @@
 from pathlib import Path
 import zipfile
 import hashlib
+import shutil
 import subprocess
 import sys
 
@@ -25,23 +26,30 @@ def main():
     subprocess.run([sys.executable, '-m', 'unittest', 'discover', '-s', 'tests'], cwd=str(GAU_SRC), check=True)
     
     print('[3/4] Packaging GAU-v5.zip...')
+    master_zip = DIST / 'GAU-v5.zip'
+    with zipfile.ZipFile(master_zip, 'w', compression=zipfile.ZIP_DEFLATED) as z:
+        for item in sorted(GAU_SRC.rglob('*')):
+            if '__pycache__' in item.parts or item.name.endswith('.pyc') or item.is_dir():
+                continue
+            rel = item.relative_to(GAU_SRC)
+            archive_name = Path('GAU-v5') / rel
+            zinfo = zipfile.ZipInfo(str(archive_name.as_posix()))
+            zinfo.date_time = (2026, 9, 7, 0, 0, 0)
+            zinfo.compress_type = zipfile.ZIP_DEFLATED
+            zinfo.external_attr = 0o644 << 16
+            z.writestr(zinfo, item.read_bytes())
+    
+    sha = hashlib.sha256(master_zip.read_bytes()).hexdigest()
+    size = master_zip.stat().st_size
+    print(f'   -> Master GAU-v5.zip ({size:,} bytes, sha256: {sha[:16]}...)')
+    
     zip_destinations = [DOWNLOADS / 'GAU-v5.zip', ROOT_DOWNLOADS / 'GAU-v5.zip', DIST / 'GAU-v5.zip']
+    for zip_path in [DOWNLOADS / 'GAU-v5.zip', ROOT_DOWNLOADS / 'GAU-v5.zip']:
+        shutil.copy2(master_zip, zip_path)
     
     for zip_path in zip_destinations:
-        with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as z:
-            for item in sorted(GAU_SRC.rglob('*')):
-                if '__pycache__' in item.parts or item.name.endswith('.pyc') or item.is_dir():
-                    continue
-                rel = item.relative_to(GAU_SRC)
-                archive_name = Path('GAU-v5') / rel
-                z.write(item, str(archive_name.as_posix()))
-        
-        sha = hashlib.sha256(zip_path.read_bytes()).hexdigest()
-        size = zip_path.stat().st_size
-        print(f'   -> {zip_path.name} ({size:,} bytes, sha256: {sha[:16]}...)')
-        
-        # Write checksum file
         (zip_path.with_name(zip_path.name + '.sha256')).write_text(sha + '  ' + zip_path.name + '\n', encoding='utf-8')
+        print(f'   -> Populated {zip_path.relative_to(ROOT)}')
     
     print('[4/4] Creating installation scripts (install.ps1 and install.sh)...')
     
@@ -66,8 +74,8 @@ def main():
         'try {',
         '    Invoke-WebRequest -Uri $Url -OutFile $tmpZip -UseBasicParsing',
         '} catch {',
-        '    $localZip = Join-Path $PSScriptRoot "downloads/GAU-v5.zip"',
-        '    if (Test-Path $localZip) {',
+        '    $localZip = if ($PSScriptRoot) { Join-Path $PSScriptRoot "downloads/GAU-v5.zip" } else { $null }',
+        '    if ($localZip -and (Test-Path $localZip)) {',
         '        Write-Host "Using local package fallback..." -ForegroundColor Yellow',
         '        Copy-Item $localZip $tmpZip',
         '    } else {',
@@ -84,10 +92,32 @@ def main():
         '}',
         '',
         'Write-Host "Installing GAU v5 into $Project..." -ForegroundColor Green',
-        'py -3 $installScript --project $Project',
+        '$pyRan = $false',
+        'if (Get-Command py -ErrorAction SilentlyContinue) {',
+        '    try {',
+        '        py -3 "$installScript" --project "$Project"',
+        '        $pyRan = ($LASTEXITCODE -eq 0)',
+        '    } catch {',
+        '        $pyRan = $false',
+        '    }',
+        '}',
+        'if (-not $pyRan) {',
+        '    python "$installScript" --project "$Project"',
+        '}',
         '',
         'Write-Host "Verifying installation..."',
-        'py -3 "$Project/.gau/runtime/gau.py" --project $Project doctor',
+        '$docRan = $false',
+        'if (Get-Command py -ErrorAction SilentlyContinue) {',
+        '    try {',
+        '        py -3 "$Project/.gau/runtime/gau.py" --project "$Project" doctor',
+        '        $docRan = ($LASTEXITCODE -eq 0)',
+        '    } catch {',
+        '        $docRan = $false',
+        '    }',
+        '}',
+        'if (-not $docRan) {',
+        '    python "$Project/.gau/runtime/gau.py" --project "$Project" doctor',
+        '}',
         '',
         'Remove-Item $tmpZip -Force -ErrorAction SilentlyContinue',
         'Remove-Item $tmpDir -Recurse -Force -ErrorAction SilentlyContinue',
@@ -112,8 +142,8 @@ def main():
         'echo "=== GAU v5 Installer ==="',
         'echo "Target Project: $PROJECT"',
         '',
-        'TMP_ZIP="$(mktemp /tmp/gau-v5-XXXXXX.zip)"',
         'TMP_DIR="$(mktemp -d /tmp/gau-v5-ext-XXXXXX)"',
+        'TMP_ZIP="$TMP_DIR/gau-v5.zip"',
         '',
         'echo "Downloading GAU v5 package..."',
         'curl -fsSL "$URL" -o "$TMP_ZIP"',
@@ -127,7 +157,7 @@ def main():
         'echo "Verifying..."',
         'python3 "$PROJECT/.gau/runtime/gau.py" --project "$PROJECT" doctor',
         '',
-        'rm -rf "$TMP_ZIP" "$TMP_DIR"',
+        'rm -rf "$TMP_DIR"',
         'echo ""',
         'echo "[SUCCESS] GAU v5 installed successfully!"',
         ''

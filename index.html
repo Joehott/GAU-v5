@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
@@ -9,7 +9,11 @@
   <link rel="canonical" href="site/" />
   <script>
     (function() {
-      var target = "site/" + window.location.search + window.location.hash;
+      var path = window.location.pathname;
+      if (!path.endsWith('/')) {
+        path = path + '/';
+      }
+      var target = path + "site/" + window.location.search + window.location.hash;
       window.location.replace(target);
     })();
   </script>

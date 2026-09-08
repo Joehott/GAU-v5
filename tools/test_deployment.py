@@ -50,11 +50,22 @@ for script in ['install.ps1', 'install.sh']:
 print('Test 5 Passed: install.ps1 and install.sh present at all root and site paths')
 
 # 6. GAU-v5.zip checksums
+zip_paths = [root / 'site' / 'downloads' / 'GAU-v5.zip', root / 'downloads' / 'GAU-v5.zip', root / 'dist' / 'GAU-v5.zip']
+if any(not z.exists() for z in zip_paths) or any(not z.with_name(z.name + '.sha256').exists() for z in zip_paths):
+    import subprocess
+    import sys
+    print('Artifacts missing, running package_release.py...')
+    subprocess.run([sys.executable, str(root / 'tools' / 'package_release.py')], cwd=str(root), check=True)
+
 sha_expected = (root / 'site' / 'downloads' / 'GAU-v5.zip.sha256').read_text(encoding='utf-8').split()[0]
-for zpath in [root / 'site' / 'downloads' / 'GAU-v5.zip', root / 'downloads' / 'GAU-v5.zip', root / 'dist' / 'GAU-v5.zip']:
+zip_paths = [root / 'site' / 'downloads' / 'GAU-v5.zip', root / 'downloads' / 'GAU-v5.zip', root / 'dist' / 'GAU-v5.zip']
+for zpath in zip_paths:
     assert zpath.exists(), f'Zip {zpath} does not exist'
     sha_calc = hashlib.sha256(zpath.read_bytes()).hexdigest()
     assert sha_calc == sha_expected, f'Checksum mismatch for {zpath}: {sha_calc} != {sha_expected}'
+    sha_file = zpath.with_name(zpath.name + '.sha256')
+    assert sha_file.exists(), f'Checksum file {sha_file} does not exist'
+    assert sha_file.read_text(encoding='utf-8').split()[0] == sha_expected, f'Checksum file mismatch for {sha_file}'
 print(f'Test 6 Passed: Checksums match perfectly ({sha_expected[:16]}...)')
 
 # 7. .nojekyll

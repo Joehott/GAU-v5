@@ -4,7 +4,7 @@
 [![GitHub](https://img.shields.io/badge/GitHub-Joehott%2FGAU--v5-181717?logo=github)](https://github.com/Joehott/GAU-v5)
 [![Skills](https://img.shields.io/badge/Skills-72-blue)](#)
 [![Agents](https://img.shields.io/badge/Agents-16-orange)](#)
-[![Tests](https://img.shields.io/badge/Tests-16%20passing-success)](#)
+[![Tests](https://img.shields.io/badge/Tests-34%20passing-success)](#)
 [![License](https://img.shields.io/badge/License-MIT-purple)](#)
 
 O **GAU v5** (Grande Arquitetura Unificada) é um framework autônomo e verificável de engenharia de software para o Google Antigravity. Ele dota o comando `/goal` de governança cognitiva com 69 ideias integradas, 16 perfis de subagentes nativos, tolerância zero a conclusões sem prova, e isolamento de tarefas concorrentes em Git worktrees.
@@ -87,7 +87,7 @@ vercel --prod
 
 ## 🧪 Testes de Invariantes
 
-Para rodar a suíte completa de 16 testes de integração e invariantes:
+Para rodar a suíte completa de 34 testes de integração e invariantes:
 ```powershell
 py -3 -m unittest discover -s GAU-v5\tests -v
 ```

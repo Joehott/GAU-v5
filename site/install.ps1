@@ -18,8 +18,8 @@ Write-Host "Downloading GAU v5 package..." -ForegroundColor Yellow
 try {
     Invoke-WebRequest -Uri $Url -OutFile $tmpZip -UseBasicParsing
 } catch {
-    $localZip = Join-Path $PSScriptRoot "downloads/GAU-v5.zip"
-    if (Test-Path $localZip) {
+    $localZip = if ($PSScriptRoot) { Join-Path $PSScriptRoot "downloads/GAU-v5.zip" } else { $null }
+    if ($localZip -and (Test-Path $localZip)) {
         Write-Host "Using local package fallback..." -ForegroundColor Yellow
         Copy-Item $localZip $tmpZip
     } else {
@@ -36,10 +36,32 @@ if (-not (Test-Path $installScript)) {
 }
 
 Write-Host "Installing GAU v5 into $Project..." -ForegroundColor Green
-py -3 $installScript --project $Project
+$pyRan = $false
+if (Get-Command py -ErrorAction SilentlyContinue) {
+    try {
+        py -3 "$installScript" --project "$Project"
+        $pyRan = ($LASTEXITCODE -eq 0)
+    } catch {
+        $pyRan = $false
+    }
+}
+if (-not $pyRan) {
+    python "$installScript" --project "$Project"
+}
 
 Write-Host "Verifying installation..."
-py -3 "$Project/.gau/runtime/gau.py" --project $Project doctor
+$docRan = $false
+if (Get-Command py -ErrorAction SilentlyContinue) {
+    try {
+        py -3 "$Project/.gau/runtime/gau.py" --project "$Project" doctor
+        $docRan = ($LASTEXITCODE -eq 0)
+    } catch {
+        $docRan = $false
+    }
+}
+if (-not $docRan) {
+    python "$Project/.gau/runtime/gau.py" --project "$Project" doctor
+}
 
 Remove-Item $tmpZip -Force -ErrorAction SilentlyContinue
 Remove-Item $tmpDir -Recurse -Force -ErrorAction SilentlyContinue

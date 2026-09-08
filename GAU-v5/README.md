@@ -165,7 +165,7 @@ Simular antes de instalar:
 py -3 .\install.py --project "C:\Projetos\MeuProjeto" --dry-run
 ```
 
-Executar os testes do pacote:
+Executar os 34 testes do pacote:
 
 ```powershell
 py -3 -m unittest discover -s tests -v

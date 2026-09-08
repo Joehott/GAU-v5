@@ -161,21 +161,25 @@
     });
   });
 
+  // Sanitizar inputs para tabelas Markdown
+  const sanitizeMd = (val = '') => String(val).replace(/\|/g, '\\|').replace(/[\r\n]+/g, ' ').trim();
+
   // Exportar Dossiê de Auditoria
   const exportBtn = document.getElementById('exportDossier');
   if (exportBtn) {
     exportBtn.addEventListener('click', () => {
       const sc = scenarios[currentScenarioKey];
-      const obj = (missionInput ? missionInput.value : '').trim() || sc.title;
-      const status = missionStatus.textContent || 'waiting';
-      const compute = statCompute.textContent;
-      const brains = statBrains.textContent;
-      const conf = statConfidence.textContent;
-      const evidence = statEvidence.textContent;
-      const facts = memFacts.textContent;
-      const hyp = memHyp.textContent;
-      const reject = memReject.textContent;
-      const check = memCheck.textContent;
+      const rawObj = (missionInput ? missionInput.value : '').trim() || sc.title;
+      const obj = sanitizeMd(rawObj);
+      const status = sanitizeMd(missionStatus.textContent || 'waiting');
+      const compute = sanitizeMd(statCompute.textContent);
+      const brains = sanitizeMd(statBrains.textContent);
+      const conf = sanitizeMd(statConfidence.textContent);
+      const evidence = sanitizeMd(statEvidence.textContent);
+      const facts = sanitizeMd(memFacts.textContent);
+      const hyp = sanitizeMd(memHyp.textContent);
+      const reject = sanitizeMd(memReject.textContent);
+      const check = sanitizeMd(memCheck.textContent);
 
       // Extract executed steps or fallback to scenario steps
       const stepElements = timeline.querySelectorAll('.timeline-step');
@@ -193,7 +197,7 @@
       }
 
       const stepsTable = stepsData.map(s =>
-        `| **${s.id}** | ${s.name} | ${s.detail} | \`${s.state}\` |`
+        `| **${sanitizeMd(s.id)}** | ${sanitizeMd(s.name)} | ${sanitizeMd(s.detail)} | \`${sanitizeMd(s.state)}\` |`
       ).join('\n');
 
       const nowIso = new Date().toISOString();
