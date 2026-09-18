@@ -420,6 +420,7 @@ ${stepsTable}
   function openWhatsappModal(presetMsg) {
     if (!whatsappModal) return;
     whatsappModal.classList.add('active');
+    whatsappModal.classList.add('open');
     if (whatsappTooltip) {
       whatsappTooltip.style.display = 'none';
     }
@@ -434,6 +435,7 @@ ${stepsTable}
   function closeWhatsappModal() {
     if (whatsappModal) {
       whatsappModal.classList.remove('active');
+      whatsappModal.classList.remove('open');
     }
   }
 
@@ -454,7 +456,7 @@ ${stepsTable}
   if (whatsappToggleBtn) {
     whatsappToggleBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (whatsappModal && whatsappModal.classList.contains('active')) {
+      if (whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
         closeWhatsappModal();
       } else {
         openWhatsappModal();
@@ -500,6 +502,13 @@ ${stepsTable}
     });
   }
 
+  const sectionOpenChatBtn = document.getElementById('sectionOpenChatBtn');
+  if (sectionOpenChatBtn) {
+    sectionOpenChatBtn.addEventListener('click', () => {
+      openWhatsappModal('Olá! Vim pela seção de contato do GAU v5 e gostaria de tirar dúvidas.');
+    });
+  }
+
   // Quick Chips
   quickChips.forEach(chip => {
     chip.addEventListener('click', () => {
@@ -528,11 +537,12 @@ ${stepsTable}
 
   // Close modal when clicking outside
   document.addEventListener('click', (e) => {
-    if (whatsappModal && whatsappModal.classList.contains('active')) {
+    if (whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
       if (!whatsappModal.contains(e.target) && 
           !(whatsappToggleBtn && whatsappToggleBtn.contains(e.target)) && 
           !(headerWhatsappBtn && headerWhatsappBtn.contains(e.target)) &&
           !(deployCardWhatsappBtn && deployCardWhatsappBtn.contains(e.target)) &&
+          !(sectionOpenChatBtn && sectionOpenChatBtn.contains(e.target)) &&
           !(footerWhatsappBtn && footerWhatsappBtn.contains(e.target))) {
         closeWhatsappModal();
       }
@@ -541,7 +551,7 @@ ${stepsTable}
 
   // Escape key to close modal
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && whatsappModal && whatsappModal.classList.contains('active')) {
+    if (e.key === 'Escape' && whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
       closeWhatsappModal();
     }
   });
