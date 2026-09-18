@@ -32,7 +32,13 @@
       <a href="#deploy">Instalação</a>
       <a href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </nav>
-    <a class="mini-cta" href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a>
+    <div class="topbar-actions">
+      <button class="whatsapp-btn-header" id="headerWhatsappBtn" title="Falar no WhatsApp">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+        <span>WhatsApp</span>
+      </button>
+      <a class="mini-cta" href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a>
+    </div>
   </header>
 
   <main>
@@ -233,14 +239,47 @@
     <section class="section-shell section-block" id="deploy">
       <div class="deploy-card reveal">
         <div>
-          <div class="eyebrow">GAU PACKAGE</div>
+          <div class="eyebrow"><span class="pulse-dot"></span> GAU PACKAGE MASTER EDITION</div>
           <h2>Conecte o GAU v5 ao seu projeto.</h2>
-          <p>Instalação em um comando mantendo o <code>/goal</code> nativo intacto e ativando as 69 ideias, 16 agentes e a regra Always-On.</p>
+          <p>Instalação em um comando mantendo o <code>/goal</code> nativo intacto e ativando os agentes, regras e o ecossistema completo.</p>
+          
+          <div class="package-meta-box">
+            <span class="package-pill highlight">⭐ PACOTE MASTER PRO</span>
+            <span class="package-pill">📦 45.6 MB</span>
+            <span class="package-pill">⚡ 9.087 Arquivos</span>
+          </div>
+
           <div style="margin: 1.2rem 0; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-            <a class="button primary" href="downloads/GAU-v5.zip" download>Baixar GAU-v5.zip <span>↓</span></a>
+            <a class="button primary download-btn-highlight" href="downloads/GAU-v5.zip" download>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+              Baixar GAU-v5.zip (45.6 MB) <span>↓</span>
+            </a>
             <a class="button ghost" href="downloads/GAU-v5.zip.sha256" target="_blank">Checksum SHA256</a>
           </div>
+
+          <div class="hash-fingerprint-box">
+            <div class="hash-top">
+              <span class="hash-label">SHA-256 Fingerprint:</span>
+              <button class="hash-copy-btn" id="copyHashBtn" data-copy="f28fba15827bf5b050e999d6dc41e0993b13fa4c8f4bdacadf23f330fcc2560b">Copiar Hash</button>
+            </div>
+            <code>f28fba15827bf5b050e999d6dc41e0993b13fa4c8f4bdacadf23f330fcc2560b</code>
+          </div>
+
+          <!-- WhatsApp Support Banner in Deploy Card -->
+          <div class="whatsapp-support-banner">
+            <div class="whatsapp-banner-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <div class="whatsapp-banner-content">
+              <strong>Dúvidas na instalação ou integração?</strong>
+              <p>Fale diretamente conosco no WhatsApp para tirar dúvidas sobre o GAU v5.</p>
+            </div>
+            <button class="button whatsapp-direct-btn" id="deployCardWhatsappBtn">
+              Chamar no WhatsApp
+            </button>
+          </div>
         </div>
+
         <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
           <div class="codebox">
             <div class="codebox-top"><span>PowerShell (Instalação Direta)</span><button class="copy-btn" data-copy="iwr -useb https://joehott.github.io/GAU-v5/install.ps1 | iex">Copiar</button></div>
@@ -264,10 +303,64 @@
     <div class="brand footer-brand"><img src="assets/gau-mark.svg" alt="" width="30" height="30" /><span>GAU <b>v5</b></span></div>
     <p>Built around adaptive compute, independent verification and evidence-first reasoning.</p>
     <div style="display: flex; gap: 1.5rem; align-items: center;">
+      <button class="footer-whatsapp-link" id="footerWhatsappBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366" style="vertical-align: middle; margin-right: 4px;"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
+        <span>WhatsApp Suporte</span>
+      </button>
       <a href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <a href="#top">Voltar ao topo ↑</a>
     </div>
   </footer>
+
+  <!-- Floating WhatsApp Action Widget & Interactive Chat Modal -->
+  <div class="whatsapp-floating" id="whatsappFloating">
+    <div class="whatsapp-tooltip" id="whatsappTooltip">
+      <span>Dúvidas? Fale no WhatsApp!</span>
+      <button class="whatsapp-tooltip-close" id="tooltipClose" aria-label="Fechar">&times;</button>
+    </div>
+    <button class="whatsapp-pulse-btn" id="whatsappToggleBtn" aria-label="Abrir WhatsApp de Contato">
+      <span class="whatsapp-pulse-ring"></span>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="#ffffff">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+      </svg>
+    </button>
+    
+    <div class="whatsapp-modal" id="whatsappModal">
+      <div class="whatsapp-modal-head">
+        <div class="whatsapp-head-info">
+          <div class="whatsapp-avatar">
+            <img src="assets/gau-mark.svg" alt="" width="22" height="22">
+            <span class="online-indicator"></span>
+          </div>
+          <div>
+            <strong>Suporte GAU v5</strong>
+            <small>Online agora • WhatsApp</small>
+          </div>
+        </div>
+        <button class="whatsapp-close-btn" id="whatsappCloseBtn" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="whatsapp-modal-body">
+        <div class="whatsapp-chat-bubble">
+          <p>Olá! 👋 Como podemos te ajudar com o GAU v5 ou com automação de agentes?</p>
+          <span class="bubble-time">Agora</span>
+        </div>
+        <div class="whatsapp-quick-chips">
+          <button type="button" class="quick-chip" data-msg="Olá! Gostaria de tirar dúvidas sobre a instalação do GAU v5.">📦 Ajuda na Instalação</button>
+          <button type="button" class="quick-chip" data-msg="Olá! Gostaria de saber mais sobre os 16 agentes e 69 mecanismos do GAU v5.">🤖 Dúvidas sobre Agentes</button>
+          <button type="button" class="quick-chip" data-msg="Olá! Gostaria de conversar sobre um projeto com o GAU v5.">💬 Falar com Desenvolvedor</button>
+        </div>
+        <div class="whatsapp-input-group">
+          <textarea id="whatsappMessageInput" rows="2" placeholder="Digite sua mensagem...">Olá! Vim pelo site do GAU v5 e gostaria de tirar dúvidas sobre o framework.</textarea>
+          <button class="whatsapp-send-btn" id="whatsappSendBtn" title="Conversar no WhatsApp">
+            <span>Abrir WhatsApp</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
   <script src="ideas.js"></script>
   <script src="app.js"></script>

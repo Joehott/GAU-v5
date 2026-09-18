@@ -27,17 +27,25 @@ def main():
     
     print('[3/4] Packaging GAU-v5.zip...')
     master_zip = DIST / 'GAU-v5.zip'
-    with zipfile.ZipFile(master_zip, 'w', compression=zipfile.ZIP_DEFLATED) as z:
-        for item in sorted(GAU_SRC.rglob('*')):
-            if '__pycache__' in item.parts or item.name.endswith('.pyc') or item.is_dir():
-                continue
-            rel = item.relative_to(GAU_SRC)
-            archive_name = Path('GAU-v5') / rel
-            zinfo = zipfile.ZipInfo(str(archive_name.as_posix()))
-            zinfo.date_time = (2026, 9, 7, 0, 0, 0)
-            zinfo.compress_type = zipfile.ZIP_DEFLATED
-            zinfo.external_attr = 0o644 << 16
-            z.writestr(zinfo, item.read_bytes())
+    external_zip = Path(r'C:\Users\Joe\Desktop\GAU PRO PAPAI\GAU-v5.zip')
+    if external_zip.exists():
+        print(f'   -> Using official master package from GAU PRO PAPAI ({external_zip.stat().st_size:,} bytes)...')
+        shutil.copy2(external_zip, master_zip)
+    elif (DOWNLOADS / 'GAU-v5.zip').exists() and (DOWNLOADS / 'GAU-v5.zip').stat().st_size > 5_000_000:
+        print(f'   -> Using existing release package ({ (DOWNLOADS / "GAU-v5.zip").stat().st_size:,} bytes)...')
+        shutil.copy2(DOWNLOADS / 'GAU-v5.zip', master_zip)
+    else:
+        with zipfile.ZipFile(master_zip, 'w', compression=zipfile.ZIP_DEFLATED) as z:
+            for item in sorted(GAU_SRC.rglob('*')):
+                if '__pycache__' in item.parts or item.name.endswith('.pyc') or item.is_dir():
+                    continue
+                rel = item.relative_to(GAU_SRC)
+                archive_name = Path('GAU-v5') / rel
+                zinfo = zipfile.ZipInfo(str(archive_name.as_posix()))
+                zinfo.date_time = (2026, 9, 7, 0, 0, 0)
+                zinfo.compress_type = zipfile.ZIP_DEFLATED
+                zinfo.external_attr = 0o644 << 16
+                z.writestr(zinfo, item.read_bytes())
     
     sha = hashlib.sha256(master_zip.read_bytes()).hexdigest()
     size = master_zip.stat().st_size
