@@ -357,4 +357,192 @@ ${stepsTable}
 
   renderLeaderboard();
   resetMission();
+
+  // ==========================================
+  // Toast Notification System
+  // ==========================================
+  const toastEl = document.getElementById('toastNotification');
+  let toastTimer = null;
+  function showToast(message, duration = 3000) {
+    if (!toastEl) return;
+    toastEl.textContent = message;
+    toastEl.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toastEl.classList.remove('show');
+    }, duration);
+  }
+
+  // ==========================================
+  // SHA-256 Copy Button Handler
+  // ==========================================
+  const copyHashBtn = document.getElementById('copyHashBtn');
+  if (copyHashBtn) {
+    copyHashBtn.addEventListener('click', async () => {
+      const hash = copyHashBtn.dataset.copy || 'f28fba15827bf5b050e999d6dc41e0993b13fa4c8f4bdacadf23f330fcc2560b';
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(hash);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = hash;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        const oldText = copyHashBtn.textContent;
+        copyHashBtn.textContent = 'Hash Copiado! ✓';
+        showToast('SHA-256 copiado para a área de transferência!');
+        setTimeout(() => {
+          copyHashBtn.textContent = oldText;
+        }, 2000);
+      } catch (err) {
+        showToast('Não foi possível copiar automaticamente. Selecione manualmente o hash.');
+      }
+    });
+  }
+
+  // ==========================================
+  // WhatsApp Contact Widget & Modal
+  // ==========================================
+  const whatsappModal = document.getElementById('whatsappModal');
+  const whatsappToggleBtn = document.getElementById('whatsappToggleBtn');
+  const whatsappCloseBtn = document.getElementById('whatsappCloseBtn');
+  const tooltipCloseBtn = document.getElementById('tooltipClose');
+  const whatsappTooltip = document.getElementById('whatsappTooltip');
+  const whatsappSendBtn = document.getElementById('whatsappSendBtn');
+  const whatsappMessageInput = document.getElementById('whatsappMessageInput');
+  const quickChips = document.querySelectorAll('.quick-chip');
+
+  function openWhatsappModal(presetMsg) {
+    if (!whatsappModal) return;
+    whatsappModal.classList.add('active');
+    if (whatsappTooltip) {
+      whatsappTooltip.style.display = 'none';
+    }
+    if (presetMsg && whatsappMessageInput) {
+      whatsappMessageInput.value = presetMsg;
+    }
+    if (whatsappMessageInput) {
+      setTimeout(() => whatsappMessageInput.focus(), 150);
+    }
+  }
+
+  function closeWhatsappModal() {
+    if (whatsappModal) {
+      whatsappModal.classList.remove('active');
+    }
+  }
+
+  function triggerWhatsappSend() {
+    const text = (whatsappMessageInput ? whatsappMessageInput.value : '').trim();
+    if (!text) {
+      showToast('Por favor, digite uma mensagem antes de continuar.');
+      return;
+    }
+    const encoded = encodeURIComponent(text);
+    // Universal WhatsApp launch URL (opens WhatsApp app or WhatsApp Web)
+    const url = `https://wa.me/?text=${encoded}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+    closeWhatsappModal();
+    showToast('Abrindo WhatsApp...');
+  }
+
+  if (whatsappToggleBtn) {
+    whatsappToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (whatsappModal && whatsappModal.classList.contains('active')) {
+        closeWhatsappModal();
+      } else {
+        openWhatsappModal();
+      }
+    });
+  }
+
+  if (whatsappCloseBtn) {
+    whatsappCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeWhatsappModal();
+    });
+  }
+
+  if (tooltipCloseBtn) {
+    tooltipCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (whatsappTooltip) {
+        whatsappTooltip.style.display = 'none';
+      }
+    });
+  }
+
+  // External trigger buttons
+  const headerWhatsappBtn = document.getElementById('headerWhatsappBtn');
+  if (headerWhatsappBtn) {
+    headerWhatsappBtn.addEventListener('click', () => {
+      openWhatsappModal('Olá! Vim pelo cabeçalho do site do GAU v5 e gostaria de tirar dúvidas sobre o framework.');
+    });
+  }
+
+  const deployCardWhatsappBtn = document.getElementById('deployCardWhatsappBtn');
+  if (deployCardWhatsappBtn) {
+    deployCardWhatsappBtn.addEventListener('click', () => {
+      openWhatsappModal('Olá! Preciso de ajuda para instalar e rodar o GAU v5 no meu ambiente de trabalho.');
+    });
+  }
+
+  const footerWhatsappBtn = document.getElementById('footerWhatsappBtn');
+  if (footerWhatsappBtn) {
+    footerWhatsappBtn.addEventListener('click', () => {
+      openWhatsappModal('Olá! Gostaria de falar com o suporte/desenvolvedor do GAU v5.');
+    });
+  }
+
+  // Quick Chips
+  quickChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const msg = chip.dataset.msg;
+      if (msg && whatsappMessageInput) {
+        whatsappMessageInput.value = msg;
+        whatsappMessageInput.focus();
+      }
+    });
+  });
+
+  // Send WhatsApp Button
+  if (whatsappSendBtn) {
+    whatsappSendBtn.addEventListener('click', triggerWhatsappSend);
+  }
+
+  // Enter to send (Shift+Enter for new line)
+  if (whatsappMessageInput) {
+    whatsappMessageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        triggerWhatsappSend();
+      }
+    });
+  }
+
+  // Close modal when clicking outside
+  document.addEventListener('click', (e) => {
+    if (whatsappModal && whatsappModal.classList.contains('active')) {
+      if (!whatsappModal.contains(e.target) && 
+          !(whatsappToggleBtn && whatsappToggleBtn.contains(e.target)) && 
+          !(headerWhatsappBtn && headerWhatsappBtn.contains(e.target)) &&
+          !(deployCardWhatsappBtn && deployCardWhatsappBtn.contains(e.target)) &&
+          !(footerWhatsappBtn && footerWhatsappBtn.contains(e.target))) {
+        closeWhatsappModal();
+      }
+    }
+  });
+
+  // Escape key to close modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && whatsappModal && whatsappModal.classList.contains('active')) {
+      closeWhatsappModal();
+    }
+  });
 })();
