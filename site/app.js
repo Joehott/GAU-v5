@@ -406,10 +406,9 @@ ${stepsTable}
   }
 
   // ==========================================
-  // WhatsApp Direct Online Chat & Modal
+  // WhatsApp Official Channel & Modal
   // ==========================================
-  const GAU_WHATSAPP_PHONE = '5511970005005';
-  const GAU_WHATSAPP_DISPLAY = '+55 (11) 97000-5005';
+  const GAU_WHATSAPP_CHANNEL_URL = 'https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V';
 
   const whatsappModal = document.getElementById('whatsappModal');
   const whatsappToggleBtn = document.getElementById('whatsappToggleBtn');
@@ -417,25 +416,14 @@ ${stepsTable}
   const tooltipCloseBtn = document.getElementById('tooltipClose');
   const whatsappTooltip = document.getElementById('whatsappTooltip');
   const whatsappSendBtn = document.getElementById('whatsappSendBtn');
-  const whatsappMessageInput = document.getElementById('whatsappMessageInput');
-  const quickChips = document.querySelectorAll('.quick-chip');
-  const contactActionChips = document.querySelectorAll('.contact-chip-action');
+  const sectionOpenChatBtn = document.getElementById('sectionOpenChatBtn');
 
-  function openWhatsappModal(presetMsg) {
+  function openWhatsappModal() {
     if (!whatsappModal) return;
     whatsappModal.classList.add('active');
     whatsappModal.classList.add('open');
     if (whatsappTooltip) {
       whatsappTooltip.style.display = 'none';
-    }
-    if (presetMsg && whatsappMessageInput) {
-      whatsappMessageInput.value = presetMsg;
-    }
-    if (whatsappMessageInput) {
-      setTimeout(() => {
-        whatsappMessageInput.focus();
-        whatsappMessageInput.setSelectionRange(whatsappMessageInput.value.length, whatsappMessageInput.value.length);
-      }, 150);
     }
   }
 
@@ -446,13 +434,9 @@ ${stepsTable}
     }
   }
 
-  function startOnlineWhatsappChat(customText) {
-    const raw = customText || (whatsappMessageInput ? whatsappMessageInput.value : '');
-    const text = (raw || 'Olá! Vim pelo site do GAU v5 e gostaria de atendimento online.').trim();
-    const encoded = encodeURIComponent(text);
-    const url = `https://wa.me/${GAU_WHATSAPP_PHONE}?text=${encoded}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-    showToast(`Iniciando atendimento online com ${GAU_WHATSAPP_DISPLAY}...`);
+  function openWhatsappChannel() {
+    window.open(GAU_WHATSAPP_CHANNEL_URL, '_blank', 'noopener,noreferrer');
+    showToast('Acessando o Canal Oficial do GAU v5 no WhatsApp...');
     closeWhatsappModal();
   }
 
@@ -483,75 +467,17 @@ ${stepsTable}
     });
   }
 
-  // Quick Chips in Modal
-  quickChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const msg = chip.dataset.msg;
-      if (msg && whatsappMessageInput) {
-        whatsappMessageInput.value = msg;
-        whatsappMessageInput.focus();
-      }
-    });
-  });
-
-  // Action chips in contact section
-  contactActionChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const question = chip.dataset.ask || chip.textContent.trim();
-      startOnlineWhatsappChat(question);
-    });
-  });
-
-  // Send WhatsApp Button inside modal
-  if (whatsappSendBtn) {
-    whatsappSendBtn.addEventListener('click', () => {
-      startOnlineWhatsappChat();
-    });
-  }
-
-  // Enter to send (Shift+Enter for newline)
-  if (whatsappMessageInput) {
-    whatsappMessageInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        startOnlineWhatsappChat();
-      }
-    });
-  }
-
-  // External trigger buttons
-  const headerWhatsappBtn = document.getElementById('headerWhatsappBtn');
-  if (headerWhatsappBtn) {
-    headerWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Gostaria de tirar dúvidas sobre o GAU v5.');
-    });
-  }
-
-  const deployCardWhatsappBtn = document.getElementById('deployCardWhatsappBtn');
-  if (deployCardWhatsappBtn) {
-    deployCardWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Preciso de ajuda com a instalação e testes do GAU v5.');
-    });
-  }
-
-  const footerWhatsappBtn = document.getElementById('footerWhatsappBtn');
-  if (footerWhatsappBtn) {
-    footerWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Gostaria de falar sobre o suporte do GAU v5.');
-    });
-  }
-
-  const sectionOpenChatBtn = document.getElementById('sectionOpenChatBtn');
   if (sectionOpenChatBtn) {
-    sectionOpenChatBtn.addEventListener('click', () => {
+    sectionOpenChatBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       openWhatsappModal();
     });
   }
 
-  const mainSectionWhatsappCta = document.getElementById('mainSectionWhatsappCta');
-  if (mainSectionWhatsappCta) {
-    mainSectionWhatsappCta.addEventListener('click', () => {
-      startOnlineWhatsappChat('Olá! Gostaria de falar com o suporte do GAU v5.');
+  if (whatsappSendBtn) {
+    whatsappSendBtn.addEventListener('click', () => {
+      showToast('Acessando o Canal Oficial do GAU v5 no WhatsApp...');
+      closeWhatsappModal();
     });
   }
 
@@ -560,11 +486,7 @@ ${stepsTable}
     if (whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
       if (!whatsappModal.contains(e.target) && 
           !(whatsappToggleBtn && whatsappToggleBtn.contains(e.target)) && 
-          !(headerWhatsappBtn && headerWhatsappBtn.contains(e.target)) &&
-          !(deployCardWhatsappBtn && deployCardWhatsappBtn.contains(e.target)) &&
-          !(sectionOpenChatBtn && sectionOpenChatBtn.contains(e.target)) &&
-          !(mainSectionWhatsappCta && mainSectionWhatsappCta.contains(e.target)) &&
-          !(footerWhatsappBtn && footerWhatsappBtn.contains(e.target))) {
+          !(sectionOpenChatBtn && sectionOpenChatBtn.contains(e.target))) {
         closeWhatsappModal();
       }
     }
