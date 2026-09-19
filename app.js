@@ -605,4 +605,46 @@ ${stepsTable}
       }
     }, 80);
   }, { passive: true });
+
+  // Desktop Mobile Simulator Toggle
+  const mobileSimToggleBtn = document.getElementById('mobileSimToggleBtn');
+  const drawerMobileSimBtn = document.getElementById('drawerMobileSimBtn');
+  const exitMobileSimBtn = document.getElementById('exitMobileSimBtn');
+  const mobileSimBanner = document.getElementById('mobileSimBanner');
+
+  function enableMobileSimulator() {
+    document.body.classList.add('simulating-mobile');
+    if (mobileSimBanner) mobileSimBanner.style.display = 'flex';
+    showToast('📱 Modo Celular Ativado!');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function disableMobileSimulator() {
+    document.body.classList.remove('simulating-mobile');
+    if (mobileSimBanner) mobileSimBanner.style.display = 'none';
+    showToast('Retornando ao Modo Computador');
+  }
+
+  function toggleMobileSimulator() {
+    if (document.body.classList.contains('simulating-mobile')) {
+      disableMobileSimulator();
+    } else {
+      enableMobileSimulator();
+    }
+  }
+
+  if (mobileSimToggleBtn) {
+    mobileSimToggleBtn.addEventListener('click', toggleMobileSimulator);
+  }
+
+  if (drawerMobileSimBtn) {
+    drawerMobileSimBtn.addEventListener('click', () => {
+      closeMobileDrawer();
+      toggleMobileSimulator();
+    });
+  }
+
+  if (exitMobileSimBtn) {
+    exitMobileSimBtn.addEventListener('click', disableMobileSimulator);
+  }
 })();
