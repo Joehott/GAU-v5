@@ -8,13 +8,19 @@
   "theme_color": "#080b12",
   "icons": [
     {
+      "src": "assets/gau-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
       "src": "assets/gau-avatar.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     },
     {
-      "src": "assets/gau-mark.svg",
+      "src": "assets/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
