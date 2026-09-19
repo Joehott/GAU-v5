@@ -104,6 +104,11 @@
       <a href="#deploy">Instalação</a>
     </nav>
     <div class="topbar-actions">
+      <button class="search-k-btn" id="spotlightTriggerBtn" title="Busca Rápida de Ideias, Agentes e Comandos (Ctrl+K)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span class="search-k-txt">Buscar</span>
+        <kbd class="search-k-badge">Ctrl K</kbd>
+      </button>
       <button class="mobile-sim-toggle" id="mobileSimToggleBtn" title="Alternar visão de celular">
         <span>📱 Modo Celular</span>
       </button>
@@ -532,6 +537,54 @@
           </div>
         </div>
       </div>
+
+      <!-- UX 2: Interactive Before vs After Comparison Slider -->
+      <div class="comparison-wrap reveal delay-2">
+        <div class="comparison-header">
+          <div class="eyebrow"><span class="pulse-dot"></span> COMPARAÇÃO COGNITIVA</div>
+          <h3>Sem GAU vs Com GAU v5</h3>
+          <p>Arraste o divisor para ver a diferença física entre a execução cega de um agente comum e a máquina de provas do GAU.</p>
+        </div>
+        <div class="comparison-slider" id="comparisonSlider">
+          <div class="comparison-pane pane-after">
+            <div class="pane-content">
+              <span class="pane-badge after-badge">⚡ COM GAU v5 • MÁQUINA DE PROVAS</span>
+              <h4>Engenharia Rigorosa &amp; Auditada</h4>
+              <ul class="comp-list">
+                <li><span class="comp-icon ok">✓</span> <b>Requisitos congelados (E0):</b> Critérios formais antes da primeira linha de código.</li>
+                <li><span class="comp-icon ok">✓</span> <b>Equipe calibrada por risco:</b> Aloca 1 a 12 cérebros sem overengineering.</li>
+                <li><span class="comp-icon ok">✓</span> <b>Verificação independente:</b> <code>Exit Code 0</code> em testes físicos reais.</li>
+                <li><span class="comp-icon ok">✓</span> <b>Gate de encerramento (E5):</b> Imutabilidade de disco e hashes SHA-256 auditados.</li>
+              </ul>
+              <div class="pane-footer">
+                <span class="comp-metric green">100% Código Confiável • 0 Falsos "Done"</span>
+              </div>
+            </div>
+          </div>
+          <div class="comparison-pane pane-before" id="compPaneBefore">
+            <div class="pane-content">
+              <span class="pane-badge before-badge">⚠️ AGENTE COMUM • EXECUÇÃO CEGA</span>
+              <h4>Alucinações &amp; Quebra de Código</h4>
+              <ul class="comp-list">
+                <li><span class="comp-icon bad">✕</span> <b>Falso "Done":</b> Declara que terminou sem rodar nenhum teste real.</li>
+                <li><span class="comp-icon bad">✕</span> <b>Loops infinitos de tokens:</b> Repete o mesmo erro 10 vezes sem notar.</li>
+                <li><span class="comp-icon bad">✕</span> <b>Viés de concordância:</b> Adula o usuário em vez de apontar falhas reais.</li>
+                <li><span class="comp-icon bad">✕</span> <b>Destruição de contexto:</b> Perde o histórico e quebra arquivos pré-existentes.</li>
+              </ul>
+              <div class="pane-footer">
+                <span class="comp-metric red">Alto Risco • Desperdício de Tokens</span>
+              </div>
+            </div>
+          </div>
+          <div class="comparison-handle" id="compHandle" role="slider" aria-label="Divisor de Comparação" aria-valuenow="50" tabindex="0">
+            <div class="handle-line"></div>
+            <div class="handle-button">
+              <span>‹ ›</span>
+            </div>
+            <div class="handle-line"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="section-shell section-block" id="deploy">
@@ -814,9 +867,27 @@
     </div>
   </div>
 
+  <!-- UX 1: Spotlight Command Palette (Ctrl+K) -->
+  <div class="spotlight-backdrop" id="spotlightBackdrop" style="display: none;"></div>
+  <div class="spotlight-modal" id="spotlightModal" role="dialog" aria-modal="true" aria-label="Busca Rápida GAU v5" style="display: none;">
+    <div class="spotlight-header">
+      <svg class="spotlight-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="spotlightInput" placeholder="Buscar ideias, agentes, comandos ou skills... (ex: router, memory, /goal)" autocomplete="off" />
+      <kbd class="spotlight-esc" id="spotlightEscBtn">ESC</kbd>
+    </div>
+    <div class="spotlight-body" id="spotlightResults">
+      <!-- Dynamically generated results -->
+    </div>
+    <div class="spotlight-footer">
+      <span><kbd>↑</kbd> <kbd>↓</kbd> Navegar</span>
+      <span><kbd>↵</kbd> Selecionar / Copiar</span>
+      <span><kbd>ESC</kbd> Fechar</span>
+    </div>
+  </div>
+
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.2.0"></script>
-  <script src="app.js?v=5.2.0"></script>
+  <script src="ideas.js?v=5.3.0"></script>
+  <script src="app.js?v=5.3.0"></script>
 </body>
 </html>

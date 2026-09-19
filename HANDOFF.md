@@ -1,6 +1,6 @@
 # HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.2.0  
+**Versão**: 5.3.0  
 **Data da Última Atualização**: 19 de Setembro de 2026  
 **Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
 **URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
@@ -20,7 +20,25 @@ O ecossistema implementa integralmente as **69 ideias aprovadas** no documento c
 
 ## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 2.1. Evolução de UI/UX V2 (v5.2.0) — Auditoria e Refinamento
+### 2.1. Lançamento V3 (v5.3.0) — Acabamento de UI Pura + 2 Recursos Cirúrgicos de UX
+* **1. Polimento de UI Pura (Zero novas opções de conteúdo):**
+  * **Glassmorphism 2.0:** Destaque de chanfro em dupla camada (*dual-layer bevel highlight*) aplicado em todos os cartões (`.layer-card`, `.podium-card`, `.agent-card`, etc.), gerando profundidade tátil e reflexo luminoso sutil.
+  * **Auras Neon Personalizadas nos 6 Ícones de Arquitetura 3D:** Brilho volumétrico ambiente posicionado atrás de cada ícone mapeado para a cor tema de cada camada (L1 Violeta, L2 Ciano, L3 Verde Menta, L4 Magenta, L5 Ouro Âmbar, L6 Azul Royal).
+  * **Profundidade Gradiente em Títulos de Destaque:** Efeito cromado futurista com sombra de queda azul luminosa suave.
+  * **Efeito Shimmer em Botões Principais:** Reflexo luminoso sutil (*light sweep*) passando pelos botões de ação `.button.primary`.
+  * **Scrollbar Minimalista Cyberpunk:** Barra de rolagem translúcida com indicador em gradiente ciano/violeta.
+* **2. UX 1 — Spotlight Command Palette (`Ctrl + K` / `Cmd + K`):**
+  * Modal flutuante de busca instantânea com vidro fosco de alta tecnologia (`#spotlightModal`).
+  * Indexa e filtra dinamicamente: Comandos Slash/CLI (`/start`, `/goal`, `/gau-ultra-super-goal`, `/gau-council`, `/gau-doctor`, etc.), as 6 Camadas de Arquitetura, os 16 Agentes Especializados do Leaderboard e as 69 Ideias Operacionais.
+  * Suporta navegação completa por teclado (`↑` e `↓` para selecionar, `↵` para executar/copiar e `ESC` para fechar).
+  * Botão de acesso rápido integrado na barra de navegação superior (`[ 🔍 Buscar | Ctrl K ]`).
+* **3. UX 2 — Slider Interativo de Comparação ("Sem GAU vs Com GAU v5"):**
+  * Componente interativo de divisor arrastável integrado na seção `#goal`.
+  * Permite ao visitante arrastar com o mouse ou toque (touchscreen) para contrastar visualmente:
+    * **Lado Esquerdo (Vermelho):** A execução caótica de agentes comuns (alucinações, falso "Done", loops infinitos e quebra de contexto).
+    * **Lado Direito (Verde):** A máquina de provas físicas do GAU v5 (requisitos congelados, equipes calibradas, verificação independente e gate com hashes SHA-256).
+  * Acessibilidade completa com suporte a teclado (setas para esquerda/direita alteram a divisão).
+
 * **1. Novos Ícones 3D na Seção de Arquitetura Cognitiva (`#architecture`):**
   * Integração dos 6 novos ícones de alta fidelidade (`icons_arquitetura (1..6).png`) com aura de neon, efeito flutuante contínuo (*breathing pulse*) e escala no hover:
     * Camada 01: `icons_arquitetura (3).png` (Hierarquia/DAG — Orquestração)
