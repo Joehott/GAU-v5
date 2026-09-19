@@ -1157,4 +1157,339 @@ ${stepsTable}
   if (exitMobileSimBtn) {
     exitMobileSimBtn.addEventListener('click', disableMobileSimulator);
   }
+
+  // ==========================================
+  // UX 1: Spotlight Command Palette (Ctrl+K)
+  // ==========================================
+  const spotlightBackdrop = document.getElementById('spotlightBackdrop');
+  const spotlightModal = document.getElementById('spotlightModal');
+  const spotlightTriggerBtn = document.getElementById('spotlightTriggerBtn');
+  const spotlightInput = document.getElementById('spotlightInput');
+  const spotlightResults = document.getElementById('spotlightResults');
+  const spotlightEscBtn = document.getElementById('spotlightEscBtn');
+
+  const SPOTLIGHT_COMMANDS = [
+    { title: '/start', desc: 'Inicialização de sessão com pré-flight visível e alinhamento', tag: 'Comando', icon: '🚀', action: 'copy', val: '/start' },
+    { title: '/goal', desc: 'Engenharia autônoma orientada pelo protocolo GAU v5', tag: 'Comando', icon: '🎯', action: 'copy', val: '/goal' },
+    { title: '/gau-ultra-super-goal', desc: 'Protocolo sequencial de estado crítico unificando 116 ideias', tag: 'Comando', icon: '⚡', action: 'copy', val: '/gau-ultra-super-goal' },
+    { title: '/gau-council', desc: 'Conselhos deliberativos, debates multi-agente e torneio de código', tag: 'Comando', icon: '⚖️', action: 'copy', val: '/gau-council' },
+    { title: '/gau-doctor', desc: 'Diagnóstico instantâneo de saúde do Python, SQLite WAL e Git', tag: 'Comando', icon: '🩺', action: 'copy', val: '/gau-doctor' },
+    { title: '/gau-status', desc: 'Consulta de status da missão ativa, tarefas e gate formal', tag: 'Comando', icon: '📊', action: 'copy', val: '/gau-status' },
+    { title: '/gau-leaderboard', desc: 'Ranking Elo calibrado de agentes, skills e modelos', tag: 'Comando', icon: '🏆', action: 'scroll', target: '#leaderboard' },
+    { title: '/gau-computer-use', desc: 'Automação no Windows: janelas, digitação e cliques', tag: 'Comando', icon: '🖱️', action: 'copy', val: '/gau-computer-use' },
+    { title: '/gau-screen-vision', desc: 'Captura de tela e auditoria visual multissensor', tag: 'Comando', icon: '👁️', action: 'copy', val: '/gau-screen-vision' },
+    { title: 'gau match "<meta>"', desc: 'Busca semântica de ideias no terminal para meta de código', tag: 'CLI', icon: '💻', action: 'copy', val: 'gau match "<meta>"' },
+    { title: 'python tools/gau_ctl.py doctor', desc: 'Validação CLI do runtime e banco SQLite local', tag: 'CLI', icon: '💻', action: 'copy', val: 'python tools/gau_ctl.py doctor' }
+  ];
+
+  const SPOTLIGHT_LAYERS = [
+    { title: 'Camada 1: Governança Cognitiva & Subagentes', desc: '31 subagentes com modelo inherit e revisão cega', tag: 'Arquitetura', icon: '🧠', action: 'scroll', target: '#architecture' },
+    { title: 'Camada 2: Inteligência Tri-Modal', desc: 'Precedência API ➔ Computer Layer ➔ Browser DevTools', tag: 'Arquitetura', icon: '🌐', action: 'scroll', target: '#architecture' },
+    { title: 'Camada 3: Motor de Status & Evidências Físicas', desc: 'PLANNED ➔ EXECUTING ➔ EXECUTED ➔ VERIFYING ➔ VERIFIED', tag: 'Arquitetura', icon: '🛡️', action: 'scroll', target: '#architecture' },
+    { title: 'Camada 4: Persistência SQLite WAL & Memória', desc: 'Barramento de eventos, snapshots e rollbacks físicos', tag: 'Arquitetura', icon: '💾', action: 'scroll', target: '#architecture' },
+    { title: 'Camada 5: Resiliência Ciber-Física & Governança', desc: 'Secret Broker, travas de emergência e leases temporários', tag: 'Arquitetura', icon: '🔒', action: 'scroll', target: '#architecture' },
+    { title: 'Camada 6: Intent-to-Reality Engine', desc: 'Zero-prompt runtime, cápsula de intenção e contratos', tag: 'Arquitetura', icon: '👑', action: 'scroll', target: '#architecture' }
+  ];
+
+  let currentSpotlightItems = [];
+  let spotlightSelectedIndex = 0;
+
+  function openSpotlight() {
+    if (!spotlightModal || !spotlightBackdrop) return;
+    spotlightBackdrop.style.display = 'block';
+    spotlightModal.style.display = 'flex';
+    requestAnimationFrame(() => {
+      spotlightBackdrop.classList.add('open');
+      spotlightModal.classList.add('open');
+      if (spotlightInput) {
+        spotlightInput.value = '';
+        spotlightInput.focus();
+      }
+      renderSpotlightResults('');
+    });
+  }
+
+  function closeSpotlight() {
+    if (!spotlightModal || !spotlightBackdrop) return;
+    spotlightBackdrop.classList.remove('open');
+    spotlightModal.classList.remove('open');
+    setTimeout(() => {
+      spotlightBackdrop.style.display = 'none';
+      spotlightModal.style.display = 'none';
+    }, 220);
+  }
+
+  function renderSpotlightResults(query) {
+    if (!spotlightResults) return;
+    const q = (query || '').trim().toLowerCase();
+
+    let filteredCommands = SPOTLIGHT_COMMANDS.filter(c =>
+      !q || c.title.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)
+    );
+
+    let filteredLayers = SPOTLIGHT_LAYERS.filter(l =>
+      !q || l.title.toLowerCase().includes(q) || l.desc.toLowerCase().includes(q)
+    );
+
+    let filteredAgents = AGENT_LEADERBOARD.filter(a =>
+      !q || a.name.toLowerCase().includes(q) || a.specialty.toLowerCase().includes(q) || a.id.toLowerCase().includes(q)
+    ).map(a => ({
+      title: a.name,
+      desc: a.specialty,
+      tag: a.category,
+      icon: '🤖',
+      action: 'agent',
+      agentId: a.id,
+      name: a.name
+    }));
+
+    let filteredIdeas = ideas.filter(i =>
+      !q || `${i.id} ${i.name} ${i.summary} ${i.category}`.toLowerCase().includes(q)
+    ).map(i => ({
+      title: `#${String(i.id).padStart(2, '0')} ${i.name}`,
+      desc: i.summary,
+      tag: i.category,
+      icon: '💡',
+      action: 'idea',
+      ideaItem: i
+    }));
+
+    // Limites de exibição
+    if (!q) {
+      filteredCommands = filteredCommands.slice(0, 4);
+      filteredLayers = filteredLayers.slice(0, 3);
+      filteredAgents = filteredAgents.slice(0, 4);
+      filteredIdeas = filteredIdeas.slice(0, 5);
+    } else {
+      filteredCommands = filteredCommands.slice(0, 5);
+      filteredLayers = filteredLayers.slice(0, 4);
+      filteredAgents = filteredAgents.slice(0, 6);
+      filteredIdeas = filteredIdeas.slice(0, 10);
+    }
+
+    currentSpotlightItems = [
+      ...filteredCommands,
+      ...filteredLayers,
+      ...filteredAgents,
+      ...filteredIdeas
+    ];
+
+    spotlightSelectedIndex = 0;
+
+    if (currentSpotlightItems.length === 0) {
+      spotlightResults.innerHTML = `
+        <div class="spotlight-empty">
+          Nenhum resultado encontrado para <strong>"${escapeHtml(query)}"</strong>.
+        </div>
+      `;
+      return;
+    }
+
+    let html = '';
+    let globalIdx = 0;
+
+    const appendSection = (label, list) => {
+      if (!list.length) return;
+      html += `<div class="spotlight-group-label">${label} (${list.length})</div>`;
+      list.forEach(item => {
+        const isSel = globalIdx === spotlightSelectedIndex;
+        html += `
+          <div class="spotlight-item ${isSel ? 'selected' : ''}" data-index="${globalIdx}">
+            <div class="spotlight-item-left">
+              <span class="spotlight-item-icon">${item.icon}</span>
+              <div class="spotlight-item-info">
+                <div class="spotlight-item-title">${escapeHtml(item.title)}</div>
+                <div class="spotlight-item-desc">${escapeHtml(item.desc)}</div>
+              </div>
+            </div>
+            <span class="spotlight-item-tag">${escapeHtml(item.tag)}</span>
+          </div>
+        `;
+        globalIdx++;
+      });
+    };
+
+    appendSection('Comandos Rápidos & CLI', filteredCommands);
+    appendSection('Camadas de Arquitetura', filteredLayers);
+    appendSection('Agentes Especializados', filteredAgents);
+    appendSection('Ideias Operacionais GAU', filteredIdeas);
+
+    spotlightResults.innerHTML = html;
+
+    spotlightResults.querySelectorAll('.spotlight-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.dataset.index, 10);
+        executeSpotlightItem(idx);
+      });
+      el.addEventListener('mouseenter', () => {
+        spotlightSelectedIndex = parseInt(el.dataset.index, 10);
+        updateSpotlightSelection();
+      });
+    });
+  }
+
+  function updateSpotlightSelection() {
+    if (!spotlightResults) return;
+    const items = spotlightResults.querySelectorAll('.spotlight-item');
+    items.forEach((item, idx) => {
+      if (idx === spotlightSelectedIndex) {
+        item.classList.add('selected');
+        item.scrollIntoView({ block: 'nearest' });
+      } else {
+        item.classList.remove('selected');
+      }
+    });
+  }
+
+  async function executeSpotlightItem(idx) {
+    const item = currentSpotlightItems[idx];
+    if (!item) return;
+
+    if (item.action === 'copy') {
+      try {
+        await navigator.clipboard.writeText(item.val);
+        showToast(`Comando copiado: ${item.val}`);
+      } catch {
+        showToast(`Comando: ${item.val}`);
+      }
+      closeSpotlight();
+    } else if (item.action === 'scroll') {
+      closeSpotlight();
+      const el = document.querySelector(item.target);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (item.action === 'agent') {
+      closeSpotlight();
+      const lb = document.getElementById('leaderboard');
+      if (lb) lb.scrollIntoView({ behavior: 'smooth' });
+      showToast(`Agente selecionado: ${item.name}`);
+    } else if (item.action === 'idea') {
+      closeSpotlight();
+      if (item.ideaItem) {
+        openIdeaModal(item.ideaItem);
+      }
+    }
+  }
+
+  if (spotlightTriggerBtn) {
+    spotlightTriggerBtn.addEventListener('click', openSpotlight);
+  }
+  if (spotlightEscBtn) {
+    spotlightEscBtn.addEventListener('click', closeSpotlight);
+  }
+  if (spotlightBackdrop) {
+    spotlightBackdrop.addEventListener('click', closeSpotlight);
+  }
+  if (spotlightInput) {
+    spotlightInput.addEventListener('input', (e) => {
+      renderSpotlightResults(e.target.value);
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    // Ctrl+K or Cmd+K
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      if (spotlightModal && spotlightModal.classList.contains('open')) {
+        closeSpotlight();
+      } else {
+        openSpotlight();
+      }
+      return;
+    }
+
+    // Escape
+    if (e.key === 'Escape' && spotlightModal && spotlightModal.classList.contains('open')) {
+      closeSpotlight();
+      return;
+    }
+
+    // Arrow navigation when spotlight is open
+    if (spotlightModal && spotlightModal.classList.contains('open')) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (currentSpotlightItems.length > 0) {
+          spotlightSelectedIndex = (spotlightSelectedIndex + 1) % currentSpotlightItems.length;
+          updateSpotlightSelection();
+        }
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (currentSpotlightItems.length > 0) {
+          spotlightSelectedIndex = (spotlightSelectedIndex - 1 + currentSpotlightItems.length) % currentSpotlightItems.length;
+          updateSpotlightSelection();
+        }
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        executeSpotlightItem(spotlightSelectedIndex);
+      }
+    }
+  });
+
+  // ==========================================
+  // UX 2: Interactive Before vs After Comparison Slider
+  // ==========================================
+  const compSlider = document.getElementById('comparisonSlider');
+  const compPaneBefore = document.getElementById('compPaneBefore');
+  const compHandle = document.getElementById('compHandle');
+
+  if (compSlider && compPaneBefore && compHandle) {
+    let isDraggingSlider = false;
+    let currentPct = 50;
+
+    function setSliderPosition(pct) {
+      currentPct = Math.max(5, Math.min(95, pct));
+      compPaneBefore.style.clipPath = `polygon(0 0, ${currentPct}% 0, ${currentPct}% 100%, 0 100%)`;
+      compHandle.style.left = `${currentPct}%`;
+      compHandle.setAttribute('aria-valuenow', Math.round(currentPct));
+    }
+
+    function handleDrag(clientX) {
+      const rect = compSlider.getBoundingClientRect();
+      const offsetX = clientX - rect.left;
+      const pct = (offsetX / rect.width) * 100;
+      setSliderPosition(pct);
+    }
+
+    compSlider.addEventListener('mousedown', (e) => {
+      isDraggingSlider = true;
+      handleDrag(e.clientX);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingSlider) return;
+      e.preventDefault();
+      handleDrag(e.clientX);
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingSlider = false;
+    });
+
+    compSlider.addEventListener('touchstart', (e) => {
+      isDraggingSlider = true;
+      if (e.touches && e.touches[0]) {
+        handleDrag(e.touches[0].clientX);
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDraggingSlider) return;
+      if (e.touches && e.touches[0]) {
+        handleDrag(e.touches[0].clientX);
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+      isDraggingSlider = false;
+    });
+
+    compHandle.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setSliderPosition(currentPct - 5);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setSliderPosition(currentPct + 5);
+      }
+    });
+  }
 })();
