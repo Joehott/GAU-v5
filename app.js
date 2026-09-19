@@ -10,7 +10,10 @@
   const categories = ['Todas', ...new Set(ideas.map(i => i.category))];
 
   function renderFilters(){
-    filters.innerHTML = categories.map(cat => `<button class="filter-btn ${cat === activeCategory ? 'active' : ''}" data-cat="${escapeHtml(cat)}">${escapeHtml(cat)}</button>`).join('');
+    filters.innerHTML = categories.map(cat => {
+      const cnt = cat === 'Todas' ? ideas.length : ideas.filter(i => i.category === cat).length;
+      return `<button class="filter-btn ${cat === activeCategory ? 'active' : ''}" data-cat="${escapeHtml(cat)}">${escapeHtml(cat)} <small style="opacity:0.75; font-size:9px;">(${cnt})</small></button>`;
+    }).join('');
     filters.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
       activeCategory = btn.dataset.cat;
       renderFilters(); renderIdeas();
@@ -22,19 +25,135 @@
     return `gau-${num}-${clean}`;
   }
 
+  // Detailed metadata generator for the 69 ideas
+  function getIdeaDetails(item) {
+    const slug = getSkillSlug(item.id, item.name);
+    const categoryMechanisms = {
+      'Roteamento': 'O mecanismo monitora incerteza, complexidade de requisitos e taxa de vitória histórica para selecionar o modelo e subagente ideais pelo ranking Elo. Caso ocorra falha ou timeout, ativa o grafo de fallback automático sem loops de repetição.',
+      'Councils': 'Convoca de 6 a 12 cérebros especializados com perspectivas divergentes e revisão cega. O sintetizador dialético unifica os pontos fortes sem viés de concordância (sycophancy) e submete a decisão ao Tribunal de Evidências.',
+      'Raciocínio': 'Desacopla o problema em linhas independentes de raciocínio, formulando hipóteses concorrentes testadas por experimentos discriminatórios com decaimento temporal para as sem evidência física.',
+      'Memória': 'Grava checkpoints e fatos canônicos com hashes SHA-256 no banco local SQLite em modo WAL. Implementa auto-pruning para eliminar ruídos de log e preservar contratos de interface e caminhos rejeitados.',
+      'Execução': 'Paraleliza a codificação em worktrees isoladas do Git via Coding Swarm. Cada coder opera com interfaces congeladas, e apenas implementações aprovadas na suíte de testes são integradas à árvore principal.',
+      'Governança': 'Dimensiona compute proporcionalmente ao risco da tarefa (Risk-Based Compute). Aplica tetos orçamentários rígidos e interrompe o consumo assim que a prova física de conclusão for atingida.'
+    };
+
+    const categoryRules = {
+      'Roteamento': 'Regra Inviolável: O agente que falhou nunca decide sozinho se merece mais uma tentativa. O roteamento exige evidência comparável de benchmark.',
+      'Councils': 'Regra Inviolável: Maioria de votos nunca apaga uma falha reproduzível em teste real. A evidência física supera qualquer consenso verbal.',
+      'Raciocínio': 'Regra Inviolável: Proibido assumir hipóteses sem teste discriminatório. Toda premissa deve ser rotulada como comprovada ou especulativa.',
+      'Memória': 'Regra Inviolável: Memória não altera a realidade física do disco. Toda suposição vinda do histórico deve ser revalidada contra o workspace atual.',
+      'Execução': 'Regra Inviolável: Nenhum código é integrado na branch principal sem execução física e código de saída 0 no terminal.',
+      'Governança': 'Regra Inviolável: Compute é interrompido imediatamente após satisfação do gate formal. Overengineering e desperdício de tokens são censurados.'
+    };
+
+    return {
+      slug,
+      mechanism: categoryMechanisms[item.category] || 'Mecanismo cognitivo autônomo operando sob contratos formais, telemetria em tempo real e verificação física no Antigravity.',
+      rule: categoryRules[item.category] || 'Regra Inviolável: Toda conclusão técnica exige teste executado via terminal com código de saída 0 e integridade auditada.'
+    };
+  }
+
+  // Modal elements
+  const ideaModal = document.getElementById('ideaModal');
+  const ideaModalBackdrop = document.getElementById('ideaModalBackdrop');
+  const modalIdeaId = document.getElementById('modalIdeaId');
+  const modalIdeaCat = document.getElementById('modalIdeaCat');
+  const modalIdeaTitle = document.getElementById('modalIdeaTitle');
+  const modalIdeaSkill = document.getElementById('modalIdeaSkill');
+  const modalIdeaSummary = document.getElementById('modalIdeaSummary');
+  const modalIdeaMechanism = document.getElementById('modalIdeaMechanism');
+  const modalIdeaRule = document.getElementById('modalIdeaRule');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalFooterCloseBtn = document.getElementById('modalFooterCloseBtn');
+  const modalCopySkillBtn = document.getElementById('modalCopySkillBtn');
+
+  function openIdeaModal(item) {
+    if (!ideaModal || !ideaModalBackdrop) return;
+    const details = getIdeaDetails(item);
+    if (modalIdeaId) modalIdeaId.textContent = `#${String(item.id).padStart(2, '0')}`;
+    if (modalIdeaCat) modalIdeaCat.textContent = item.category;
+    if (modalIdeaTitle) modalIdeaTitle.textContent = item.name;
+    if (modalIdeaSkill) modalIdeaSkill.textContent = details.slug;
+    if (modalIdeaSummary) modalIdeaSummary.textContent = item.summary;
+    if (modalIdeaMechanism) modalIdeaMechanism.textContent = details.mechanism;
+    if (modalIdeaRule) modalIdeaRule.textContent = details.rule;
+
+    ideaModalBackdrop.style.display = 'block';
+    ideaModal.style.display = 'block';
+    setTimeout(() => {
+      ideaModalBackdrop.classList.add('open');
+      ideaModal.classList.add('open');
+    }, 10);
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeIdeaModal() {
+    if (!ideaModal || !ideaModalBackdrop) return;
+    ideaModalBackdrop.classList.remove('open');
+    ideaModal.classList.remove('open');
+    setTimeout(() => {
+      ideaModalBackdrop.style.display = 'none';
+      ideaModal.style.display = 'none';
+      document.body.style.overflow = '';
+    }, 280);
+  }
+
+  if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeIdeaModal);
+  if (modalFooterCloseBtn) modalFooterCloseBtn.addEventListener('click', closeIdeaModal);
+  if (ideaModalBackdrop) ideaModalBackdrop.addEventListener('click', closeIdeaModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && ideaModal && ideaModal.classList.contains('open')) {
+      closeIdeaModal();
+    }
+  });
+
+  if (modalCopySkillBtn) {
+    modalCopySkillBtn.addEventListener('click', async () => {
+      const skillText = modalIdeaSkill ? modalIdeaSkill.textContent : '';
+      if (!skillText) return;
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(skillText);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = skillText;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        showToast(`Skill copiada: ${skillText}`);
+        const old = modalCopySkillBtn.textContent;
+        modalCopySkillBtn.textContent = 'Copiado! ✓';
+        setTimeout(() => { modalCopySkillBtn.textContent = old; }, 1600);
+      } catch {
+        showToast(`Selecione: ${skillText}`);
+      }
+    });
+  }
+
   function renderIdeas(){
     const q = (search.value || '').toLocaleLowerCase('pt-BR').trim();
     const filtered = ideas.filter(i => (activeCategory === 'Todas' || i.category === activeCategory) && (`${i.id} ${i.name} ${i.summary} ${i.category}`.toLocaleLowerCase('pt-BR').includes(q)));
     grid.innerHTML = filtered.map(i => {
       const slug = getSkillSlug(i.id, i.name);
-      return `<article class="idea-card" title="Skill GAU: ${escapeHtml(slug)}">
+      return `<article class="idea-card" data-ideaid="${i.id}" title="Clique para abrir detalhes da ideia ${escapeHtml(i.name)}">
         <div class="idea-top"><span class="idea-id">#${String(i.id).padStart(2,'0')}</span><span class="idea-cat">${escapeHtml(i.category)}</span></div>
         <h3>${escapeHtml(i.name)}</h3>
         <p>${escapeHtml(i.summary)}</p>
         <span class="idea-skill-tag">⚙ ${escapeHtml(slug)}</span>
+        <span class="idea-inspect-hint">🔍 Inspecionar mecanismo →</span>
       </article>`;
     }).join('');
     count.textContent = filtered.length;
+
+    grid.querySelectorAll('.idea-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = parseInt(card.dataset.ideaid, 10);
+        const item = ideas.find(x => x.id === id);
+        if (item) openIdeaModal(item);
+      });
+    });
   }
   search.addEventListener('input', renderIdeas);
   renderFilters(); renderIdeas();
@@ -120,31 +239,146 @@
 
   let currentScenarioKey = 'auth-bug';
 
+  // Telemetry & Cockpit elements
+  const telemetryStatus = document.getElementById('telemetryStatus');
+  const telemetryPing = document.getElementById('telemetryPing');
+  const telemetryAgents = document.getElementById('telemetryAgents');
+  const ladderLevelLabel = document.getElementById('ladderLevelLabel');
+  const proofLadder = document.getElementById('proofLadder');
+  const matrixStatusLabel = document.getElementById('matrixStatusLabel');
+  const agentMatrixGrid = document.getElementById('agentMatrixGrid');
+
+  const ladderLevels = ['E0', 'E1', 'E2', 'E3', 'E4', 'E5'];
+  const ladderLabels = {
+    'E0': 'E0: Baseline Inicial',
+    'E1': 'E1: Execução Isolada',
+    'E2': 'E2: Registro de Logs',
+    'E3': 'E3: Reprodutibilidade',
+    'E4': 'E4: Contra-teste Hostil',
+    'E5': 'E5: Verificado & Aprovado'
+  };
+
+  function updateProofLadder(currentLvl) {
+    if (!proofLadder) return;
+    const currentIdx = ladderLevels.indexOf(currentLvl);
+    const steps = proofLadder.querySelectorAll('.ladder-step');
+    steps.forEach((step, idx) => {
+      step.classList.remove('active', 'complete');
+      if (idx < currentIdx) {
+        step.classList.add('complete');
+      } else if (idx === currentIdx) {
+        step.classList.add('active');
+      }
+    });
+    if (ladderLevelLabel && ladderLabels[currentLvl]) {
+      ladderLevelLabel.textContent = ladderLabels[currentLvl];
+    }
+  }
+
+  function updateAgentMatrix(stepName, isFinished = false) {
+    if (!agentMatrixGrid) return;
+    const chips = agentMatrixGrid.querySelectorAll('.matrix-chip');
+    
+    if (isFinished) {
+      chips.forEach(chip => {
+        if (chip.classList.contains('active')) {
+          chip.classList.remove('active');
+          chip.classList.add('verified');
+        }
+      });
+      if (matrixStatusLabel) matrixStatusLabel.textContent = '8 agentes sincronizados';
+      return;
+    }
+
+    const stepLower = (stepName || '').toLowerCase();
+    const activeMap = {
+      'requirement': ['gau-requirements', 'gau-orchestrator'],
+      'router': ['gau-orchestrator'],
+      'hypothesis': ['gau-investigator'],
+      'laboratory': ['gau-investigator'],
+      'project brain': ['gau-orchestrator'],
+      'checkpoint': ['gau-orchestrator'],
+      'coding': ['gau-implementer', 'gau-architect'],
+      'worktree': ['gau-implementer'],
+      'tournament': ['gau-implementer', 'gau-verifier'],
+      'evidence': ['gau-verifier'],
+      'verification': ['gau-verifier'],
+      'regression': ['gau-verifier'],
+      'security': ['gau-security'],
+      'adversarial': ['gau-security'],
+      'counterexample': ['gau-security'],
+      'architecture': ['gau-architect'],
+      'database': ['gau-architect'],
+      'performance': ['gau-architect'],
+      'tribunal': ['gau-judge', 'gau-verifier']
+    };
+
+    for (const [key, agents] of Object.entries(activeMap)) {
+      if (stepLower.includes(key)) {
+        agents.forEach(ag => {
+          const chip = agentMatrixGrid.querySelector(`[data-agent="${ag}"]`);
+          if (chip) {
+            chip.classList.add('active');
+          }
+        });
+      }
+    }
+
+    const activeCount = agentMatrixGrid.querySelectorAll('.matrix-chip.active, .matrix-chip.verified').length;
+    if (matrixStatusLabel) {
+      matrixStatusLabel.textContent = `${activeCount} agente(s) mobilizado(s)`;
+    }
+  }
+
   function setStats(s){
     statCompute.textContent=s.compute; statBrains.textContent=s.brains; statConfidence.textContent=s.conf+'%'; statEvidence.textContent=s.e;
     memFacts.textContent=s.facts; memHyp.textContent=s.hyp; memReject.textContent=s.reject; memCheck.textContent=s.check; memoryState.textContent='synced';
+    if (telemetryAgents) telemetryAgents.textContent = `${s.brains}/16`;
+    if (telemetryPing) telemetryPing.textContent = `${Math.floor(Math.random() * 6) + 11}ms`;
+    updateProofLadder(s.e);
   }
+
   function resetMission(){
     clearInterval(missionTimer); missionTimer=null; runBtn.disabled=false; runBtn.textContent='Rodar missão';
     missionStatus.textContent='waiting'; timeline.innerHTML='<div class="timeline-empty">Pressione <b>Rodar missão</b> para iniciar o fluxo.</div>';
     const sc = scenarios[currentScenarioKey];
     setStats(sc.initialStats); memoryState.textContent='idle';
+    if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SYS_IDLE';
+    if (agentMatrixGrid) {
+      agentMatrixGrid.querySelectorAll('.matrix-chip').forEach(c => c.classList.remove('active', 'verified'));
+    }
+    if (matrixStatusLabel) matrixStatusLabel.textContent = 'Pronto para iniciar';
   }
+
   function addStep(s,index){
-    if(index===0) timeline.innerHTML='';
+    if(index===0) {
+      timeline.innerHTML='';
+      if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SWARM_ACTIVE';
+    }
     const el=document.createElement('div'); el.className='timeline-step';
     el.innerHTML=`<div class="timeline-badge">${s.id}</div><div class="timeline-body"><b>${escapeHtml(s.name)}</b><span>${escapeHtml(s.detail)}</span></div><div class="timeline-state">PASS</div>`;
     timeline.appendChild(el); timeline.scrollTop=timeline.scrollHeight; setStats(s);
+    updateAgentMatrix(s.name);
   }
+
   runBtn.addEventListener('click', () => {
     if(missionTimer) return;
     resetMission(); runBtn.disabled=true; runBtn.textContent='Executando...'; missionStatus.textContent='running'; memoryState.textContent='opening';
+    if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SWARM_ACTIVE';
     const sc = scenarios[currentScenarioKey];
     const steps = sc.steps;
     let i=0; addStep(steps[i],i); i++;
     missionTimer=setInterval(()=>{
-      if(i<steps.length){addStep(steps[i],i);i++;}
-      else{clearInterval(missionTimer); missionTimer=null; missionStatus.textContent='COMPLETE'; runBtn.disabled=false; runBtn.textContent='Rodar novamente';}
+      if(i<steps.length){
+        addStep(steps[i],i);
+        i++;
+      } else {
+        clearInterval(missionTimer); missionTimer=null; missionStatus.textContent='COMPLETE'; runBtn.disabled=false; runBtn.textContent='Rodar novamente';
+        if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SYS_PASS';
+        updateProofLadder('E5');
+        updateAgentMatrix('', true);
+        showToast('Missão concluída com verificação independente formal (E5 PASS)!');
+      }
     }, 650);
   });
   resetBtn.addEventListener('click', resetMission);
@@ -265,7 +499,7 @@ ${stepsTable}
     });
   }
 
-  // Agent Elo Leaderboard Data & Rendering
+  // Leaderboard Data: Agents & Models
   const AGENT_LEADERBOARD = [
     { rank: 1, id: 'gau-implementer', name: 'GAU Implementer', rating: 1500, wins: 1, losses: 0, draws: 0, duels: 1, winRate: 100, status: 'PROVISIONAL', specialty: 'Implementação TDD, refatoração atômica e isolamento em worktrees', category: 'Engenharia' },
     { rank: 2, id: 'gau-verifier', name: 'GAU Verifier', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Verificação independente, integridade de snapshots e testes de aceitação', category: 'Verificação' },
@@ -285,21 +519,49 @@ ${stepsTable}
     { rank: 16, id: 'gau-ux', name: 'GAU UX', rating: 1500, wins: 0, losses: 0, draws: 0, duels: 0, winRate: 0, status: 'PROVISIONAL', specialty: 'Design systems, jornadas do usuário, acessibilidade e microinterações', category: 'Engenharia' }
   ];
 
+  const MODEL_LEADERBOARD = [
+    { rank: 1, id: 'claude-3-7-sonnet', name: 'Claude 3.7 Sonnet', rating: 1680, wins: 28, losses: 6, draws: 2, duels: 36, winRate: 78, status: 'CALIBRATED', specialty: 'Raciocínio híbrido, refatoração de alta precisão e síntese arquitetural', category: 'Modelos' },
+    { rank: 2, id: 'gemini-2-5-pro', name: 'Gemini 2.5 Pro', rating: 1665, wins: 25, losses: 6, draws: 3, duels: 34, winRate: 74, status: 'CALIBRATED', specialty: 'Janela de 2M tokens, análise multimodal profunda e auditoria de repositórios', category: 'Modelos' },
+    { rank: 3, id: 'gpt-4o', name: 'GPT-4o (Omni)', rating: 1640, wins: 26, losses: 9, draws: 3, duels: 38, winRate: 68, status: 'CALIBRATED', specialty: 'Execução rápida de pipelines, tooling e geração robusta de código', category: 'Modelos' },
+    { rank: 4, id: 'deepseek-r1', name: 'DeepSeek R1', rating: 1625, wins: 21, losses: 7, draws: 2, duels: 30, winRate: 70, status: 'CALIBRATED', specialty: 'Raciocínio matemático rigoroso, testes de invariantes e contraexemplos', category: 'Modelos' },
+    { rank: 5, id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', rating: 1610, wins: 32, losses: 12, draws: 4, duels: 48, winRate: 67, status: 'CALIBRATED', specialty: 'Benchmark histórico clássico em engenharia autônoma no Antigravity', category: 'Modelos' },
+    { rank: 6, id: 'gemini-2-5-flash', name: 'Gemini 2.5 Flash', rating: 1590, wins: 24, losses: 11, draws: 5, duels: 40, winRate: 60, status: 'CALIBRATED', specialty: 'Ultra baixa latência (<200ms) para routers, classificadores e loop sentinels', category: 'Modelos' },
+    { rank: 7, id: 'llama-3-3-70b', name: 'Llama 3.3 70B', rating: 1560, wins: 14, losses: 9, draws: 2, duels: 25, winRate: 56, status: 'CALIBRATED', specialty: 'Execução local privada e soberania de dados sem dependência de nuvem', category: 'Modelos' }
+  ];
+
+  let currentLbDimension = 'agents';
+  let activeLbCat = 'Todos';
+
   const podiumEl = document.getElementById('leaderboardPodium');
   const lbGridEl = document.getElementById('agentLeaderboardGrid');
   const lbFiltersEl = document.getElementById('agentLeaderboardFilters');
-  let activeLbCat = 'Todos';
+  const lbDimensionTabs = document.getElementById('lbDimensionTabs');
+
+  if (lbDimensionTabs) {
+    lbDimensionTabs.querySelectorAll('.dim-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        lbDimensionTabs.querySelectorAll('.dim-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentLbDimension = tab.dataset.dim;
+        activeLbCat = 'Todos';
+        renderLeaderboard();
+      });
+    });
+  }
 
   function renderLeaderboard() {
     if (!podiumEl || !lbGridEl) return;
+    const currentList = currentLbDimension === 'models' ? MODEL_LEADERBOARD : AGENT_LEADERBOARD;
 
     // Podium rendering (Top 3)
-    const top3 = AGENT_LEADERBOARD.slice(0, 3);
+    const top3 = currentList.slice(0, 3);
     const crownIcons = ['🥇', '🥈', '🥉'];
+    const rankTitles = ['OURO • LÍDER', 'PRATA • TITÂNIO', 'BRONZE • ORBITAL'];
+
     podiumEl.innerHTML = top3.map((a, idx) => `
       <div class="podium-card rank-${idx + 1}">
         <span class="podium-crown">${crownIcons[idx]}</span>
-        <div class="podium-rank">#${String(idx + 1).padStart(2, '0')} ${idx === 0 ? 'TOP LEADER' : ''}</div>
+        <div class="podium-rank">#${String(idx + 1).padStart(2, '0')} ${rankTitles[idx]}</div>
         <div class="podium-name">${escapeHtml(a.name)}</div>
         <div class="podium-rating">
           <strong>${a.rating}</strong>
@@ -314,22 +576,27 @@ ${stepsTable}
       </div>
     `).join('');
 
-    // Categories filter
-    const cats = ['Todos', ...new Set(AGENT_LEADERBOARD.map(a => a.category))];
+    // Filters row
     if (lbFiltersEl) {
-      lbFiltersEl.innerHTML = cats.map(c => `
-        <button class="filter-btn ${c === activeLbCat ? 'active' : ''}" data-lbcat="${escapeHtml(c)}">${escapeHtml(c)}</button>
-      `).join('');
-      lbFiltersEl.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          activeLbCat = btn.dataset.lbcat;
-          renderLeaderboard();
+      if (currentLbDimension === 'models') {
+        lbFiltersEl.style.display = 'none';
+      } else {
+        lbFiltersEl.style.display = 'flex';
+        const cats = ['Todos', ...new Set(AGENT_LEADERBOARD.map(a => a.category))];
+        lbFiltersEl.innerHTML = cats.map(c => `
+          <button class="filter-btn ${c === activeLbCat ? 'active' : ''}" data-lbcat="${escapeHtml(c)}">${escapeHtml(c)}</button>
+        `).join('');
+        lbFiltersEl.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            activeLbCat = btn.dataset.lbcat;
+            renderLeaderboard();
+          });
         });
-      });
+      }
     }
 
-    // Agent grid rendering
-    const filtered = AGENT_LEADERBOARD.filter(a => activeLbCat === 'Todos' || a.category === activeLbCat);
+    // Grid rendering
+    const filtered = currentList.filter(a => activeLbCat === 'Todos' || a.category === activeLbCat);
     lbGridEl.innerHTML = filtered.map(a => `
       <article class="agent-card">
         <div class="agent-card-top">
@@ -345,15 +612,128 @@ ${stepsTable}
         <div class="agent-stats-row">
           <span class="stat-pill">Vitórias: <b>${a.wins}</b></span>
           <span class="stat-pill">Duelos: <b>${a.duels}</b></span>
+          <span class="stat-pill">Taxa: <b>${a.winRate}%</b></span>
         </div>
         <p class="agent-specialty">${escapeHtml(a.specialty)}</p>
         <div class="agent-card-footer">
           <span class="agent-cat-tag">${escapeHtml(a.category)}</span>
-          ${a.wins > 0 ? `<span class="agent-win-badge">✓ ${a.wins} vitória registrada</span>` : ''}
+          ${a.wins > 0 ? `<span class="agent-win-badge">✓ ${a.wins} vitória(s)</span>` : ''}
         </div>
       </article>
     `).join('');
   }
+
+  // Satellites Interactive System
+  const satellites = document.querySelectorAll('.satellite');
+  const capsuleTitle = document.getElementById('capsuleTitle');
+  const capsuleDesc = document.getElementById('capsuleDesc');
+  const capsuleIcon = document.getElementById('capsuleIcon');
+  const orbitalLiveStatus = document.getElementById('orbitalLiveStatus');
+  const orbitalCoreNode = document.getElementById('orbitalCoreNode');
+
+  satellites.forEach(sat => {
+    const handleSelect = () => {
+      satellites.forEach(s => s.classList.remove('active'));
+      sat.classList.add('active');
+      const satId = sat.dataset.sat || '';
+      const name = sat.dataset.name || '';
+      const desc = sat.dataset.desc || '';
+
+      if (capsuleTitle) capsuleTitle.textContent = `#${satId} • ${name}`;
+      if (capsuleDesc) capsuleDesc.textContent = desc;
+      if (capsuleIcon) capsuleIcon.textContent = '🛰️';
+      if (orbitalLiveStatus) orbitalLiveStatus.innerHTML = `<i></i> SAT ${satId} ONLINE`;
+    };
+
+    sat.addEventListener('click', handleSelect);
+    sat.addEventListener('mouseenter', handleSelect);
+  });
+
+  if (orbitalCoreNode) {
+    orbitalCoreNode.addEventListener('click', () => {
+      satellites.forEach(s => s.classList.remove('active'));
+      if (capsuleTitle) capsuleTitle.textContent = 'Núcleo Central GAU v5 (Global Agentic Universe)';
+      if (capsuleDesc) capsuleDesc.textContent = 'Orquestrador quântico unificado operando no Antigravity com 16 agentes, 69 ideias aprovadas e tolerância zero a alucinação.';
+      if (capsuleIcon) capsuleIcon.textContent = '⚡';
+      if (orbitalLiveStatus) orbitalLiveStatus.innerHTML = '<i></i> QUANTUM CORE 100%';
+    });
+  }
+
+  // Interactive Pipeline do /goal
+  const pipeNodes = document.querySelectorAll('#goalPipeline .pipe-node');
+  const pipeStepBadge = document.getElementById('pipeStepBadge');
+  const pipeStepGate = document.getElementById('pipeStepGate');
+  const pipeStepTitle = document.getElementById('pipeStepTitle');
+  const pipeStepDesc = document.getElementById('pipeStepDesc');
+  const pipeStepAgents = document.getElementById('pipeStepAgents');
+  const pipeStepProof = document.getElementById('pipeStepProof');
+
+  const pipeStepData = [
+    {
+      badge: 'ETAPA 00 • INPUT',
+      gate: 'GATE: Abertura',
+      title: 'Entrada do Comando /goal [tarefa]',
+      desc: 'O desenvolvedor digita /goal diretamente no terminal do Antigravity. O GAU intercepta a intenção, analisa restrições e inicializa a governança sem quebrar a assinatura do comando nativo.',
+      agents: 'gau-orchestrator',
+      proof: 'E0: Requisitos Verificáveis'
+    },
+    {
+      badge: 'ETAPA 01 • BASELINE',
+      gate: 'GATE: Congelamento de Requisitos',
+      title: 'Requirement Council (Idea #30)',
+      desc: 'Fixa o baseline formal antes de qualquer código ser alterado. Define exatamente quais testes matemáticos ou funcionais provarão que a tarefa foi cumprida com êxito.',
+      agents: 'gau-requirements, gau-judge',
+      proof: 'E0 ➔ E1: Critérios Fixados'
+    },
+    {
+      badge: 'ETAPA 02 • ROTEAMENTO',
+      gate: 'GATE: Alocação Orçamentária',
+      title: 'Adaptive Model Router & Compute Governor (Ideas #01, #38)',
+      desc: 'Calcula o risco e a incerteza da missão. Tarefas rotineiras recebem compute SMART; cenários complexos convocam debates de múltiplos modelos e equipes profundas.',
+      agents: 'gau-orchestrator, gau-router',
+      proof: 'E1: Rota e Orçamento Definidos'
+    },
+    {
+      badge: 'ETAPA 03 • EXECUÇÃO',
+      gate: 'GATE: Testes de Unidade Isolados',
+      title: 'Execution Graph & Worktree Swarms (Ideas #08, #34)',
+      desc: 'Implementação simultânea em worktrees isoladas do Git via Coding Swarm. Cada coder desenvolve sob interfaces congeladas sem poluir a branch principal.',
+      agents: 'gau-implementer, gau-architect',
+      proof: 'E2 ➔ E3: Código Executado e Logs Coletados'
+    },
+    {
+      badge: 'ETAPA 04 • AUDITORIA',
+      gate: 'GATE: Contraexemplos e Regressão',
+      title: 'Evidence Court & Regression Hunters (Ideas #22, #35)',
+      desc: 'Sessão cega de verificação adversária. Tenta quebrar a solução proposta através de testes de estresse, injeção de falhas e caça ativa a regressões.',
+      agents: 'gau-evidence, gau-adversarial',
+      proof: 'E4: Testes sob Estresse Aprovados'
+    },
+    {
+      badge: 'ETAPA 05 • CONCLUSÃO',
+      gate: 'GATE FINAL: Prova Física SHA-256',
+      title: 'Final Completion Tribunal (Idea #36)',
+      desc: 'O tribunal emite o veredito PASS apenas após inspecionar o código de saída 0 no terminal, logs íntegros e hashes imutáveis gravados no banco SQLite WAL.',
+      agents: 'gau-judge, gau-verifier',
+      proof: 'E5: Verificação Independente Concluída'
+    }
+  ];
+
+  pipeNodes.forEach(node => {
+    node.addEventListener('click', () => {
+      pipeNodes.forEach(n => n.classList.remove('active'));
+      node.classList.add('active');
+      const stepIdx = parseInt(node.dataset.step, 10) || 0;
+      const data = pipeStepData[stepIdx] || pipeStepData[0];
+
+      if (pipeStepBadge) pipeStepBadge.textContent = data.badge;
+      if (pipeStepGate) pipeStepGate.textContent = data.gate;
+      if (pipeStepTitle) pipeStepTitle.textContent = data.title;
+      if (pipeStepDesc) pipeStepDesc.textContent = data.desc;
+      if (pipeStepAgents) pipeStepAgents.textContent = data.agents;
+      if (pipeStepProof) pipeStepProof.textContent = data.proof;
+    });
+  });
 
   renderLeaderboard();
   resetMission();
