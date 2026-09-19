@@ -170,28 +170,35 @@
         <div class="orbital-card">
           <div class="card-topline">
             <span>MISSION GRAPH</span>
-            <span class="status-live"><i></i> READY</span>
+            <span class="status-live" id="orbitalLiveStatus"><i></i> READY</span>
           </div>
           <div class="brain-stage">
             <div class="orbit orbit-1"></div>
             <div class="orbit orbit-2"></div>
             <div class="orbit orbit-3"></div>
-            <div class="core-node">
+            <div class="core-node" id="orbitalCoreNode" role="button" tabindex="0" title="GAU v5 - Núcleo Cognitivo Quântico">
               <img src="assets/gau-icon.png" alt="GAU Núcleo" style="width: 44px; height: 44px; object-fit: contain; filter: drop-shadow(0 0 16px rgba(98, 230, 255, 0.7)); margin-bottom: 2px;" />
               <b>GAU</b>
               <small>GLOBAL UNIVERSE</small>
             </div>
-            <div class="satellite s1"><span>01</span>Router</div>
-            <div class="satellite s2"><span>15</span>Brain</div>
-            <div class="satellite s3"><span>22</span>Evidence</div>
-            <div class="satellite s4"><span>38</span>Compute</div>
-            <div class="satellite s5"><span>52</span>Checkpoint</div>
-            <div class="satellite s6"><span>69</span>Evolve</div>
+            <button type="button" class="satellite s1" data-sat="01" data-name="Adaptive Model Router 3.0" data-desc="Roteamento dinâmico do modelo ideal e dimensionamento de compute por risco e incerteza."><span>01</span>Router</button>
+            <button type="button" class="satellite s2" data-sat="15" data-name="Project Brain" data-desc="Memória estruturada em SQLite WAL: fatos comprovados, hipóteses e caminhos rejeitados."><span>15</span>Brain</button>
+            <button type="button" class="satellite s3" data-sat="22" data-name="Evidence Court" data-desc="Cadeia de custódia e prova formal (E0 a E5). Nenhuma alegação é aceita sem teste físico."><span>22</span>Evidence</button>
+            <button type="button" class="satellite s4" data-sat="38" data-name="Compute Governor" data-desc="Governança orçamentária rigorosa: reserva e libera instâncias cerebrais sob demanda."><span>38</span>Compute</button>
+            <button type="button" class="satellite s5" data-sat="52" data-name="Reasoning Checkpoint" data-desc="Snapshots atômicos de estado no SQLite com restauração instantânea sob qualquer falha."><span>52</span>Checkpoint</button>
+            <button type="button" class="satellite s6" data-sat="69" data-name="Self-Evolving Router" data-desc="Curva contínua de aprendizado que refina o roteamento a partir de duelos reais Elo."><span>69</span>Evolve</button>
+          </div>
+          <div class="orbital-info-capsule" id="orbitalInfoCapsule">
+            <span class="capsule-icon" id="capsuleIcon">🛰️</span>
+            <div class="capsule-text">
+              <strong id="capsuleTitle">Satélites Orbitais Cognitivos</strong>
+              <span id="capsuleDesc">Clique em qualquer satélite acima para inspecionar seu mecanismo operacional.</span>
+            </div>
           </div>
           <div class="signal-row">
-            <div><small>MODE</small><strong>ADAPTIVE</strong></div>
-            <div><small>BRAINS</small><strong>1 → 12+</strong></div>
-            <div><small>PROOF</small><strong>E0 → E5</strong></div>
+            <div id="sigMode"><small>MODE</small><strong>ADAPTIVE</strong></div>
+            <div id="sigBrains"><small>BRAINS</small><strong>1 → 12+</strong></div>
+            <div id="sigProof"><small>PROOF</small><strong>E0 → E5</strong></div>
           </div>
         </div>
       </div>
@@ -261,8 +268,13 @@
         <div class="lab-console reveal">
           <div class="console-head">
             <div class="traffic"><i></i><i></i><i></i></div>
-            <span>GAU MISSION CONTROL / local simulation</span>
-            <span class="console-build">v5.0</span>
+            <span class="console-title">GAU COGNITIVE MISSION COCKPIT / simulation</span>
+            <div class="console-telemetry">
+              <span class="telemetry-pill live" id="telemetryStatus"><i></i> SYS_IDLE</span>
+              <span class="telemetry-pill">PING: <b id="telemetryPing">12ms</b></span>
+              <span class="telemetry-pill">AGENTS: <b id="telemetryAgents">1/16</b></span>
+              <span class="console-build">v5.0.8</span>
+            </div>
           </div>
           <div class="console-grid">
             <div class="mission-panel">
@@ -275,6 +287,65 @@
                   <button type="button" class="scenario-pill" data-scenario="security-audit">🛡️ Adversarial</button>
                 </div>
               </div>
+
+              <!-- Proof Level Progression Ladder (E0 -> E5) -->
+              <div class="proof-ladder-card">
+                <div class="ladder-header">
+                  <span>MATURAÇÃO DA PROVA</span>
+                  <b id="ladderLevelLabel">E0: Baseline Inicial</b>
+                </div>
+                <div class="proof-ladder" id="proofLadder">
+                  <div class="ladder-step active" data-lvl="E0"><span class="step-num">E0</span><span class="step-txt">Claim</span></div>
+                  <div class="ladder-step" data-lvl="E1"><span class="step-num">E1</span><span class="step-txt">Exec</span></div>
+                  <div class="ladder-step" data-lvl="E2"><span class="step-num">E2</span><span class="step-txt">Logs</span></div>
+                  <div class="ladder-step" data-lvl="E3"><span class="step-num">E3</span><span class="step-txt">Repro</span></div>
+                  <div class="ladder-step" data-lvl="E4"><span class="step-num">E4</span><span class="step-txt">Adv</span></div>
+                  <div class="ladder-step" data-lvl="E5"><span class="step-num">E5</span><span class="step-txt">Verified</span></div>
+                </div>
+              </div>
+
+              <!-- Mobilized Agent Live Matrix -->
+              <div class="agent-matrix-box">
+                <div class="matrix-title">
+                  <span>AGENTES MOBILIZADOS AO VIVO</span>
+                  <small id="matrixStatusLabel">Pronto para iniciar</small>
+                </div>
+                <div class="agent-matrix-grid" id="agentMatrixGrid">
+                  <div class="matrix-chip" data-agent="gau-orchestrator" title="Orquestrador Mestre">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Orchestrator</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-requirements" title="Requisitos e Baseline">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Requirements</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-investigator" title="Laboratório de Hipóteses">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Investigator</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-implementer" title="Implementador Isolado">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Implementer</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-verifier" title="Verificador Independente">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Verifier</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-security" title="Segurança e Adversarial">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Security</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-architect" title="Arquiteto Estrutural">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Architect</span>
+                  </div>
+                  <div class="matrix-chip" data-agent="gau-judge" title="Tribunal de Conclusão">
+                    <span class="chip-status"></span>
+                    <span class="chip-name">Judge</span>
+                  </div>
+                </div>
+              </div>
+
               <label for="missionInput">OBJETIVO DA MISSÃO</label>
               <textarea id="missionInput" rows="3">Corrigir um bug intermitente de autenticação sem introduzir regressões.</textarea>
               <div class="mission-actions">
@@ -310,13 +381,22 @@
     <section class="section-shell section-block" id="leaderboard">
       <div class="section-heading reveal split-heading">
         <div>
-          <div class="eyebrow"><span class="pulse-dot"></span> AGENT ELO LEADERBOARD</div>
-          <h2>Ranking dos Agentes Especializados</h2>
-          <p>Avaliação empírica do desempenho de cada agente em duelos de resolução de tarefas (<code>gau match</code>). Ratings provisórios padrão (1500) até a consolidação estatística com histórico de vitórias.</p>
+          <div class="eyebrow"><span class="pulse-dot"></span> AGENT &amp; MODEL ELO LEADERBOARD</div>
+          <h2>Ranking Empírico de Desempenho</h2>
+          <p>Avaliação empírica do desempenho em duelos reais de resolução de tarefas (<code>gau match</code>). Ratings calibrados e provisórios (&lt; 5 duelos) com histórico de vitórias comprovadas.</p>
         </div>
         <div class="leaderboard-meta">
           <span class="leaderboard-badge">Base: 1500 Elo (Provisório &lt; 5 duelos)</span>
         </div>
+      </div>
+
+      <div class="leaderboard-dimension-tabs" id="lbDimensionTabs">
+        <button type="button" class="dim-tab active" data-dim="agents">
+          <span>🤖</span> Agentes Especializados (16)
+        </button>
+        <button type="button" class="dim-tab" data-dim="models">
+          <span>⚡</span> Modelos &amp; LLMs (Duelos)
+        </button>
       </div>
 
       <div class="leaderboard-podium reveal" id="leaderboardPodium"></div>
@@ -331,7 +411,7 @@
         <div>
           <div class="eyebrow">69 IDEIAS APROVADAS</div>
           <h2>O atlas cognitivo.</h2>
-          <p>Busque por nome, categoria ou função. Cada item abaixo vem da especificação aprovada do GAU v5.</p>
+          <p>Busque por nome, categoria ou função. Clique em qualquer card para abrir o modal de inspeção profunda com mecanismo operacional e regra de governança.</p>
         </div>
         <div class="idea-search-wrap">
           <label class="sr-only" for="ideaSearch">Buscar ideias</label>
@@ -341,7 +421,7 @@
       </div>
       <div class="filter-row" id="ideaFilters" aria-label="Filtros das ideias"></div>
       <div class="ideas-grid" id="ideasGrid"></div>
-      <div class="ideas-footer"><span id="ideaCount">69</span> mecanismos visíveis</div>
+      <div class="ideas-footer"><span id="ideaCount">69</span> mecanismos visíveis • Clique em um card para inspecionar</div>
     </section>
 
     <section class="goal-section" id="goal">
@@ -356,18 +436,33 @@
             <div><span>03</span><p><b>History suggests. Evidence decides.</b><br>Memória orienta, estado atual manda.</p></div>
           </div>
         </div>
-        <div class="pipeline reveal delay-1" aria-label="Pipeline do /goal">
-          <div class="pipe-node active"><small>INPUT</small><strong>/goal</strong><span>objetivo + restrições</span></div>
-          <i class="pipe-line"></i>
-          <div class="pipe-node"><small>01</small><strong>Requirement Council</strong><span>baseline + critérios</span></div>
-          <i class="pipe-line"></i>
-          <div class="pipe-node"><small>02</small><strong>Adaptive Router</strong><span>modelo + agentes + compute</span></div>
-          <i class="pipe-line"></i>
-          <div class="pipe-node"><small>03</small><strong>Execution Graph</strong><span>skills + swarms + worktrees</span></div>
-          <i class="pipe-line"></i>
-          <div class="pipe-node"><small>04</small><strong>Evidence Court</strong><span>claims → provas</span></div>
-          <i class="pipe-line"></i>
-          <div class="pipe-node success"><small>05</small><strong>Completion Tribunal</strong><span>PASS / REOPEN / BLOCKED</span></div>
+        <div class="pipeline-container reveal delay-1">
+          <div class="pipeline" id="goalPipeline" aria-label="Pipeline interativo do /goal">
+            <div class="pipe-node active" role="button" tabindex="0" data-step="0"><small>INPUT</small><strong>/goal [tarefa]</strong><span>objetivo + restrições</span></div>
+            <i class="pipe-line"><span class="pipe-pulse"></span></i>
+            <div class="pipe-node" role="button" tabindex="0" data-step="1"><small>01</small><strong>Requirement Council</strong><span>baseline + critérios</span></div>
+            <i class="pipe-line"><span class="pipe-pulse"></span></i>
+            <div class="pipe-node" role="button" tabindex="0" data-step="2"><small>02</small><strong>Adaptive Router</strong><span>modelo + agentes + compute</span></div>
+            <i class="pipe-line"><span class="pipe-pulse"></span></i>
+            <div class="pipe-node" role="button" tabindex="0" data-step="3"><small>03</small><strong>Execution Graph</strong><span>skills + swarms + worktrees</span></div>
+            <i class="pipe-line"><span class="pipe-pulse"></span></i>
+            <div class="pipe-node" role="button" tabindex="0" data-step="4"><small>04</small><strong>Evidence Court</strong><span>claims → provas</span></div>
+            <i class="pipe-line"><span class="pipe-pulse"></span></i>
+            <div class="pipe-node success" role="button" tabindex="0" data-step="5"><small>05</small><strong>Completion Tribunal</strong><span>PASS / REOPEN / BLOCKED</span></div>
+          </div>
+
+          <div class="pipeline-detail-card" id="pipeDetailCard">
+            <div class="detail-header">
+              <span class="detail-badge" id="pipeStepBadge">ETAPA 00 • INPUT</span>
+              <span class="detail-gate" id="pipeStepGate">GATE: Abertura</span>
+            </div>
+            <h4 id="pipeStepTitle">Entrada do Comando /goal</h4>
+            <p id="pipeStepDesc">O usuário define o objetivo diretamente no prompt. O GAU intercepta a intenção e monta a arquitetura sem quebrar o comando nativo.</p>
+            <div class="detail-meta">
+              <div><small>AGENTES ENVOLVIDOS</small><strong id="pipeStepAgents">gau-orchestrator</strong></div>
+              <div><small>PROVA EXIGIDA</small><strong id="pipeStepProof">E0: Requisitos Verificáveis</strong></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -604,9 +699,45 @@
     </button>
   </nav>
 
+  <!-- Idea Detail Holographic Modal -->
+  <div class="modal-backdrop" id="ideaModalBackdrop" style="display: none;"></div>
+  <div class="idea-modal" id="ideaModal" role="dialog" aria-modal="true" aria-labelledby="modalIdeaTitle" style="display: none;">
+    <div class="idea-modal-header">
+      <div class="idea-modal-badge-group">
+        <span class="modal-idea-id" id="modalIdeaId">#01</span>
+        <span class="modal-idea-cat" id="modalIdeaCat">Roteamento</span>
+      </div>
+      <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Fechar Modal">&times;</button>
+    </div>
+    <div class="idea-modal-body">
+      <h3 id="modalIdeaTitle">Adaptive Model Router 3.0</h3>
+      <div class="idea-modal-skill-bar">
+        <span>Skill Oficial:</span>
+        <code id="modalIdeaSkill">gau-01-adaptive-model-router-3-0</code>
+        <button type="button" class="button ghost small copy-skill-btn" id="modalCopySkillBtn">Copiar Skill</button>
+      </div>
+      <div class="idea-modal-section">
+        <h4>🎯 Propósito e Resumo</h4>
+        <p id="modalIdeaSummary">Escolher automaticamente o modelo adequado com base na incerteza e no risco da tarefa.</p>
+      </div>
+      <div class="idea-modal-section">
+        <h4>⚙️ Mecanismo Operacional no GAU v5</h4>
+        <p id="modalIdeaMechanism">Avalia a complexidade antes de instanciar agentes. Em tarefas simples, adota modelos leves para economia de compute; em tarefas de alto risco, escala para equipes profundas, debates multi-modelo ou swarms paralelos em worktrees.</p>
+      </div>
+      <div class="idea-modal-section">
+        <h4>🛡️ Regra Inviolável de Governança</h4>
+        <p id="modalIdeaRule">O agente ou modelo que falhou nunca decide sozinho se merece nova tentativa. O roteamento reordena alternativas disponíveis e exige prova física de sucesso.</p>
+      </div>
+    </div>
+    <div class="idea-modal-footer">
+      <span class="modal-footer-note">Atlas Cognitivo GAU v5 • 69 Ideias Aprovadas</span>
+      <button type="button" class="button primary small" id="modalFooterCloseBtn">Entendido ✓</button>
+    </div>
+  </div>
+
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.0.8"></script>
-  <script src="app.js?v=5.0.8"></script>
+  <script src="ideas.js?v=5.1.0"></script>
+  <script src="app.js?v=5.1.0"></script>
 </body>
 </html>

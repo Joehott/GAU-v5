@@ -1,6 +1,6 @@
 # HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.0.8  
+**Versão**: 5.1.0  
 **Data da Última Atualização**: 19 de Setembro de 2026  
 **Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
 **URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
@@ -20,7 +20,27 @@ O ecossistema implementa integralmente as **69 ideias aprovadas** no documento c
 
 ## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 2.1. Nova Identidade Visual e Branding Oficial
+### 2.1. Nova Camada de UI/UX Cognitiva Concluída (v5.1.0)
+* **1. Hero & Cérebro Orbital Interativo (`#top`):**
+  * Satélites orbitais clicáveis (`01 Router`, `15 Brain`, `22 Evidence`, `38 Compute`, `52 Checkpoint`, `69 Evolve`) com hover glow e micro-animações.
+  * Cápsula informativa holográfica dinamicamente atualizada ao interagir com satélites ou com o núcleo quântico.
+* **2. Mission Lab Cockpit Futurista (`#lab`):**
+  * Barra de telemetria em tempo real com indicador de estado (`SYS_IDLE`, `SWARM_ACTIVE`, `SYS_PASS`), ping dinâmico e contador de agentes ativos.
+  * Escala visual progressiva de maturação da prova (**E0 Claim ➔ E1 Exec ➔ E2 Logs ➔ E3 Repro ➔ E4 Adversarial ➔ E5 Verified**).
+  * Matriz visual de agentes mobilizados em tempo real com chips reativos para `Orchestrator`, `Requirements`, `Investigator`, `Implementer`, `Verifier`, `Security`, `Architect`, `Judge`.
+* **3. Catálogo das 69 Ideias com Modal Holográfico (`#ideas`):**
+  * Contadores dinâmicos nas pílulas de categorias (ex: `Todas (69)`, `Roteamento (5)`, `Councils (12)`, etc.).
+  * Modal detalhado de inspeção profunda aberto ao clicar em qualquer card: exibe mecanismo operacional, regra inviolável de governança e botão de cópia rápida da skill.
+* **4. Leaderboard Elo com Pódio Metálico Premium (`#leaderboard`):**
+  * Pódio com acabamentos metálicos realistas: Ouro Líder (`#ffd700`), Prata Titânio (`#e2e8f0`) e Bronze Orbital (`#f59e0b`).
+  * Alternador de dimensões permitindo visualizar tanto os **16 Agentes Especializados** quanto os **Modelos LLM (Duelos de IA)**.
+* **5. Pipeline Interativo do `/goal` (`#goal`):**
+  * Conectores de etapas com animação de pulso laser viajante.
+  * Nós clicáveis que atualizam dinamicamente o card de detalhes da etapa com agentes envolvidos e nível de evidência exigido.
+* **6. Ergonomia Mobile & Acessibilidade:**
+  * Alvos de toque calibrados para $\ge 48\text{px}$, suporte completo a foco por teclado (`focus-visible`) e compatibilidade total com o simulador de celular.
+
+### 2.2. Nova Identidade Visual e Branding Oficial
 * **Novo Ícone Orbital GAU:** Letra `G` metálica cromada em 3D, com núcleo quântico azul neon pulsante e 3 esferas orbitais.
 * **Logotipos Oficiais Transparentes:**
   * `site/assets/gau-logo-transparent.png` (Horizontal completo com subtítulo `GLOBAL AGENTIC UNIVERSE`).
