@@ -408,6 +408,9 @@ ${stepsTable}
   // ==========================================
   // WhatsApp Live Doubt Chat & Modal
   // ==========================================
+  const GAU_WHATSAPP_PHONE = '5511970005005';
+  const GAU_WHATSAPP_DISPLAY = '+55 (11) 97000-5005';
+
   const whatsappModal = document.getElementById('whatsappModal');
   const whatsappToggleBtn = document.getElementById('whatsappToggleBtn');
   const whatsappCloseBtn = document.getElementById('whatsappCloseBtn');
@@ -504,9 +507,10 @@ ${stepsTable}
              `• <strong>E5:</strong> Prova formal e stress test.`;
     }
 
-    if (lower.includes('humano') || lower.includes('contato') || lower.includes('zap') || lower.includes('desenvolvedor') || lower.includes('falar')) {
-      return `💬 <strong>Atendimento WhatsApp:</strong><br><br>` +
-             `Para conversar diretamente pelo WhatsApp no seu aplicativo, basta clicar no botão <em>'Abrir no App do WhatsApp'</em> abaixo. Estaremos prontos para te atender!`;
+    if (lower.includes('humano') || lower.includes('contato') || lower.includes('zap') || lower.includes('desenvolvedor') || lower.includes('falar') || lower.includes('numero') || lower.includes('telefone')) {
+      return `💬 <strong>WhatsApp Oficial GAU v5:</strong><br><br>` +
+             `Número de contato: <strong>${GAU_WHATSAPP_DISPLAY}</strong>.<br><br>` +
+             `Clique no botão abaixo <em>'Conversar via WhatsApp'</em> para abrir a conversa direta com esse número no seu aplicativo!`;
     }
 
     return `Entendi sua dúvida! O <strong>GAU v5</strong> fornece inteligência autônoma com 69 mecanismos cognitivos para o Antigravity.<br><br>` +
@@ -517,7 +521,14 @@ ${stepsTable}
     if (!whatsappChatThread) return;
     const bubble = document.createElement('div');
     bubble.className = 'whatsapp-chat-bubble bot';
-    bubble.innerHTML = `<p>${htmlContent}</p><span class="bubble-time">${getCurrentTimeString()}</span>`;
+    bubble.innerHTML = `
+      <div class="bubble-sender">
+        <img src="assets/gau-avatar.svg" alt="GAU" width="14" height="14" style="border-radius: 50%; vertical-align: middle;">
+        <span>GAU v5 Suporte</span>
+      </div>
+      <p>${htmlContent}</p>
+      <span class="bubble-time">${getCurrentTimeString()}</span>
+    `;
     whatsappChatThread.appendChild(bubble);
     scrollChatToBottom();
   }
@@ -540,7 +551,12 @@ ${stepsTable}
     // Show typing indicator
     const typingBubble = document.createElement('div');
     typingBubble.className = 'whatsapp-chat-bubble bot typing-indicator-bubble';
-    typingBubble.innerHTML = `<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+    typingBubble.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <img src="assets/gau-avatar.svg" alt="GAU" width="14" height="14" style="border-radius: 50%;">
+        <div class="typing-indicator" style="padding: 2px 0;"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+      </div>
+    `;
     whatsappChatThread.appendChild(typingBubble);
     scrollChatToBottom();
 
@@ -558,9 +574,9 @@ ${stepsTable}
     const lastMsg = whatsappMessageInput ? whatsappMessageInput.value.trim() : '';
     const text = (lastMsg || 'Olá! Vim pelo site do GAU v5 e gostaria de suporte técnico.').trim();
     const encoded = encodeURIComponent(text);
-    const url = `https://api.whatsapp.com/send?text=${encoded}`;
+    const url = `https://wa.me/${GAU_WHATSAPP_PHONE}?text=${encoded}`;
     window.open(url, '_blank', 'noopener,noreferrer');
-    showToast('Abrindo aplicativo do WhatsApp...');
+    showToast(`Abrindo WhatsApp (${GAU_WHATSAPP_DISPLAY})...`);
   }
 
   if (whatsappToggleBtn) {
@@ -587,7 +603,11 @@ ${stepsTable}
       if (whatsappChatThread) {
         whatsappChatThread.innerHTML = `
           <div class="whatsapp-chat-bubble bot">
-            <p>Olá! 👋 Sou o assistente oficial do <strong>GAU v5</strong>. Como posso te ajudar com a instalação, agentes, /goal ou testes?</p>
+            <div class="bubble-sender">
+              <img src="assets/gau-avatar.svg" alt="GAU" width="16" height="16" style="border-radius: 50%; vertical-align: middle; margin-right: 4px;">
+              <span>GAU v5 Suporte</span>
+            </div>
+            <p>Olá! 👋 Sou o assistente oficial do <strong>GAU v5</strong> (<span style="color:#25D366; font-weight:700;">${GAU_WHATSAPP_DISPLAY}</span>). Como posso te ajudar com a instalação, agentes, /goal ou testes?</p>
             <span class="bubble-time">${getCurrentTimeString()}</span>
           </div>
         `;
