@@ -2,6 +2,7 @@
 
 [![Antigravity](https://img.shields.io/badge/Antigravity-Ready-brightgreen)](https://antigravity.google)
 [![GitHub](https://img.shields.io/badge/GitHub-Joehott%2FGAU--v5-181717?logo=github)](https://github.com/Joehott/GAU-v5)
+[![Vercel](https://img.shields.io/badge/Vercel-Ready-black?logo=vercel)](https://vercel.com)
 [![Skills](https://img.shields.io/badge/Skills-72-blue)](#)
 [![Agents](https://img.shields.io/badge/Agents-16-orange)](#)
 [![Tests](https://img.shields.io/badge/Tests-34%20passing-success)](#)
@@ -30,13 +31,13 @@ Leia e execute as extensões do GAU v5 deste workspace:
 ### Instalar no seu projeto via PowerShell (Linha Única)
 
 ```powershell
-iwr -useb https://joehott.github.io/GAU-v5/install.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/Joehott/GAU-v5/main/install.ps1 | iex
 ```
 
 ### Instalar no seu projeto via Bash (Linux / macOS)
 
 ```bash
-curl -fsSL https://joehott.github.io/GAU-v5/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Joehott/GAU-v5/main/install.sh | bash
 ```
 
 ### Instalar localmente (deste repositório)
