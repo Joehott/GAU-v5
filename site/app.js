@@ -498,4 +498,23 @@ ${stepsTable}
       closeWhatsappModal();
     }
   });
+
+  // Commercial Video Auto-scroll & Play
+  const commercialVideo = document.getElementById('gauCommercialVideo');
+  document.querySelectorAll('a[href="#comercial"]').forEach(link => {
+    link.addEventListener('click', () => {
+      if (commercialVideo) {
+        setTimeout(() => {
+          commercialVideo.play().catch(() => {});
+        }, 500);
+      }
+    });
+  });
+
+  const shareWhatsappBtn = document.getElementById('shareWhatsappBtn');
+  if (shareWhatsappBtn) {
+    shareWhatsappBtn.addEventListener('click', () => {
+      showToast('Abrindo WhatsApp para compartilhar o GAU v5...');
+    });
+  }
 })();
