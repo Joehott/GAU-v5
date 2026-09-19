@@ -406,16 +406,20 @@ ${stepsTable}
   }
 
   // ==========================================
-  // WhatsApp Contact Widget & Modal
+  // WhatsApp Live Doubt Chat & Modal
   // ==========================================
   const whatsappModal = document.getElementById('whatsappModal');
   const whatsappToggleBtn = document.getElementById('whatsappToggleBtn');
   const whatsappCloseBtn = document.getElementById('whatsappCloseBtn');
+  const whatsappClearBtn = document.getElementById('whatsappClearBtn');
   const tooltipCloseBtn = document.getElementById('tooltipClose');
   const whatsappTooltip = document.getElementById('whatsappTooltip');
   const whatsappSendBtn = document.getElementById('whatsappSendBtn');
   const whatsappMessageInput = document.getElementById('whatsappMessageInput');
+  const whatsappChatThread = document.getElementById('whatsappChatThread');
+  const whatsappWebRedirectBtn = document.getElementById('whatsappWebRedirectBtn');
   const quickChips = document.querySelectorAll('.quick-chip');
+  const contactActionChips = document.querySelectorAll('.contact-chip-action');
 
   function openWhatsappModal(presetMsg) {
     if (!whatsappModal) return;
@@ -424,12 +428,12 @@ ${stepsTable}
     if (whatsappTooltip) {
       whatsappTooltip.style.display = 'none';
     }
-    if (presetMsg && whatsappMessageInput) {
-      whatsappMessageInput.value = presetMsg;
-    }
-    if (whatsappMessageInput) {
+    if (presetMsg) {
+      sendUserMessage(presetMsg);
+    } else if (whatsappMessageInput) {
       setTimeout(() => whatsappMessageInput.focus(), 150);
     }
+    scrollChatToBottom();
   }
 
   function closeWhatsappModal() {
@@ -439,18 +443,124 @@ ${stepsTable}
     }
   }
 
-  function triggerWhatsappSend() {
-    const text = (whatsappMessageInput ? whatsappMessageInput.value : '').trim();
-    if (!text) {
-      showToast('Por favor, digite uma mensagem antes de continuar.');
-      return;
+  function scrollChatToBottom() {
+    if (whatsappChatThread) {
+      whatsappChatThread.scrollTop = whatsappChatThread.scrollHeight;
     }
+  }
+
+  function getCurrentTimeString() {
+    const d = new Date();
+    const h = String(d.getHours()).padStart(2, '0');
+    const m = String(d.getMinutes()).padStart(2, '0');
+    return `${h}:${m}`;
+  }
+
+  function escapeChatHtml(str) {
+    return (str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function getBotResponse(userText) {
+    const lower = (userText || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    
+    if (lower.includes('instal') || lower.includes('download') || lower.includes('zip') || lower.includes('baixar') || lower.includes('powershell')) {
+      return `📦 <strong>Instalação Rápida do GAU v5:</strong><br><br>` +
+             `• <strong>PowerShell (Windows):</strong><br><code>iwr -useb https://joehott.github.io/GAU-v5/install.ps1 | iex</code><br><br>` +
+             `• <strong>Bash (Linux/Mac):</strong><br><code>curl -fsSL https://joehott.github.io/GAU-v5/install.sh | bash</code><br><br>` +
+             `• <strong>Python Local (após extrair ZIP):</strong><br><code>py -3 GAU-v5/install.py --project .</code><br><br>` +
+             `O pacote ZIP de 45.6MB já está disponível para download no topo do site!`;
+    }
+    
+    if (lower.includes('goal') || lower.includes('missao') || lower.includes('meta')) {
+      return `🎯 <strong>Como funciona o /goal:</strong><br><br>` +
+             `O comando <code>/goal</code> continua 100% nativo do Antigravity! O GAU v5 ativa a skill <code>gau-goal</code> para gerenciar councils e swarms sem alterar o runtime do host.<br><br>` +
+             `A missão só é encerrada quando houver cobertura real de requisitos e evidências comprovadas (níveis E0–E5).`;
+    }
+    
+    if (lower.includes('agente') || lower.includes('skill') || lower.includes('mecanismo') || lower.includes('69') || lower.includes('16')) {
+      return `🤖 <strong>16 Agentes & 69 Mecanismos:</strong><br><br>` +
+             `O GAU v5 traz 16 perfis cognitivos especializados (ex: <code>gau-architect</code>, <code>gau-implementer</code>, <code>gau-verifier</code>, <code>gau-adversarial</code>, <code>gau-judge</code>) e 69 skills com governança de compute, torneios e ranking Elo.<br><br>` +
+             `Você pode explorar cada mecanismo na seção <strong>69 ideias</strong> do site!`;
+    }
+    
+    if (lower.includes('teste') || lower.includes('test') || lower.includes('doctor') || lower.includes('validar') || lower.includes('bug')) {
+      return `🧪 <strong>Diagnóstico & Testes:</strong><br><br>` +
+             `• Para verificar o runtime: <code>python .gau/runtime/gau.py doctor</code><br>` +
+             `• Para rodar a suíte de integridade: <code>python tools/test_deployment.py</code> (100% dos checks validados).`;
+    }
+
+    if (lower.includes('evidencia') || lower.includes('e0') || lower.includes('e1') || lower.includes('e2') || lower.includes('e3') || lower.includes('e4') || lower.includes('e5') || lower.includes('prova')) {
+      return `⚖️ <strong>Níveis de Verificação (E0 a E5):</strong><br><br>` +
+             `• <strong>E0:</strong> Asserção inicial<br>` +
+             `• <strong>E1:</strong> Leitura estática de código<br>` +
+             `• <strong>E2:</strong> Execução de testes unitários locais<br>` +
+             `• <strong>E3:</strong> Execução em ambiente isolado descartável<br>` +
+             `• <strong>E4:</strong> Contraexemplos e testes adversariais<br>` +
+             `• <strong>E5:</strong> Prova formal e stress test.`;
+    }
+
+    if (lower.includes('humano') || lower.includes('contato') || lower.includes('zap') || lower.includes('desenvolvedor') || lower.includes('falar')) {
+      return `💬 <strong>Atendimento WhatsApp:</strong><br><br>` +
+             `Para conversar diretamente pelo WhatsApp no seu aplicativo, basta clicar no botão <em>'Abrir no App do WhatsApp'</em> abaixo. Estaremos prontos para te atender!`;
+    }
+
+    return `Entendi sua dúvida! O <strong>GAU v5</strong> fornece inteligência autônoma com 69 mecanismos cognitivos para o Antigravity.<br><br>` +
+           `Como posso te orientar agora? Escolha um tema: <strong>instalação</strong>, <strong>16 agentes</strong>, <strong>comando /goal</strong> ou <strong>testes</strong>!`;
+  }
+
+  function appendBotBubble(htmlContent) {
+    if (!whatsappChatThread) return;
+    const bubble = document.createElement('div');
+    bubble.className = 'whatsapp-chat-bubble bot';
+    bubble.innerHTML = `<p>${htmlContent}</p><span class="bubble-time">${getCurrentTimeString()}</span>`;
+    whatsappChatThread.appendChild(bubble);
+    scrollChatToBottom();
+  }
+
+  function sendUserMessage(text) {
+    const trimmed = (text || '').trim();
+    if (!trimmed || !whatsappChatThread) return;
+
+    // Append user bubble
+    const userBubble = document.createElement('div');
+    userBubble.className = 'whatsapp-chat-bubble user';
+    userBubble.innerHTML = `<p>${escapeChatHtml(trimmed)}</p><span class="bubble-time">${getCurrentTimeString()} ✓✓</span>`;
+    whatsappChatThread.appendChild(userBubble);
+    
+    if (whatsappMessageInput) {
+      whatsappMessageInput.value = '';
+    }
+    scrollChatToBottom();
+
+    // Show typing indicator
+    const typingBubble = document.createElement('div');
+    typingBubble.className = 'whatsapp-chat-bubble bot typing-indicator-bubble';
+    typingBubble.innerHTML = `<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+    whatsappChatThread.appendChild(typingBubble);
+    scrollChatToBottom();
+
+    // Answer after realistic delay
+    setTimeout(() => {
+      if (typingBubble.parentNode) {
+        typingBubble.parentNode.removeChild(typingBubble);
+      }
+      const response = getBotResponse(trimmed);
+      appendBotBubble(response);
+    }, 450);
+  }
+
+  function openExternalWhatsapp() {
+    const lastMsg = whatsappMessageInput ? whatsappMessageInput.value.trim() : '';
+    const text = (lastMsg || 'Olá! Vim pelo site do GAU v5 e gostaria de suporte técnico.').trim();
     const encoded = encodeURIComponent(text);
-    // Universal WhatsApp launch URL (opens WhatsApp app or WhatsApp Web)
-    const url = `https://wa.me/?text=${encoded}`;
+    const url = `https://api.whatsapp.com/send?text=${encoded}`;
     window.open(url, '_blank', 'noopener,noreferrer');
-    closeWhatsappModal();
-    showToast('Abrindo WhatsApp...');
+    showToast('Abrindo aplicativo do WhatsApp...');
   }
 
   if (whatsappToggleBtn) {
@@ -471,6 +581,21 @@ ${stepsTable}
     });
   }
 
+  if (whatsappClearBtn) {
+    whatsappClearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (whatsappChatThread) {
+        whatsappChatThread.innerHTML = `
+          <div class="whatsapp-chat-bubble bot">
+            <p>Olá! 👋 Sou o assistente oficial do <strong>GAU v5</strong>. Como posso te ajudar com a instalação, agentes, /goal ou testes?</p>
+            <span class="bubble-time">${getCurrentTimeString()}</span>
+          </div>
+        `;
+        showToast('Conversa reiniciada.');
+      }
+    });
+  }
+
   if (tooltipCloseBtn) {
     tooltipCloseBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -480,59 +605,84 @@ ${stepsTable}
     });
   }
 
+  // Quick Chips
+  quickChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const q = chip.dataset.query || chip.textContent;
+      sendUserMessage(q);
+    });
+  });
+
+  // Contact section action chips
+  contactActionChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const question = chip.dataset.ask || chip.textContent.trim();
+      openWhatsappModal(question);
+    });
+  });
+
   // External trigger buttons
   const headerWhatsappBtn = document.getElementById('headerWhatsappBtn');
   if (headerWhatsappBtn) {
     headerWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Vim pelo cabeçalho do site do GAU v5 e gostaria de tirar dúvidas sobre o framework.');
+      openWhatsappModal('Como posso instalar o GAU v5 no meu projeto?');
     });
   }
 
   const deployCardWhatsappBtn = document.getElementById('deployCardWhatsappBtn');
   if (deployCardWhatsappBtn) {
     deployCardWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Preciso de ajuda para instalar e rodar o GAU v5 no meu ambiente de trabalho.');
+      openWhatsappModal('Preciso de ajuda com a instalação e testes do GAU v5.');
     });
   }
 
   const footerWhatsappBtn = document.getElementById('footerWhatsappBtn');
   if (footerWhatsappBtn) {
     footerWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Gostaria de falar com o suporte/desenvolvedor do GAU v5.');
+      openWhatsappModal('Olá! Gostaria de falar sobre o suporte do GAU v5.');
     });
   }
 
   const sectionOpenChatBtn = document.getElementById('sectionOpenChatBtn');
   if (sectionOpenChatBtn) {
     sectionOpenChatBtn.addEventListener('click', () => {
-      openWhatsappModal('Olá! Vim pela seção de contato do GAU v5 e gostaria de tirar dúvidas.');
+      openWhatsappModal();
     });
   }
 
-  // Quick Chips
-  quickChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const msg = chip.dataset.msg;
-      if (msg && whatsappMessageInput) {
-        whatsappMessageInput.value = msg;
-        whatsappMessageInput.focus();
+  const mainSectionWhatsappCta = document.getElementById('mainSectionWhatsappCta');
+  if (mainSectionWhatsappCta) {
+    mainSectionWhatsappCta.addEventListener('click', () => {
+      openWhatsappModal('Olá! Gostaria de falar com o suporte do GAU v5.');
+    });
+  }
+
+  // Send WhatsApp Button inside modal
+  if (whatsappSendBtn) {
+    whatsappSendBtn.addEventListener('click', () => {
+      const text = (whatsappMessageInput ? whatsappMessageInput.value : '').trim();
+      if (text) {
+        sendUserMessage(text);
       }
     });
-  });
-
-  // Send WhatsApp Button
-  if (whatsappSendBtn) {
-    whatsappSendBtn.addEventListener('click', triggerWhatsappSend);
   }
 
-  // Enter to send (Shift+Enter for new line)
+  // Enter to send
   if (whatsappMessageInput) {
     whatsappMessageInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+      if (e.key === 'Enter') {
         e.preventDefault();
-        triggerWhatsappSend();
+        const text = whatsappMessageInput.value.trim();
+        if (text) {
+          sendUserMessage(text);
+        }
       }
     });
+  }
+
+  // External redirect button
+  if (whatsappWebRedirectBtn) {
+    whatsappWebRedirectBtn.addEventListener('click', openExternalWhatsapp);
   }
 
   // Close modal when clicking outside
@@ -543,6 +693,7 @@ ${stepsTable}
           !(headerWhatsappBtn && headerWhatsappBtn.contains(e.target)) &&
           !(deployCardWhatsappBtn && deployCardWhatsappBtn.contains(e.target)) &&
           !(sectionOpenChatBtn && sectionOpenChatBtn.contains(e.target)) &&
+          !(mainSectionWhatsappCta && mainSectionWhatsappCta.contains(e.target)) &&
           !(footerWhatsappBtn && footerWhatsappBtn.contains(e.target))) {
         closeWhatsappModal();
       }
