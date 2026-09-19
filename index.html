@@ -35,7 +35,7 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.0.8" />
+  <link rel="stylesheet" href="styles.css?v=5.3.1" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -543,11 +543,16 @@
         <div class="comparison-header">
           <div class="eyebrow"><span class="pulse-dot"></span> COMPARAÇÃO COGNITIVA</div>
           <h3>Sem GAU vs Com GAU v5</h3>
-          <p>Arraste o divisor para ver a diferença física entre a execução cega de um agente comum e a máquina de provas do GAU.</p>
+          <p>Arraste o divisor livremente de 0% a 100% ou use os atalhos para comparar a execução cega vs a máquina de provas do GAU.</p>
+          <div class="comparison-presets">
+            <button type="button" class="comp-preset-btn" data-preset="0" title="Ver 100% Com GAU v5">⚡ 100% Com GAU v5</button>
+            <button type="button" class="comp-preset-btn active" data-preset="50" title="Comparar Lado a Lado">⚖️ Lado a Lado (50/50)</button>
+            <button type="button" class="comp-preset-btn" data-preset="100" title="Ver 100% Sem GAU">⚠️ 100% Sem GAU</button>
+          </div>
         </div>
         <div class="comparison-slider" id="comparisonSlider">
           <div class="comparison-pane pane-after">
-            <div class="pane-content">
+            <div class="pane-content pane-content-after">
               <span class="pane-badge after-badge">⚡ COM GAU v5 • MÁQUINA DE PROVAS</span>
               <h4>Engenharia Rigorosa &amp; Auditada</h4>
               <ul class="comp-list">
@@ -562,7 +567,7 @@
             </div>
           </div>
           <div class="comparison-pane pane-before" id="compPaneBefore">
-            <div class="pane-content">
+            <div class="pane-content pane-content-before">
               <span class="pane-badge before-badge">⚠️ AGENTE COMUM • EXECUÇÃO CEGA</span>
               <h4>Alucinações &amp; Quebra de Código</h4>
               <ul class="comp-list">
@@ -887,7 +892,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.3.0"></script>
-  <script src="app.js?v=5.3.0"></script>
+  <script src="ideas.js?v=5.3.1"></script>
+  <script src="app.js?v=5.3.1"></script>
 </body>
 </html>
