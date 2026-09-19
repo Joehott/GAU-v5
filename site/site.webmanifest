@@ -1,9 +1,22 @@
 {
-  "name": "GAU v5",
+  "name": "GAU v5 Oficial",
   "short_name": "GAU v5",
+  "description": "GAU v5: 69 mecanismos cognitivos e 16 agentes autônomos integrados ao comando /goal do Antigravity.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#070910",
   "theme_color": "#080b12",
-  "icons": []
+  "icons": [
+    {
+      "src": "assets/gau-avatar.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/gau-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
 }

@@ -611,9 +611,81 @@ ${stepsTable}
   }
 
   if (phoneSimulateGoalBtn) phoneSimulateGoalBtn.addEventListener('click', runPhoneSimulation);
-  if (triggerPhoneTestBtn) triggerPhoneTestBtn.addEventListener('click', () => {
-    const el = document.getElementById('mobile-showcase');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(runPhoneSimulation, 600);
+  // Dock Active Navigation Tracker & Scrollspy
+  const dockItems = document.querySelectorAll('.mobile-bottom-dock .dock-item');
+  function setDockActive(targetId) {
+    dockItems.forEach(item => {
+      const href = item.getAttribute('href');
+      if (href === targetId || (targetId === '#top' && item.id === 'dockHome')) {
+        item.classList.add('active');
+      } else if (item.id !== 'dockWhatsappBtn') {
+        item.classList.remove('active');
+      }
+    });
+  }
+
+  dockItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const href = item.getAttribute('href');
+      if (href && href.startsWith('#')) {
+        setDockActive(href);
+      }
+    });
   });
+
+  const spySections = [
+    { id: '#top', el: document.getElementById('top') },
+    { id: '#comercial', el: document.getElementById('comercial') },
+    { id: '#mobile-showcase', el: document.getElementById('mobile-showcase') },
+    { id: '#lab', el: document.getElementById('lab') },
+    { id: '#ideas', el: document.getElementById('ideas') }
+  ];
+
+  let scrollTimeout = null;
+  window.addEventListener('scroll', () => {
+    if (scrollTimeout) return;
+    scrollTimeout = setTimeout(() => {
+      scrollTimeout = null;
+      const scrollPos = window.scrollY + 220;
+      for (let i = spySections.length - 1; i >= 0; i--) {
+        const s = spySections[i];
+        if (s.el && s.el.offsetTop <= scrollPos) {
+          setDockActive(s.id);
+          break;
+        }
+      }
+    }, 80);
+  }, { passive: true });
+
+  // Desktop Mobile Simulator Toggle
+  const mobileSimToggleBtn = document.getElementById('mobileSimToggleBtn');
+  const exitMobileSimBtn = document.getElementById('exitMobileSimBtn');
+  const mobileSimBanner = document.getElementById('mobileSimBanner');
+
+  function enableMobileSimulator() {
+    document.body.classList.add('simulating-mobile');
+    if (mobileSimBanner) mobileSimBanner.style.display = 'flex';
+    showToast('📱 Modo Tela de Celular Ativado!');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function disableMobileSimulator() {
+    document.body.classList.remove('simulating-mobile');
+    if (mobileSimBanner) mobileSimBanner.style.display = 'none';
+    showToast('Retornando ao Modo Desktop');
+  }
+
+  if (mobileSimToggleBtn) {
+    mobileSimToggleBtn.addEventListener('click', () => {
+      if (document.body.classList.contains('simulating-mobile')) {
+        disableMobileSimulator();
+      } else {
+        enableMobileSimulator();
+      }
+    });
+  }
+
+  if (exitMobileSimBtn) {
+    exitMobileSimBtn.addEventListener('click', disableMobileSimulator);
+  }
 })();
