@@ -2,8 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
   <meta name="theme-color" content="#080b12" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="GAU v5" />
+  <link rel="apple-touch-icon" href="assets/gau-avatar.png" />
   <meta name="description" content="GAU v5 para Antigravity: 69 mecanismos cognitivos integrados ao /goal, com roteamento adaptativo, memória, councils, swarms e verificação por evidência." />
   <meta name="keywords" content="GAU v5, GAU, Grande Arquitetura Unificada, Antigravity, Google Antigravity, comando /goal, agentes autônomos, inteligência artificial, multi-agent system, orquestração de IA, robôs programadores, Joehott" />
   <link rel="canonical" href="https://gau-oficial.vercel.app/" />
@@ -29,7 +34,7 @@
   <title>GAU v5 | Antigravity Cognitive Orchestration</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.0.3" />
+  <link rel="stylesheet" href="styles.css?v=5.0.8" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -39,13 +44,19 @@
   <script defer src="/_vercel/insights/script.js"></script>
   <script defer src="/_vercel/speed-insights/script.js"></script>
   <style>
-    /* Critical inline styles to guarantee instant rendering of WhatsApp elements */
+    /* Critical inline styles to guarantee instant rendering of WhatsApp & Mobile elements */
     .whatsapp-floating {
       position: fixed !important;
       bottom: 26px !important;
       right: 26px !important;
       z-index: 99999 !important;
       display: block !important;
+    }
+    @media (max-width: 768px) {
+      .whatsapp-floating {
+        bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+        right: 16px !important;
+      }
     }
     .whatsapp-pulse-btn {
       width: 58px !important;
@@ -70,6 +81,13 @@
   <div class="aurora aurora-a" aria-hidden="true"></div>
   <div class="aurora aurora-b" aria-hidden="true"></div>
 
+  <div class="mobile-sim-banner" id="mobileSimBanner" style="display: none;" role="region" aria-label="Simulador Mobile">
+    <div class="sim-banner-content">
+      <span>📱 <strong>Modo Tela de Celular Ativo</strong> &bull; Visualização Smartphone</span>
+      <button class="sim-exit-btn" id="exitMobileSimBtn" title="Voltar ao Modo Desktop">✕ Fechar Modo Celular</button>
+    </div>
+  </div>
+
   <header class="topbar" id="top">
     <a class="brand" href="#top" aria-label="GAU v5 - início">
       <img src="assets/gau-mark.svg" alt="" width="34" height="34" />
@@ -87,6 +105,10 @@
       <a href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </nav>
     <div class="topbar-actions">
+      <button class="mobile-sim-toggle" id="mobileSimToggleBtn" title="Simular Interface de Celular no Desktop" aria-label="Simular Tela de Celular">
+        <span class="sim-icon">📱</span>
+        <span class="sim-text">Modo Celular</span>
+      </button>
       <a class="whatsapp-btn-header" id="headerWhatsappBtn" href="https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V" target="_blank" rel="noopener noreferrer" title="Canal Oficial no WhatsApp">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
         <span>WhatsApp</span>
@@ -108,6 +130,10 @@
         <span>GAU <b>v5</b></span>
       </div>
       <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Fechar Menu">&times;</button>
+    </div>
+    <div class="drawer-status-pill">
+      <span class="pulse-dot"></span>
+      <span>GAU v5 Mobile &bull; 16 Agentes Ativos</span>
     </div>
     <nav class="drawer-links">
       <a href="#top" class="drawer-link"><span class="drawer-icon">🏠</span> Início</a>
@@ -278,6 +304,13 @@
         </div>
 
         <div class="phone-info-col reveal delay-1">
+          <div class="mobile-active-notice">
+            <div class="mobile-active-banner">
+              <span class="mobile-active-badge">📱 INTERFACE MOBILE ATIVA</span>
+              <strong style="color: #fff; display: block; margin: 4px 0 2px;">Você já está navegando na versão oficial para celulares!</strong>
+              <p style="margin: 0; color: #a0aec0; font-size: 0.85rem;">Use a barra de navegação inferior ou o menu gaveta para acessar qualquer recurso com um toque.</p>
+            </div>
+          </div>
           <div class="eyebrow" style="color: #62e6ff;">EXPERIÊNCIA MOBILE COMPLETA</div>
           <h2 style="font-size: clamp(2rem, 3.2vw, 2.7rem); margin-top: 0.5rem;">O GAU v5 na tela do seu celular</h2>
           <p style="color: #94a3b8; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">
@@ -694,7 +727,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.0.7"></script>
-  <script src="app.js?v=5.0.7"></script>
+  <script src="ideas.js?v=5.0.8"></script>
+  <script src="app.js?v=5.0.8"></script>
 </body>
 </html>
