@@ -1,151 +1,163 @@
-# HANDOFF — GAU v5 (Antigravity Cognitive Architecture)
+# HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.0.0  
-**Data**: 07 de Setembro de 2026  
-**Status**: Operacional, Auditado e Versionado em Git  
-**Modelo Padrão**: Gemini 3.8 Flash (High) via `model: inherit`
-
----
-
-## 1. Visão Geral do Projeto
-
-O **GAU v5** (Grande Arquitetura Unificada) é uma camada de orquestração cognitiva de alta precisão desenhada para o Google Antigravity. Ele transforma o comando nativo `/goal` em uma máquina de execução autônoma rigorosa, orientada por evidências verificáveis, limites orçamentários rígidos e separação de responsabilidades.
-
-O ecossistema implementa integralmente as **69 ideias aprovadas** no documento canônico `GAU_v5_ideias_aprovadas.md`, organizadas em 6 camadas operacionais e apoiadas por um runtime Python local baseado em SQLite WAL sem dependências externas.
+**Versão**: 5.0.8  
+**Data da Última Atualização**: 19 de Setembro de 2026  
+**Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
+**URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
+**URL Espelho (GitHub Pages)**: [https://joehott.github.io/GAU-v5/](https://joehott.github.io/GAU-v5/)  
+**Repositório Oficial**: [https://github.com/Joehott/GAU-v5](https://github.com/Joehott/GAU-v5)  
+**Canal Oficial WhatsApp**: [https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V](https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V)  
 
 ---
 
-## 2. Como o `/goal` Foi Integrado
+## 1. Visão Geral do Sistema
 
-O binário do Antigravity é proprietário e não permite modificação direta de seu código executável. A integração do GAU v5 é realizada de forma nativa e elegante através dos quatro pontos oficiais de extensão da plataforma:
+O **GAU v5** (*Global Agentic Universe* / Grande Arquitetura Unificada) é uma camada de orquestração cognitiva de alta precisão para o **Google Antigravity**. Ele transforma o comando nativo `/goal` em uma máquina de execução autônoma rigorosa, orientada por evidências verificáveis, limites orçamentários rígidos e separação de responsabilidades.
 
-1. **Regra Mestre Always-On** (`.agents/rules/gau-v5.md`):
-   - Possui frontmatter `trigger: always_on`.
-   - Intercepta qualquer requisição de engenharia e instrui o modelo a ativar a skill `gau-goal`.
-2. **Skill Orquestradora** (`.agents/skills/gau-goal/SKILL.md`):
-   - Guia o ciclo de vida do `/goal`: baseline de requisitos, roteamento de modelo, delegação para subagentes, checkpoints cognitivos, coleta de evidências e fechamento no gate.
-3. **16 Subagentes Especialistas** (`.agents/agents/gau-*.md`):
-   - Perfis declarados com ferramentas específicas (`tools`), skills atribuídas e sandboxing ativado.
-   - Invocados nativamente via `invoke_subagent` com `model: inherit`.
-4. **Runtime de Estado e Evidências** (`.gau/runtime/gau.py`):
-   - Executado localmente pelo agente via terminal para controle de missões, reservas de compute, DAG de tarefas, freshness de arquivos por SHA-256 e gate final.
+O ecossistema implementa integralmente as **69 ideias aprovadas** no documento canônico `GAU_v5_ideias_aprovadas.md`, distribuídas em 6 camadas cognitivas e apoiadas por um runtime Python local baseado em SQLite WAL sem dependências externas.
 
 ---
 
-## 3. Inventário Completo de Artefatos
+## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 3.1. Estrutura de Diretórios no Workspace
+### 2.1. Nova Identidade Visual e Branding Oficial
+* **Novo Ícone Orbital GAU:** Letra `G` metálica cromada em 3D, com núcleo quântico azul neon pulsante e 3 esferas orbitais.
+* **Logotipos Oficiais Transparentes:**
+  * `site/assets/gau-logo-transparent.png` (Horizontal completo com subtítulo `GLOBAL AGENTIC UNIVERSE`).
+  * `site/assets/gau-logo-vertical-transparent.png` (Vertical com ícone superior e texto 3D).
+  * `site/assets/gau-icon.png` e `gau-icon-transparent.png` (Ícone isolado em alta resolução 512x512).
+  * `site/assets/gau-logo-black.png` e `gau-logo-white.png` (Versões de fundo preto e fundo branco).
+* **SVGs e Favicons Sincronizados:**
+  * `site/assets/favicon.svg` e `site/assets/favicon.png` com o novo ícone orbital.
+  * `site/assets/gau-mark.svg` e `site/assets/gau-avatar.svg` atualizados para conter a nova marca.
+* **Banner de Compartilhamento Open Graph (1200x630):**
+  * `site/assets/gau-og-banner.png` configurado nas tags `og:image` e `twitter:image` para renderizar o logo oficial no WhatsApp, Facebook e Twitter.
+* **Arquivos Locais na Área de Trabalho (`C:\Users\Joe\Desktop`):**
+  * Cópias em altíssima resolução prontas para uso externo (`gau-logo-transparent.png`, `gau-icon-transparent.png`, `gau-avatar-whatsapp.png`, `gau-logo-black.png`, `gau-logo-white.png`).
 
-```text
-GAU-v5/
-├── .agents/
-│   ├── agents/               # 16 perfis de subagentes nativos do Antigravity
-│   ├── rules/                # Regra mestre gau-v5.md (Always-On)
-│   └── skills/               # 72 skills (69 ideias + gau-goal, gau-council, gau-maintain)
-├── .gau/
-│   ├── config.json           # Configuração de limites e preferências de modelo
-│   ├── docs/                 # Guias de Operação, Contratos e Delegação
-│   ├── examples/             # Modelos de JSON para comandos do runtime
-│   ├── registry.json         # Catálogo completo das 69 ideias
-│   ├── runtime/gau.py        # Runtime CLI Python com SQLite WAL
-│   └── state.sqlite3         # Banco de dados de estado, missões e ratings Elo
-├── GAU-v5/                   # Código-fonte gerador do pacote e testes unitários
-│   ├── build_package.py      # Meta-compilador do payload
-│   ├── install.py            # Instalador idempotente com detecção de conflitos
-│   └── tests/test_gau.py     # Suíte de 34 testes de invariantes do runtime
-├── site/                     # Landing Page & Interface Web (pronta para Vercel)
-│   ├── downloads/            # Pacote GAU-v5.zip, checksum SHA-256 e scripts
-│   ├── app.js & ideas.js     # Motor da UI e catálogo das 69 ideias
-│   ├── index.html            # Página principal com Mission Lab interativo
-│   └── vercel.json           # Configurações de deploy e segurança na Vercel
-├── tools/
-│   ├── package_release.py    # Script de automação para empacotar releases e scripts
-│   └── test_deployment.py    # Teste de integridade de deploy para Vercel e GitHub Pages
-├── .nojekyll                 # Garante deploy estático direto no GitHub Pages sem Jekyll
-├── downloads/                # Espelhamento de downloads para raiz no GitHub Pages
-├── index.html                # Redirecionador imediato e redundância total para site/
-├── install.ps1 & install.sh  # Instaladores de linha única disponíveis na raiz
-├── vercel.json               # Configuração mestre Vercel na raiz (cleanUrls, headers, rewrites)
-├── HANDOFF.md                # Este documento de passagem
-└── README-ANTIGRAVITY.md     # Guia rápido de bootstrap no Antigravity
-```
+### 2.2. Vídeo Comercial Oficial Full HD (38s)
+* Vídeo gravado em 1080p com narração neural em português e trilha sonora cibernética (`site/assets/GAU_v5_Comercial_Oficial.mp4`).
+* Seção `#comercial` integrada no site com reprodutor responsivo, poster de prévia (`commercial_preview.jpg`), botões de reprodução na Hero e no menu drawer.
 
-### 3.2. Os 16 Agentes Especialistas
+### 2.3. Canal Oficial no WhatsApp
+* Link oficial do canal: `https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V`.
+* Widget flutuante de canto com anel pulsante, tooltip inteligente e modal de boas-vindas com botão direto.
+* Seção de contato dedicada (`#contato`) com atalhos para suporte, atualizações e comunidade.
 
-| Agente | Especialidade | Ferramentas Atribuídas | Skills Chave |
-|---|---|---|---|
-| `gau-requirements` | Requisitos e Escopo | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 30, 65, 68 |
-| `gau-implementer` | Implementação Isolada | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `replace_file_content`, `write_to_file`, `run_command` | 8, 34 |
-| `gau-investigator` | Causa e Hipóteses | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 6, 20, 58, 59 |
-| `gau-architect` | Arquitetura e Contratos | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 7, 16, 29 |
-| `gau-verifier` | Verificação Independente | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 9, 35, 53, 57 |
-| `gau-evidence` | Evidência e Proveniência | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 22, 57, 68 |
-| `gau-adversarial` | Contraexemplos / Red Team | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 5, 66, 67 |
-| `gau-security` | Auditoria de Segurança | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 25 |
-| `gau-performance` | Desempenho e Algoritmos | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 26, 32 |
-| `gau-ux` | Experiência de Uso / UI | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 27 |
-| `gau-database` | Dados e Migrations | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 28 |
-| `gau-integration` | Integração e Branches | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `replace_file_content`, `write_to_file`, `run_command` | 29, 34 |
-| `gau-research` | Pesquisa Técnica | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command`, `read_url_content`, `search_web` | 24 |
-| `gau-memory` | Memória e Checkpoints | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `replace_file_content`, `write_to_file`, `run_command` | 15, 17, 18, 48, 49, 52 |
-| `gau-judge` | Júri Supremo e Gate | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command` | 4, 11, 36, 56, 60 |
-| `gau-orchestrator` | Meta-Orquestração DAG | `view_file`, `grep_search`, `find_by_name`, `list_dir`, `run_command`, `invoke_subagent`, `manage_subagents`, `send_message` | 38, 39, 40, 41, 46, 47, 62 |
+### 2.4. Navegação e Simulador "Modo Celular"
+* **Barra de Navegação Topbar:**
+  * Expandida para até `1440px` com `white-space: nowrap` — nenhuma palavra quebra ou fica espremida.
+  * Links duplicados de texto foram eliminados, mantendo apenas botões de ação elegantes à direita.
+* **Simulador "Modo Celular" para Desktop:**
+  * Botão `[📱 Modo Celular]` na topbar e no drawer que alterna `body.simulating-mobile`.
+  * Centraliza o viewport no tamanho de tela de smartphone (412px), ativa o dock inferior e exibe a barra superior flutuante com botão de `Voltar ao Computador ✕`.
+  * Totalmente desacoplado de desenhos/mockups 3D antigos (o mockup pesado `#mobile-showcase` foi permanentemente removido).
 
 ---
 
-## 4. Invariantes de Qualidade e Segurança
+## 3. Objetivo da Próxima Sessão: Aprimoramento de UI / UX
 
-1. **Evidence Beats Vote**: Nenhuma votação de conselho pode aprovar uma entrega se houver uma falha reproduzível aberta.
-2. **Freshness Engine**: O runtime invalida automaticamente qualquer evidência anterior caso algum arquivo de código ou log tenha sido modificado posteriormente.
-3. **Falsa Independência Rejeitada**: Para requisitos marcados com `independent: true`, o sistema rejeita verificação onde implementador e verificador possuem a mesma identidade ou sessão.
-4. **Compute Governor**: Tetos orçamentários fixados em `config.json` (máximo de 8 cérebros concorrentes, profundidade 2, até 3 rodadas de debate por conselho).
-5. **Anti-Loop**: O detector de novidade bloqueia tentativas repetitivas de mesma estratégia e mesmo erro lexical.
+O objetivo declarado para a próxima sessão é **aplicar a UI/UX do sistema GAU para elevar a qualidade visual, interação e ergonomia do site existente**.
+
+### 3.1. Diretrizes de Design System (Estética GAU)
+* **Atmosfera Visual:** Cyberpunk elegante, espacial/quântico, glassmorphism de alta tecnologia.
+* **Paleta de Cores Oficial:**
+  * Fundo Cósmico Profundo: `#070910`, `#0b0e18`, `#020408`.
+  * Painéis e Vidros: `rgba(15, 19, 31, 0.72)` com `backdrop-filter: blur(20px)`.
+  * Acentos Principais:
+    * Ciano / Azul Quântico: `#62e6ff`, `#00d8ff` (núcleo, links e tecnologia).
+    * Roxo Cognitivo / Violeta: `#9a7cff`, `#6848ef` (orquestração, inteligência e badges).
+    * Verde Menta / WhatsApp: `#25D366`, `#80ffd4` (ações diretas, online status e sucesso).
+    * Coral de Alerta: `#ff708a` (falhas e investigações).
+* **Tipografia:** `Inter`, `-apple-system`, `system-ui`, com fontes monoespaçadas legíveis para códigos e métricas (`ui-monospace`, `Consolas`, `SFMono-Regular`).
+
+### 3.2. Frentes de Melhoria UI/UX Planejadas
+
+1. **Hero & Cérebro Orbital (`#top`):**
+   * Refinar o card orbital (`.orbital-card`) e a animação do núcleo central com o novo logo.
+   * Tornar as órbitas interativas ao passar o mouse ou dar toque (destacar satélites de roteamento, evidência e checkpoint).
+   * Polir o contraste do selo do logotipo horizontal no topo do Hero.
+
+2. **Mission Lab Console (`#lab`):**
+   * Aprimorar a experiência do console simulador de missões:
+     * Adicionar seletor visual de cenários pré-configurados (Bug complexo, Refatoração, Feature nova, Auditoria de segurança).
+     * Exibir os agentes autônomos trabalhando em cards ou nós visuais com indicadores de status ao vivo.
+     * Melhorar a timeline de passos com ícones e cores para cada nível de prova (E0 a E5).
+
+3. **Catálogo das 69 Ideias Aprovadas (`#ideas`):**
+   * Sistema de abas ou pílulas para filtrar as ideias pelas 6 camadas cognitivas (Roteamento, Conselhos, Swarms, Memória, Tribunais, Meta-Orquestração).
+   * Modal ou card expandido com explicação visual detalhada, subagentes responsáveis e prova matemática/lógica de cada ideia.
+   * Barra de busca rápida por texto com realce visual.
+
+4. **Leaderboard Elo (`#leaderboard`):**
+   * Design de pódio aprimorado para os modelos e agentes mais bem avaliados.
+   * Gráficos ou barras de progresso visual mostrando as dimensões (Agente, Modelo, Skill, Ferramenta, Pipeline).
+
+5. **Visualização do Pipeline do Comando `/goal` (`#goal`):**
+   * Diagrama interativo de fluxo visual ilustrando o caminho de uma missão:
+     `Requisitos (E0)` ➔ `Roteador de Modelos` ➔ `Swarm de Código` ➔ `Evidence Court` ➔ `Gate Final (E5)`.
+
+6. **Ergonomia Mobile & Acessibilidade:**
+   * Alvos de toque (touch targets) de no mínimo 48x48px em botões e links.
+   * Contraste de cores em conformidade com WCAG 2.1 nível AA.
+   * Otimização de transições para respeitar `prefers-reduced-motion`.
 
 ---
 
-## 5. Rotinas e Comandos de Manutenção
+## 4. Mapa Técnico dos Arquivos do Frontend
 
-### 5.1. Recompilar e Atualizar o Pacote
+| Arquivo | Função Principal |
+|---|---|
+| `site/index.html` | Estrutura semântica, metatags, seções do site, modal do WhatsApp, banner do simulador |
+| `site/styles.css` | Design system, variáveis CSS, temas escuros, glassmorphism, animações e responsividade |
+| `site/app.js` | Comportamento dinâmico, simulador do Mission Lab, controle de scrollspy, modal e simulador mobile |
+| `site/ideas.js` | Banco de dados em JS com as 69 ideias completas, categorias e tags de skills |
+| `site/assets/` | Biblioteca de imagens, novos logos transparentes, ícones e vídeo comercial |
+| `site/site.webmanifest` | Manifesto PWA com suporte a ícones de tela inicial |
+| `site/vercel.json` | Regras de roteamento e cache na Vercel |
+
+---
+
+## 5. Comandos Essenciais para a Próxima Sessão
+
+### 5.1. Testar Localmente
 ```powershell
-# Recompila as 69 skills e 16 agentes a partir das ideias aprovadas
-py -3 GAU-v5\build_package.py
-
-# Reexecuta os testes de invariantes
-py -3 -m unittest discover -s GAU-v5\tests -v
-
-# Atualiza a instalação no workspace atual
-py -3 GAU-v5\install.py --project .
-```
-
-### 5.2. Gerar Novo Pacote de Release para o Site
-```powershell
-py -3 tools\package_release.py
-```
-Isso atualiza automaticamente `site/downloads/GAU-v5.zip`, calcula o SHA-256 e gera os instaladores `install.ps1` e `install.sh`.
-
-### 5.3. Testar o Site Localmente
-```powershell
-# A partir da raiz (testa o redirecionador e links gerais)
-py -3 -m http.server 8000
-# Acesse: http://localhost:8000 -> redireciona para http://localhost:8000/site/
-
-# Ou servindo diretamente a pasta site
-cd site
+# Iniciar servidor web local para visualizar alterações
+cd c:\Users\Joe\Desktop\GAU-v5\site
 py -3 -m http.server 8080
-# Acesse: http://localhost:8080
+# Abra no navegador: http://localhost:8080
 ```
 
-### 5.4. Publicar na Vercel
+### 5.2. Validações Automatizadas (Obrigatório rodar após alterações)
 ```powershell
-# Publicação a partir da raiz (usa vercel.json raiz com rewrites automáticos)
-vercel --prod
+# 1. Verificar sintaxe do JavaScript
+node -c site\app.js
 
-# Ou publicando apenas a pasta site
-cd site
-vercel --prod
-```
-
-### 5.5. Testes de Integridade de Deploy
-```powershell
+# 2. Testar integridade dos arquivos e links de deploy
 py -3 tools\test_deployment.py
+
+# 3. Executar os 34 testes unitários do runtime
+py -3 -m unittest discover -s GAU-v5\tests -v
 ```
+
+### 5.3. Publicação em Produção (Vercel + GitHub Pages)
+```powershell
+# 1. Commitar alterações na branch main
+git add site/
+git commit -m "feat(ui): aprimorar UI/UX do site com identidade visual do GAU"
+git push origin main
+
+# 2. Sincronizar branch gh-pages automaticamente
+git subtree split --prefix site -b gh-pages-temp
+git push -f origin gh-pages-temp:gh-pages
+git branch -D gh-pages-temp
+```
+
+---
+
+## 6. Restrições e Compromissos Inegociáveis
+
+1. **Custo Zero (100% Grátis):** O proprietário do projeto é um jovem estudante. Nunca utilize serviços pagos, APIs com custo por requisição ou soluções de hospedagem que exijam cartão de crédito.
+2. **Runtime Intacto:** Os testes unitários do motor Python (`GAU-v5/tests/test_gau.py`) devem permanecer 100% aprovados (34/34 passing).
+3. **Paridade de Arquivos:** Caso algum ajuste atinja o runtime `.gau/runtime/gau.py`, o arquivo espelho em `GAU-v5/payload/runtime/gau.py` deve permanecer com hash SHA-256 idêntico.
+4. **Respeito às Imagens Oficiais:** Manter o uso dos novos arquivos transparentes criados (`gau-logo-transparent.png`, `gau-icon.png`, `gau-avatar.png`).
