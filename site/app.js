@@ -517,4 +517,103 @@ ${stepsTable}
       showToast('Abrindo WhatsApp para compartilhar o GAU v5...');
     });
   }
+
+  // Mobile Navigation Drawer
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+  const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+  const drawerCloseBtn = document.getElementById('drawerCloseBtn');
+
+  function openMobileDrawer() {
+    if (mobileMenuBtn) mobileMenuBtn.classList.add('active');
+    if (mobileNavDrawer) mobileNavDrawer.classList.add('open');
+    if (mobileNavBackdrop) mobileNavBackdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileDrawer() {
+    if (mobileMenuBtn) mobileMenuBtn.classList.remove('active');
+    if (mobileNavDrawer) mobileNavDrawer.classList.remove('open');
+    if (mobileNavBackdrop) mobileNavBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+      if (mobileNavDrawer && mobileNavDrawer.classList.contains('open')) {
+        closeMobileDrawer();
+      } else {
+        openMobileDrawer();
+      }
+    });
+  }
+
+  if (drawerCloseBtn) drawerCloseBtn.addEventListener('click', closeMobileDrawer);
+  if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileDrawer);
+
+  document.querySelectorAll('.drawer-link').forEach(link => {
+    link.addEventListener('click', closeMobileDrawer);
+  });
+
+  // Dock WhatsApp Button
+  const dockWhatsappBtn = document.getElementById('dockWhatsappBtn');
+  if (dockWhatsappBtn) {
+    dockWhatsappBtn.addEventListener('click', openWhatsappModal);
+  }
+
+  // Live Phone Clock
+  const phoneClock = document.getElementById('phoneClock');
+  function updatePhoneClock() {
+    if (!phoneClock) return;
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    phoneClock.textContent = `${h}:${m}`;
+  }
+  updatePhoneClock();
+  setInterval(updatePhoneClock, 30000);
+
+  // Phone Simulation Interactive Runner
+  const phoneSimulateGoalBtn = document.getElementById('phoneSimulateGoalBtn');
+  const triggerPhoneTestBtn = document.getElementById('triggerPhoneTestBtn');
+  const phoneTerminalBox = document.getElementById('phoneTerminalBox');
+  let phoneRunning = false;
+
+  function runPhoneSimulation() {
+    if (phoneRunning || !phoneTerminalBox) return;
+    phoneRunning = true;
+    showToast('Executando simulação de missão na Tela de Celular...');
+
+    const steps = [
+      { text: '> [0.2s] /goal "Validar e testar microsserviço"', cls: 'info', delay: 300 },
+      { text: '> [0.5s] Router: Model Router v3 selecionado.', cls: '', delay: 700 },
+      { text: '> [0.9s] Swarm: 3 agentes convocados (Arch, Code, Verif).', cls: '', delay: 1100 },
+      { text: '> [1.3s] Evidence Court: 34 testes executados -> PASS.', cls: 'success', delay: 1600 },
+      { text: '> [1.7s] Prova nível E4 confirmada!', cls: 'info', delay: 2100 },
+      { text: '> [2.0s] Gatekeeper: SUCESSO APROVADO! ✓', cls: 'success', delay: 2600 }
+    ];
+
+    phoneTerminalBox.innerHTML = '<div class="phone-terminal-line info">&gt; Iniciando missão no GAU Mobile...</div>';
+
+    steps.forEach((step, idx) => {
+      setTimeout(() => {
+        const line = document.createElement('div');
+        line.className = `phone-terminal-line ${step.cls}`;
+        line.textContent = step.text;
+        phoneTerminalBox.appendChild(line);
+        phoneTerminalBox.scrollTop = phoneTerminalBox.scrollHeight;
+
+        if (idx === steps.length - 1) {
+          phoneRunning = false;
+        }
+      }, step.delay);
+    });
+  }
+
+  if (phoneSimulateGoalBtn) phoneSimulateGoalBtn.addEventListener('click', runPhoneSimulation);
+  if (triggerPhoneTestBtn) triggerPhoneTestBtn.addEventListener('click', () => {
+    const el = document.getElementById('mobile-showcase');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(runPhoneSimulation, 600);
+  });
 })();
