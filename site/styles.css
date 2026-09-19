@@ -2207,5 +2207,258 @@ body.simulating-mobile .deploy-card {
   outline-offset: 2px !important;
 }
 
+/* ==========================================================================
+   GAU v5.2.0 (V2) UI/UX ENHANCEMENTS
+   ========================================================================== */
 
+/* 1. Architecture 3D Icons & Skills Badges */
+.layer-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+}
+.layer-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(98, 230, 255, 0.4);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35), 0 0 35px rgba(154, 124, 255, 0.2);
+}
+.layer-icon {
+  width: 64px !important;
+  height: 64px !important;
+  background: transparent !important;
+  border: none !important;
+  margin-bottom: 24px !important;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+.layer-icon-img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 14px rgba(154, 124, 255, 0.45));
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+  animation: floatLayer 6s ease-in-out infinite;
+}
+.layer-card:nth-child(even) .layer-icon-img {
+  animation-delay: -3s;
+}
+@keyframes floatLayer {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+.layer-card:hover .layer-icon-img {
+  transform: scale(1.12) rotate(-2deg);
+  filter: drop-shadow(0 6px 24px rgba(98, 230, 255, 0.75));
+}
+.layer-skills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  margin-bottom: 30px;
+}
+.layer-skill-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #9a7cff;
+  background: rgba(154, 124, 255, 0.12);
+  border: 1px solid rgba(154, 124, 255, 0.28);
+  border-radius: 6px;
+  padding: 2px 7px;
+  letter-spacing: 0.04em;
+  transition: all 0.2s ease;
+}
+.layer-card:hover .layer-skill-badge {
+  color: #62e6ff;
+  border-color: rgba(98, 230, 255, 0.4);
+  background: rgba(98, 230, 255, 0.12);
+}
 
+/* 2. Hero Quick Prompt Launchers */
+.hero-prompts {
+  margin: 18px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.hero-prompts-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #798399;
+  text-transform: uppercase;
+}
+.hero-prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.prompt-chip {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: #cbd5e1;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+}
+.prompt-chip:hover {
+  background: rgba(98, 230, 255, 0.12);
+  border-color: rgba(98, 230, 255, 0.4);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 216, 255, 0.18);
+}
+
+/* 3. Commercial Video Chapters */
+.video-chapters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1.25rem;
+  padding: 0 1rem;
+}
+.chapters-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #25D366;
+  text-transform: uppercase;
+}
+.chapter-pill {
+  background: rgba(15, 19, 31, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 6px 14px;
+  color: #cbd5e1;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.chapter-pill:hover, .chapter-pill.active {
+  background: rgba(37, 211, 102, 0.18);
+  border-color: #25D366;
+  color: #25D366;
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.25);
+  transform: translateY(-1px);
+}
+
+/* 4. Mission Lab DAG Progress Bar */
+.dag-progress-wrap {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.dag-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #9a7cff, #62e6ff, #80ffd4);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 8px rgba(98, 230, 255, 0.5);
+}
+.dag-progress-text {
+  font: 700 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #62e6ff;
+}
+
+/* 5. Deploy OS Selector Tabs */
+.deploy-os-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.os-tab {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 16px;
+  color: #94a3b8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+}
+.os-tab:hover {
+  background: rgba(154, 124, 255, 0.12);
+  border-color: rgba(154, 124, 255, 0.35);
+  color: #fff;
+}
+.os-tab.active {
+  background: rgba(154, 124, 255, 0.2);
+  border-color: var(--violet);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(154, 124, 255, 0.3);
+}
+
+/* 6. Topbar ScrollSpy Active Link */
+.nav a {
+  position: relative;
+}
+.nav a.active {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(98, 230, 255, 0.6);
+  font-weight: 750;
+}
+.nav a.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #62e6ff, #9a7cff);
+  border-radius: 2px;
+  box-shadow: 0 0 8px #62e6ff;
+}
+
+/* 7. Leaderboard Win Rate Bar */
+.winrate-wrap {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.winrate-meta {
+  display: flex;
+  justify-content: space-between;
+  font: 8.5px ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #7b88a1;
+}
+.winrate-meta strong {
+  color: #80ffd4;
+}
+.winrate-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.winrate-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #9a7cff, #80ffd4);
+}

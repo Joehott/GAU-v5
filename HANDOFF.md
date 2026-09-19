@@ -1,6 +1,6 @@
 # HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.1.0  
+**Versão**: 5.2.0  
 **Data da Última Atualização**: 19 de Setembro de 2026  
 **Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
 **URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
@@ -20,14 +20,29 @@ O ecossistema implementa integralmente as **69 ideias aprovadas** no documento c
 
 ## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 2.1. Nova Camada de UI/UX Cognitiva Concluída (v5.1.0)
-* **1. Hero & Cérebro Orbital Interativo (`#top`):**
-  * Satélites orbitais clicáveis (`01 Router`, `15 Brain`, `22 Evidence`, `38 Compute`, `52 Checkpoint`, `69 Evolve`) com hover glow e micro-animações.
-  * Cápsula informativa holográfica dinamicamente atualizada ao interagir com satélites ou com o núcleo quântico.
-* **2. Mission Lab Cockpit Futurista (`#lab`):**
-  * Barra de telemetria em tempo real com indicador de estado (`SYS_IDLE`, `SWARM_ACTIVE`, `SYS_PASS`), ping dinâmico e contador de agentes ativos.
-  * Escala visual progressiva de maturação da prova (**E0 Claim ➔ E1 Exec ➔ E2 Logs ➔ E3 Repro ➔ E4 Adversarial ➔ E5 Verified**).
-  * Matriz visual de agentes mobilizados em tempo real com chips reativos para `Orchestrator`, `Requirements`, `Investigator`, `Implementer`, `Verifier`, `Security`, `Architect`, `Judge`.
+### 2.1. Evolução de UI/UX V2 (v5.2.0) — Auditoria e Refinamento
+* **1. Novos Ícones 3D na Seção de Arquitetura Cognitiva (`#architecture`):**
+  * Integração dos 6 novos ícones de alta fidelidade (`icons_arquitetura (1..6).png`) com aura de neon, efeito flutuante contínuo (*breathing pulse*) e escala no hover:
+    * Camada 01: `icons_arquitetura (3).png` (Hierarquia/DAG — Orquestração)
+    * Camada 02: `icons_arquitetura (2).png` (Rede neural — Raciocínio)
+    * Camada 03: `icons_arquitetura (4).png` (Planos de memória — Memória)
+    * Camada 04: `icons_arquitetura (5).png` (Cubo de execução >> — Execução)
+    * Camada 05: `icons_arquitetura (6).png` (Escudo de segurança ✓ — Verificação)
+    * Camada 06: `icons_arquitetura (1).png` (Ciclo de evolução — Aprendizado)
+  * Inclusão de pílulas com as **skills oficiais** de cada camada em cada card.
+* **2. Prompts Rápidos no Hero (`#top`):**
+  * 3 botões interativos ("⚡ Bug Auth", "🏗️ Refatoração", "🛡️ Adversarial") que preenchem o Mission Lab e rolam a tela diretamente ao console.
+* **3. Capítulos do Vídeo Comercial (`#comercial`):**
+  * Pílulas interativas de minutagem (`0:00 Início`, `0:09 16 Agentes`, `0:19 Provas E0-E5`, `0:29 Instalação`) com salto instantâneo e reprodução.
+* **4. Barra de Progresso do DAG no Mission Lab (`#lab`):**
+  * Barra superior animada indicando o avanço de 0% a 100% dos passos cognitivos durante a execução.
+* **5. Seletor de SO no Bloco de Instalação (`#deploy`):**
+  * Abas dedicadas: `[ Windows (PowerShell) ]`, `[ Linux / macOS (Bash) ]` e `[ Instalação Local Python ]`.
+* **6. ScrollSpy de Alta Performance & Contador Animado:**
+  * Indicação visual da seção ativa na topbar e no dock mobile conforme a rolagem da página.
+  * Contagem numérica animada nos indicadores numéricos de métricas.
+* **7. Taxa de Vitória (Win Rate %) no Leaderboard (`#leaderboard`):**
+  * Barra de progresso visual de Win Rate em cada card de modelo e agente.
 * **3. Catálogo das 69 Ideias com Modal Holográfico (`#ideas`):**
   * Contadores dinâmicos nas pílulas de categorias (ex: `Todas (69)`, `Roteamento (5)`, `Councils (12)`, etc.).
   * Modal detalhado de inspeção profunda aberto ao clicar em qualquer card: exibe mecanismo operacional, regra inviolável de governança e botão de cópia rápida da skill.
