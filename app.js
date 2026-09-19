@@ -247,6 +247,8 @@
   const proofLadder = document.getElementById('proofLadder');
   const matrixStatusLabel = document.getElementById('matrixStatusLabel');
   const agentMatrixGrid = document.getElementById('agentMatrixGrid');
+  const dagProgressFill = document.getElementById('dagProgressFill');
+  const dagProgressText = document.getElementById('dagProgressText');
 
   const ladderLevels = ['E0', 'E1', 'E2', 'E3', 'E4', 'E5'];
   const ladderLabels = {
@@ -344,13 +346,15 @@
     const sc = scenarios[currentScenarioKey];
     setStats(sc.initialStats); memoryState.textContent='idle';
     if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SYS_IDLE';
+    if (dagProgressFill) dagProgressFill.style.width = '0%';
+    if (dagProgressText) dagProgressText.textContent = '0%';
     if (agentMatrixGrid) {
       agentMatrixGrid.querySelectorAll('.matrix-chip').forEach(c => c.classList.remove('active', 'verified'));
     }
     if (matrixStatusLabel) matrixStatusLabel.textContent = 'Pronto para iniciar';
   }
 
-  function addStep(s,index){
+  function addStep(s,index,totalSteps = 6){
     if(index===0) {
       timeline.innerHTML='';
       if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SWARM_ACTIVE';
@@ -359,6 +363,11 @@
     el.innerHTML=`<div class="timeline-badge">${s.id}</div><div class="timeline-body"><b>${escapeHtml(s.name)}</b><span>${escapeHtml(s.detail)}</span></div><div class="timeline-state">PASS</div>`;
     timeline.appendChild(el); timeline.scrollTop=timeline.scrollHeight; setStats(s);
     updateAgentMatrix(s.name);
+    if (dagProgressFill && totalSteps > 0) {
+      const pct = Math.round(((index + 1) / totalSteps) * 100);
+      dagProgressFill.style.width = pct + '%';
+      if (dagProgressText) dagProgressText.textContent = pct + '%';
+    }
   }
 
   runBtn.addEventListener('click', () => {
@@ -367,14 +376,16 @@
     if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SWARM_ACTIVE';
     const sc = scenarios[currentScenarioKey];
     const steps = sc.steps;
-    let i=0; addStep(steps[i],i); i++;
+    let i=0; addStep(steps[i],i,steps.length); i++;
     missionTimer=setInterval(()=>{
       if(i<steps.length){
-        addStep(steps[i],i);
+        addStep(steps[i],i,steps.length);
         i++;
       } else {
         clearInterval(missionTimer); missionTimer=null; missionStatus.textContent='COMPLETE'; runBtn.disabled=false; runBtn.textContent='Rodar novamente';
         if (telemetryStatus) telemetryStatus.innerHTML = '<i></i> SYS_PASS';
+        if (dagProgressFill) dagProgressFill.style.width = '100%';
+        if (dagProgressText) dagProgressText.textContent = '100%';
         updateProofLadder('E5');
         updateAgentMatrix('', true);
         showToast('Missão concluída com verificação independente formal (E5 PASS)!');
@@ -613,6 +624,15 @@ ${stepsTable}
           <span class="stat-pill">Vitórias: <b>${a.wins}</b></span>
           <span class="stat-pill">Duelos: <b>${a.duels}</b></span>
           <span class="stat-pill">Taxa: <b>${a.winRate}%</b></span>
+        </div>
+        <div class="winrate-wrap">
+          <div class="winrate-meta">
+            <span>TAXA DE VITÓRIA</span>
+            <strong>${a.winRate}%</strong>
+          </div>
+          <div class="winrate-bar-track">
+            <div class="winrate-bar-fill" style="width: ${Math.max(a.winRate, 6)}%;"></div>
+          </div>
         </div>
         <p class="agent-specialty">${escapeHtml(a.specialty)}</p>
         <div class="agent-card-footer">
@@ -963,12 +983,30 @@ ${stepsTable}
     });
   });
 
+  const navLinks = document.querySelectorAll('.topbar .nav a');
   const spySections = [
     { id: '#top', el: document.getElementById('top') },
-    { id: '#comercial', el: document.getElementById('comercial') },
+    { id: '#architecture', el: document.getElementById('architecture') },
     { id: '#lab', el: document.getElementById('lab') },
-    { id: '#ideas', el: document.getElementById('ideas') }
+    { id: '#comercial', el: document.getElementById('comercial') },
+    { id: '#leaderboard', el: document.getElementById('leaderboard') },
+    { id: '#ideas', el: document.getElementById('ideas') },
+    { id: '#goal', el: document.getElementById('goal') },
+    { id: '#deploy', el: document.getElementById('deploy') },
+    { id: '#contato', el: document.getElementById('contato') }
   ];
+
+  function setActiveNav(targetId) {
+    setDockActive(targetId);
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === targetId) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
 
   let scrollTimeout = null;
   window.addEventListener('scroll', () => {
@@ -979,12 +1017,104 @@ ${stepsTable}
       for (let i = spySections.length - 1; i >= 0; i--) {
         const s = spySections[i];
         if (s.el && s.el.offsetTop <= scrollPos) {
-          setDockActive(s.id);
+          setActiveNav(s.id);
           break;
         }
       }
     }, 80);
   }, { passive: true });
+
+  // Hero Quick Prompt Launchers
+  document.querySelectorAll('.prompt-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const promptText = chip.dataset.prompt;
+      const mInput = document.getElementById('missionInput');
+      if (mInput && promptText) {
+        mInput.value = promptText;
+        showToast('⚡ Prompt transferido para o Mission Lab!');
+        const labSection = document.getElementById('lab');
+        if (labSection) {
+          labSection.scrollIntoView({ behavior: 'smooth' });
+          setTimeout(() => mInput.focus(), 600);
+        }
+      }
+    });
+  });
+
+  // Commercial Video Chapters
+  const videoEl = document.getElementById('gauCommercialVideo');
+  const chapterPills = document.querySelectorAll('.chapter-pill');
+  chapterPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      chapterPills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const time = parseFloat(pill.dataset.time || '0');
+      if (videoEl) {
+        videoEl.currentTime = time;
+        videoEl.play().catch(() => {});
+        showToast(`Reproduzindo capítulo aos ${pill.textContent.trim()}`);
+      }
+    });
+  });
+
+  // Deploy OS Selector Tabs
+  const osTabs = document.querySelectorAll('.os-tab');
+  const osPanes = {
+    powershell: document.getElementById('panePowerShell'),
+    bash: document.getElementById('paneBash'),
+    python: document.getElementById('panePython')
+  };
+
+  osTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      osTabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      const os = tab.dataset.os;
+      Object.entries(osPanes).forEach(([key, pane]) => {
+        if (pane) {
+          if (key === os) {
+            pane.style.display = 'block';
+            pane.classList.add('active');
+          } else {
+            pane.style.display = 'none';
+            pane.classList.remove('active');
+          }
+        }
+      });
+    });
+  });
+
+  // Animated Number Counters
+  const countElements = document.querySelectorAll('[data-count]');
+  if ('IntersectionObserver' in window && countElements.length > 0) {
+    const countObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.count, 10);
+          if (!isNaN(target)) {
+            let cur = 0;
+            const step = Math.max(1, Math.ceil(target / 24));
+            const timer = setInterval(() => {
+              cur += step;
+              if (cur >= target) {
+                el.textContent = target;
+                clearInterval(timer);
+              } else {
+                el.textContent = cur;
+              }
+            }, 30);
+          }
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.4 });
+    countElements.forEach(el => countObserver.observe(el));
+  }
 
   // Desktop Mobile Simulator Toggle
   const mobileSimToggleBtn = document.getElementById('mobileSimToggleBtn');
