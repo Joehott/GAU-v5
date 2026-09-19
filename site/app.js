@@ -1430,23 +1430,44 @@ ${stepsTable}
   const compSlider = document.getElementById('comparisonSlider');
   const compPaneBefore = document.getElementById('compPaneBefore');
   const compHandle = document.getElementById('compHandle');
+  const compPresetBtns = document.querySelectorAll('.comp-preset-btn');
 
   if (compSlider && compPaneBefore && compHandle) {
     let isDraggingSlider = false;
     let currentPct = 50;
 
-    function setSliderPosition(pct) {
-      currentPct = Math.max(5, Math.min(95, pct));
+    function setSliderPosition(pct, smooth = false) {
+      currentPct = Math.max(0, Math.min(100, pct));
+
+      if (smooth) {
+        compPaneBefore.style.transition = 'clip-path 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
+        compHandle.style.transition = 'left 0.32s cubic-bezier(0.16, 1, 0.3, 1)';
+      } else {
+        compPaneBefore.style.transition = 'none';
+        compHandle.style.transition = 'none';
+      }
+
       compPaneBefore.style.clipPath = `polygon(0 0, ${currentPct}% 0, ${currentPct}% 100%, 0 100%)`;
-      compHandle.style.left = `${currentPct}%`;
+      compHandle.style.left = `clamp(20px, ${currentPct}%, calc(100% - 20px))`;
       compHandle.setAttribute('aria-valuenow', Math.round(currentPct));
+
+      if (compPresetBtns.length > 0) {
+        compPresetBtns.forEach(btn => {
+          const p = parseFloat(btn.dataset.preset);
+          if (Math.abs(p - currentPct) < 4) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+      }
     }
 
     function handleDrag(clientX) {
       const rect = compSlider.getBoundingClientRect();
       const offsetX = clientX - rect.left;
       const pct = (offsetX / rect.width) * 100;
-      setSliderPosition(pct);
+      setSliderPosition(pct, false);
     }
 
     compSlider.addEventListener('mousedown', (e) => {
@@ -1461,7 +1482,9 @@ ${stepsTable}
     });
 
     window.addEventListener('mouseup', () => {
-      isDraggingSlider = false;
+      if (isDraggingSlider) {
+        isDraggingSlider = false;
+      }
     });
 
     compSlider.addEventListener('touchstart', (e) => {
@@ -1485,11 +1508,22 @@ ${stepsTable}
     compHandle.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        setSliderPosition(currentPct - 5);
+        setSliderPosition(currentPct - 5, true);
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        setSliderPosition(currentPct + 5);
+        setSliderPosition(currentPct + 5, true);
       }
     });
+
+    compPresetBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const p = parseFloat(btn.dataset.preset);
+        setSliderPosition(p, true);
+      });
+    });
+
+    // Inicializar em 50%
+    setSliderPosition(50, false);
   }
 })();

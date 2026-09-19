@@ -1,6 +1,6 @@
 # HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.3.0  
+**Versão**: 5.3.1  
 **Data da Última Atualização**: 19 de Setembro de 2026  
 **Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
 **URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
@@ -20,7 +20,20 @@ O ecossistema implementa integralmente as **69 ideias aprovadas** no documento c
 
 ## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 2.1. Lançamento V3 (v5.3.0) — Acabamento de UI Pura + 2 Recursos Cirúrgicos de UX
+### 2.1. Correção e Refinamento do Slider Comparativo (v5.3.1)
+* **1. Eliminação do Clamp Artificial (0% a 100% de Amplitude Real):**
+  * O divisor agora move-se livremente de `0%` (100% Com GAU v5 visível) até `100%` (100% Sem GAU visível), eliminando o limite que travava o divisor em 5% e 95%.
+  * O botão do divisor utiliza `clamp(20px, ${currentPct}%, calc(100% - 20px))` para navegar por toda a extensão sem ser cortado nas bordas do card.
+* **2. Correção de Colisão e Sobreposição de Texto:**
+  * No layout anterior, ambos os textos ocupavam o lado esquerdo (`padding: 38px`), fazendo com que ao arrastar o divisor os textos vermelho e verde colidissem.
+  * No novo layout side-by-side: o card Vermelho (Sem GAU) posiciona-se no quadrante esquerdo (`margin-right: auto`), e o card Verde (Com GAU v5) posiciona-se no quadrante direito (`margin-left: auto`).
+  * Em 50/50, **ambos os cards são lidos simultaneamente sem nenhuma palavra cortada**.
+* **3. 3 Botões de Acesso Rápido (Presets):**
+  * Adicionadas pílulas de alternância rápida no topo do componente: `[ ⚡ 100% Com GAU v5 ]`, `[ ⚖️ Lado a Lado (50/50) ]` e `[ ⚠️ 100% Sem GAU ]`, com transição suave em 60fps.
+* **4. Resposta Buttery Smooth (Zero Lag):**
+  * Transições CSS são desativadas dinamicamente durante o arrasto com mouse ou touch para resposta instantânea 1:1, e reativadas suavemente ao clicar nos presets ou usar as setas do teclado.
+
+### 2.2. Lançamento V3 (v5.3.0) — Acabamento de UI Pura + 2 Recursos Cirúrgicos de UX
 * **1. Polimento de UI Pura (Zero novas opções de conteúdo):**
   * **Glassmorphism 2.0:** Destaque de chanfro em dupla camada (*dual-layer bevel highlight*) aplicado em todos os cartões (`.layer-card`, `.podium-card`, `.agent-card`, etc.), gerando profundidade tátil e reflexo luminoso sutil.
   * **Auras Neon Personalizadas nos 6 Ícones de Arquitetura 3D:** Brilho volumétrico ambiente posicionado atrás de cada ícone mapeado para a cor tema de cada camada (L1 Violeta, L2 Ciano, L3 Verde Menta, L4 Magenta, L5 Ouro Âmbar, L6 Azul Royal).
