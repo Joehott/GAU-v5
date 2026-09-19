@@ -81,13 +81,6 @@
   <div class="aurora aurora-a" aria-hidden="true"></div>
   <div class="aurora aurora-b" aria-hidden="true"></div>
 
-  <div class="mobile-sim-banner" id="mobileSimBanner" style="display: none;" role="region" aria-label="Simulador Mobile">
-    <div class="sim-banner-content">
-      <span>📱 <strong>Modo Tela de Celular Ativo</strong> &bull; Visualização Smartphone</span>
-      <button class="sim-exit-btn" id="exitMobileSimBtn" title="Voltar ao Modo Desktop">✕ Fechar Modo Celular</button>
-    </div>
-  </div>
-
   <header class="topbar" id="top">
     <a class="brand" href="#top" aria-label="GAU v5 - início">
       <img src="assets/gau-mark.svg" alt="" width="34" height="34" />
@@ -101,14 +94,8 @@
       <a href="#ideas">69 ideias</a>
       <a href="#goal">/goal</a>
       <a href="#deploy">Instalação</a>
-      <a href="#contato" style="color: #25D366; font-weight: 700;">WhatsApp</a>
-      <a href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
     </nav>
     <div class="topbar-actions">
-      <button class="mobile-sim-toggle" id="mobileSimToggleBtn" title="Simular Interface de Celular no Desktop" aria-label="Simular Tela de Celular">
-        <span class="sim-icon">📱</span>
-        <span class="sim-text">Modo Celular</span>
-      </button>
       <a class="whatsapp-btn-header" id="headerWhatsappBtn" href="https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V" target="_blank" rel="noopener noreferrer" title="Canal Oficial no WhatsApp">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
         <span>WhatsApp</span>
@@ -131,14 +118,9 @@
       </div>
       <button class="drawer-close-btn" id="drawerCloseBtn" aria-label="Fechar Menu">&times;</button>
     </div>
-    <div class="drawer-status-pill">
-      <span class="pulse-dot"></span>
-      <span>GAU v5 Mobile &bull; 16 Agentes Ativos</span>
-    </div>
     <nav class="drawer-links">
       <a href="#top" class="drawer-link"><span class="drawer-icon">🏠</span> Início</a>
       <a href="#comercial" class="drawer-link highlight-commercial"><span class="drawer-icon">🎬</span> Vídeo Comercial <small class="badge-new">38s</small></a>
-      <a href="#mobile-showcase" class="drawer-link highlight-mobile"><span class="drawer-icon">📱</span> Tela de Celular</a>
       <a href="#architecture" class="drawer-link"><span class="drawer-icon">🏛️</span> Arquitetura</a>
       <a href="#lab" class="drawer-link"><span class="drawer-icon">🧪</span> Laboratório de Missões</a>
       <a href="#leaderboard" class="drawer-link"><span class="drawer-icon">🏆</span> Leaderboard Elo</a>
@@ -159,7 +141,6 @@
         <div class="hero-actions">
           <a class="button primary" href="#deploy">Instalar no Antigravity <span>↓</span></a>
           <a class="button commercial-btn" href="#comercial" style="background: rgba(37, 211, 102, 0.15); border: 1px solid #25D366; color: #25D366; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;"><span>▶</span> Assistir Comercial (38s)</a>
-          <a class="button ghost" href="#mobile-showcase" style="border-color: #62e6ff; color: #62e6ff; display: inline-flex; align-items: center; gap: 6px;"><span>📱</span> Tela de Celular</a>
           <a class="button ghost" href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">Ver no GitHub ↗</a>
           <a class="button ghost" href="#lab">Executar simulação <span>▶</span></a>
         </div>
@@ -237,119 +218,6 @@
       </div>
     </section>
 
-    <!-- Interactive Mobile Phone Showcase Section -->
-    <section class="section-shell section-block" id="mobile-showcase" style="padding-top: 3.5rem; padding-bottom: 3.5rem;">
-      <div class="phone-mockup-wrapper">
-        <div class="phone-mockup-col reveal">
-          <!-- Realistic Smartphone Device Chassis -->
-          <div class="smartphone-chassis">
-            <div class="phone-dynamic-island">
-              <div class="island-camera"></div>
-              <div class="island-sensor"></div>
-            </div>
-            
-            <div class="phone-status-bar">
-              <span id="phoneClock">13:00</span>
-              <div class="phone-status-icons">
-                <span>5G</span>
-                <span>📶</span>
-                <span>🔋 100%</span>
-              </div>
-            </div>
-
-            <div class="phone-screen-body">
-              <div class="phone-app-header">
-                <div class="phone-app-brand">
-                  <img src="assets/gau-mark.svg" alt="" width="20" height="20" />
-                  <span>GAU Mobile</span>
-                </div>
-                <div class="phone-live-tag"><span style="width:6px; height:6px; border-radius:50%; background:#25D366; display:inline-block;"></span> ONLINE</div>
-              </div>
-
-              <div class="phone-hero-card">
-                <div class="phone-robot-circle">
-                  <img src="assets/gau-avatar.png" alt="GAU Avatar" />
-                </div>
-                <h4>GAU v5 Mobile</h4>
-                <p>16 Agentes Autônomos &amp; 69 Mecanismos na palma da sua mão.</p>
-                <div style="font-size: 10px; color: #25D366; font-weight: 700; background: rgba(37,211,102,0.1); border-radius: 8px; padding: 4px;">
-                  SISTEMA NERVOSO COGNITIVO ATIVO
-                </div>
-              </div>
-
-              <div class="phone-quick-actions">
-                <button class="phone-action-btn active-run" id="phoneSimulateGoalBtn" title="Executar teste rápido">
-                  <span>▶</span> Testar /goal
-                </button>
-                <a class="phone-action-btn" href="#comercial" style="text-decoration:none;">
-                  <span>🎬</span> Comercial
-                </a>
-              </div>
-
-              <div class="phone-terminal-box" id="phoneTerminalBox">
-                <div class="phone-terminal-line info">&gt; GAU Mobile v5.0 pronto.</div>
-                <div class="phone-terminal-line">&gt; Aguardando comando /goal...</div>
-                <div class="phone-terminal-line success" style="margin-top:6px;">Toque em "Testar /goal" acima!</div>
-              </div>
-
-              <div style="margin-top: auto; padding-top: 6px;">
-                <a href="https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V" target="_blank" rel="noopener noreferrer" style="display:flex; align-items:center; justify-content:center; gap:6px; background:#25D366; color:#000; font-weight:700; font-size:11px; padding:8px; border-radius:10px; text-decoration:none;">
-                  <span>💬 Entrar no Canal WhatsApp</span>
-                </a>
-              </div>
-            </div>
-
-            <div class="phone-home-indicator"></div>
-          </div>
-        </div>
-
-        <div class="phone-info-col reveal delay-1">
-          <div class="mobile-active-notice">
-            <div class="mobile-active-banner">
-              <span class="mobile-active-badge">📱 INTERFACE MOBILE ATIVA</span>
-              <strong style="color: #fff; display: block; margin: 4px 0 2px;">Você já está navegando na versão oficial para celulares!</strong>
-              <p style="margin: 0; color: #a0aec0; font-size: 0.85rem;">Use a barra de navegação inferior ou o menu gaveta para acessar qualquer recurso com um toque.</p>
-            </div>
-          </div>
-          <div class="eyebrow" style="color: #62e6ff;">EXPERIÊNCIA MOBILE COMPLETA</div>
-          <h2 style="font-size: clamp(2rem, 3.2vw, 2.7rem); margin-top: 0.5rem;">O GAU v5 na tela do seu celular</h2>
-          <p style="color: #94a3b8; font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.5rem;">
-            Projetado para funcionar com perfeição em smartphones de qualquer tamanho. Você pode acompanhar o progresso de missões, assistir ao comercial, consultar as 69 ideias e interagir com a comunidade no WhatsApp diretamente do seu celular.
-          </p>
-
-          <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
-              <span style="background: rgba(37,211,102,0.15); color: #25D366; font-size: 1.2rem; padding: 8px; border-radius: 10px;">📱</span>
-              <div>
-                <strong style="color: #fff; font-size: 1rem;">Interface Touchscreen Adaptativa</strong>
-                <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 0.9rem;">Menu inferior estilo app nativo, botões com área de toque ampla e zero rolagem horizontal indesejada.</p>
-              </div>
-            </div>
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
-              <span style="background: rgba(98,230,255,0.15); color: #62e6ff; font-size: 1.2rem; padding: 8px; border-radius: 10px;">⚡</span>
-              <div>
-                <strong style="color: #fff; font-size: 1rem;">Simulação Interativa no Celular</strong>
-                <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 0.9rem;">Toque no botão <code>Testar /goal</code> na tela do celular ao lado para ver o GAU resolver uma missão passo a passo!</p>
-              </div>
-            </div>
-            <div style="display: flex; align-items: flex-start; gap: 12px;">
-              <span style="background: rgba(37,211,102,0.15); color: #25D366; font-size: 1.2rem; padding: 8px; border-radius: 10px;">💬</span>
-              <div>
-                <strong style="color: #fff; font-size: 1rem;">Integração Total com WhatsApp</strong>
-                <p style="margin: 2px 0 0 0; color: #94a3b8; font-size: 0.9rem;">Acesse o canal com um único toque ou compartilhe o comercial diretamente para seus contatos.</p>
-              </div>
-            </div>
-          </div>
-
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button class="button primary" id="triggerPhoneTestBtn" style="background: linear-gradient(135deg, #25D366, #128C7E); border: none;">
-              <span>📱</span> Testar Simulação no Celular
-            </button>
-            <a class="button ghost" href="#comercial">Ver Vídeo Comercial</a>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <section class="section-shell section-block" id="architecture">
       <div class="section-heading reveal">
@@ -706,10 +574,6 @@
     <a href="#comercial" class="dock-item" id="dockCommercial">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       <span>Vídeo</span>
-    </a>
-    <a href="#mobile-showcase" class="dock-item" id="dockMobile">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-      <span>Celular</span>
     </a>
     <a href="#lab" class="dock-item" id="dockLab">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.1 20.3a2 2 0 0 0 1.7 2.7h16.4a2 2 0 0 0 1.7-2.7L18 9.31V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/></svg>
