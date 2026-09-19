@@ -406,7 +406,7 @@ ${stepsTable}
   }
 
   // ==========================================
-  // WhatsApp Live Doubt Chat & Modal
+  // WhatsApp Direct Online Chat & Modal
   // ==========================================
   const GAU_WHATSAPP_PHONE = '5511970005005';
   const GAU_WHATSAPP_DISPLAY = '+55 (11) 97000-5005';
@@ -414,13 +414,10 @@ ${stepsTable}
   const whatsappModal = document.getElementById('whatsappModal');
   const whatsappToggleBtn = document.getElementById('whatsappToggleBtn');
   const whatsappCloseBtn = document.getElementById('whatsappCloseBtn');
-  const whatsappClearBtn = document.getElementById('whatsappClearBtn');
   const tooltipCloseBtn = document.getElementById('tooltipClose');
   const whatsappTooltip = document.getElementById('whatsappTooltip');
   const whatsappSendBtn = document.getElementById('whatsappSendBtn');
   const whatsappMessageInput = document.getElementById('whatsappMessageInput');
-  const whatsappChatThread = document.getElementById('whatsappChatThread');
-  const whatsappWebRedirectBtn = document.getElementById('whatsappWebRedirectBtn');
   const quickChips = document.querySelectorAll('.quick-chip');
   const contactActionChips = document.querySelectorAll('.contact-chip-action');
 
@@ -431,12 +428,15 @@ ${stepsTable}
     if (whatsappTooltip) {
       whatsappTooltip.style.display = 'none';
     }
-    if (presetMsg) {
-      sendUserMessage(presetMsg);
-    } else if (whatsappMessageInput) {
-      setTimeout(() => whatsappMessageInput.focus(), 150);
+    if (presetMsg && whatsappMessageInput) {
+      whatsappMessageInput.value = presetMsg;
     }
-    scrollChatToBottom();
+    if (whatsappMessageInput) {
+      setTimeout(() => {
+        whatsappMessageInput.focus();
+        whatsappMessageInput.setSelectionRange(whatsappMessageInput.value.length, whatsappMessageInput.value.length);
+      }, 150);
+    }
   }
 
   function closeWhatsappModal() {
@@ -446,137 +446,14 @@ ${stepsTable}
     }
   }
 
-  function scrollChatToBottom() {
-    if (whatsappChatThread) {
-      whatsappChatThread.scrollTop = whatsappChatThread.scrollHeight;
-    }
-  }
-
-  function getCurrentTimeString() {
-    const d = new Date();
-    const h = String(d.getHours()).padStart(2, '0');
-    const m = String(d.getMinutes()).padStart(2, '0');
-    return `${h}:${m}`;
-  }
-
-  function escapeChatHtml(str) {
-    return (str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  function getBotResponse(userText) {
-    const lower = (userText || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    
-    if (lower.includes('instal') || lower.includes('download') || lower.includes('zip') || lower.includes('baixar') || lower.includes('powershell')) {
-      return `📦 <strong>Instalação Rápida do GAU v5:</strong><br><br>` +
-             `• <strong>PowerShell (Windows):</strong><br><code>iwr -useb https://joehott.github.io/GAU-v5/install.ps1 | iex</code><br><br>` +
-             `• <strong>Bash (Linux/Mac):</strong><br><code>curl -fsSL https://joehott.github.io/GAU-v5/install.sh | bash</code><br><br>` +
-             `• <strong>Python Local (após extrair ZIP):</strong><br><code>py -3 GAU-v5/install.py --project .</code><br><br>` +
-             `O pacote ZIP de 45.6MB já está disponível para download no topo do site!`;
-    }
-    
-    if (lower.includes('goal') || lower.includes('missao') || lower.includes('meta')) {
-      return `🎯 <strong>Como funciona o /goal:</strong><br><br>` +
-             `O comando <code>/goal</code> continua 100% nativo do Antigravity! O GAU v5 ativa a skill <code>gau-goal</code> para gerenciar councils e swarms sem alterar o runtime do host.<br><br>` +
-             `A missão só é encerrada quando houver cobertura real de requisitos e evidências comprovadas (níveis E0–E5).`;
-    }
-    
-    if (lower.includes('agente') || lower.includes('skill') || lower.includes('mecanismo') || lower.includes('69') || lower.includes('16')) {
-      return `🤖 <strong>16 Agentes & 69 Mecanismos:</strong><br><br>` +
-             `O GAU v5 traz 16 perfis cognitivos especializados (ex: <code>gau-architect</code>, <code>gau-implementer</code>, <code>gau-verifier</code>, <code>gau-adversarial</code>, <code>gau-judge</code>) e 69 skills com governança de compute, torneios e ranking Elo.<br><br>` +
-             `Você pode explorar cada mecanismo na seção <strong>69 ideias</strong> do site!`;
-    }
-    
-    if (lower.includes('teste') || lower.includes('test') || lower.includes('doctor') || lower.includes('validar') || lower.includes('bug')) {
-      return `🧪 <strong>Diagnóstico & Testes:</strong><br><br>` +
-             `• Para verificar o runtime: <code>python .gau/runtime/gau.py doctor</code><br>` +
-             `• Para rodar a suíte de integridade: <code>python tools/test_deployment.py</code> (100% dos checks validados).`;
-    }
-
-    if (lower.includes('evidencia') || lower.includes('e0') || lower.includes('e1') || lower.includes('e2') || lower.includes('e3') || lower.includes('e4') || lower.includes('e5') || lower.includes('prova')) {
-      return `⚖️ <strong>Níveis de Verificação (E0 a E5):</strong><br><br>` +
-             `• <strong>E0:</strong> Asserção inicial<br>` +
-             `• <strong>E1:</strong> Leitura estática de código<br>` +
-             `• <strong>E2:</strong> Execução de testes unitários locais<br>` +
-             `• <strong>E3:</strong> Execução em ambiente isolado descartável<br>` +
-             `• <strong>E4:</strong> Contraexemplos e testes adversariais<br>` +
-             `• <strong>E5:</strong> Prova formal e stress test.`;
-    }
-
-    if (lower.includes('humano') || lower.includes('contato') || lower.includes('zap') || lower.includes('desenvolvedor') || lower.includes('falar') || lower.includes('numero') || lower.includes('telefone')) {
-      return `💬 <strong>WhatsApp Oficial GAU v5:</strong><br><br>` +
-             `Número de contato: <strong>${GAU_WHATSAPP_DISPLAY}</strong>.<br><br>` +
-             `Clique no botão abaixo <em>'Conversar via WhatsApp'</em> para abrir a conversa direta com esse número no seu aplicativo!`;
-    }
-
-    return `Entendi sua dúvida! O <strong>GAU v5</strong> fornece inteligência autônoma com 69 mecanismos cognitivos para o Antigravity.<br><br>` +
-           `Como posso te orientar agora? Escolha um tema: <strong>instalação</strong>, <strong>16 agentes</strong>, <strong>comando /goal</strong> ou <strong>testes</strong>!`;
-  }
-
-  function appendBotBubble(htmlContent) {
-    if (!whatsappChatThread) return;
-    const bubble = document.createElement('div');
-    bubble.className = 'whatsapp-chat-bubble bot';
-    bubble.innerHTML = `
-      <div class="bubble-sender">
-        <img src="assets/gau-avatar.svg" alt="GAU" width="14" height="14" style="border-radius: 50%; vertical-align: middle;">
-        <span>GAU v5 Suporte</span>
-      </div>
-      <p>${htmlContent}</p>
-      <span class="bubble-time">${getCurrentTimeString()}</span>
-    `;
-    whatsappChatThread.appendChild(bubble);
-    scrollChatToBottom();
-  }
-
-  function sendUserMessage(text) {
-    const trimmed = (text || '').trim();
-    if (!trimmed || !whatsappChatThread) return;
-
-    // Append user bubble
-    const userBubble = document.createElement('div');
-    userBubble.className = 'whatsapp-chat-bubble user';
-    userBubble.innerHTML = `<p>${escapeChatHtml(trimmed)}</p><span class="bubble-time">${getCurrentTimeString()} ✓✓</span>`;
-    whatsappChatThread.appendChild(userBubble);
-    
-    if (whatsappMessageInput) {
-      whatsappMessageInput.value = '';
-    }
-    scrollChatToBottom();
-
-    // Show typing indicator
-    const typingBubble = document.createElement('div');
-    typingBubble.className = 'whatsapp-chat-bubble bot typing-indicator-bubble';
-    typingBubble.innerHTML = `
-      <div style="display: flex; align-items: center; gap: 6px;">
-        <img src="assets/gau-avatar.svg" alt="GAU" width="14" height="14" style="border-radius: 50%;">
-        <div class="typing-indicator" style="padding: 2px 0;"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
-      </div>
-    `;
-    whatsappChatThread.appendChild(typingBubble);
-    scrollChatToBottom();
-
-    // Answer after realistic delay
-    setTimeout(() => {
-      if (typingBubble.parentNode) {
-        typingBubble.parentNode.removeChild(typingBubble);
-      }
-      const response = getBotResponse(trimmed);
-      appendBotBubble(response);
-    }, 450);
-  }
-
-  function openExternalWhatsapp() {
-    const lastMsg = whatsappMessageInput ? whatsappMessageInput.value.trim() : '';
-    const text = (lastMsg || 'Olá! Vim pelo site do GAU v5 e gostaria de suporte técnico.').trim();
+  function startOnlineWhatsappChat(customText) {
+    const raw = customText || (whatsappMessageInput ? whatsappMessageInput.value : '');
+    const text = (raw || 'Olá! Vim pelo site do GAU v5 e gostaria de atendimento online.').trim();
     const encoded = encodeURIComponent(text);
     const url = `https://wa.me/${GAU_WHATSAPP_PHONE}?text=${encoded}`;
     window.open(url, '_blank', 'noopener,noreferrer');
-    showToast(`Abrindo WhatsApp (${GAU_WHATSAPP_DISPLAY})...`);
+    showToast(`Iniciando atendimento online com ${GAU_WHATSAPP_DISPLAY}...`);
+    closeWhatsappModal();
   }
 
   if (whatsappToggleBtn) {
@@ -597,25 +474,6 @@ ${stepsTable}
     });
   }
 
-  if (whatsappClearBtn) {
-    whatsappClearBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (whatsappChatThread) {
-        whatsappChatThread.innerHTML = `
-          <div class="whatsapp-chat-bubble bot">
-            <div class="bubble-sender">
-              <img src="assets/gau-avatar.svg" alt="GAU" width="16" height="16" style="border-radius: 50%; vertical-align: middle; margin-right: 4px;">
-              <span>GAU v5 Suporte</span>
-            </div>
-            <p>Olá! 👋 Sou o assistente oficial do <strong>GAU v5</strong> (<span style="color:#25D366; font-weight:700;">${GAU_WHATSAPP_DISPLAY}</span>). Como posso te ajudar com a instalação, agentes, /goal ou testes?</p>
-            <span class="bubble-time">${getCurrentTimeString()}</span>
-          </div>
-        `;
-        showToast('Conversa reiniciada.');
-      }
-    });
-  }
-
   if (tooltipCloseBtn) {
     tooltipCloseBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -625,34 +483,54 @@ ${stepsTable}
     });
   }
 
-  // Quick Chips
+  // Quick Chips in Modal
   quickChips.forEach(chip => {
     chip.addEventListener('click', () => {
-      const q = chip.dataset.query || chip.textContent;
-      sendUserMessage(q);
+      const msg = chip.dataset.msg;
+      if (msg && whatsappMessageInput) {
+        whatsappMessageInput.value = msg;
+        whatsappMessageInput.focus();
+      }
     });
   });
 
-  // Contact section action chips
+  // Action chips in contact section
   contactActionChips.forEach(chip => {
     chip.addEventListener('click', () => {
       const question = chip.dataset.ask || chip.textContent.trim();
-      openWhatsappModal(question);
+      startOnlineWhatsappChat(question);
     });
   });
+
+  // Send WhatsApp Button inside modal
+  if (whatsappSendBtn) {
+    whatsappSendBtn.addEventListener('click', () => {
+      startOnlineWhatsappChat();
+    });
+  }
+
+  // Enter to send (Shift+Enter for newline)
+  if (whatsappMessageInput) {
+    whatsappMessageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        startOnlineWhatsappChat();
+      }
+    });
+  }
 
   // External trigger buttons
   const headerWhatsappBtn = document.getElementById('headerWhatsappBtn');
   if (headerWhatsappBtn) {
     headerWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Como posso instalar o GAU v5 no meu projeto?');
+      openWhatsappModal('Olá! Gostaria de tirar dúvidas sobre o GAU v5.');
     });
   }
 
   const deployCardWhatsappBtn = document.getElementById('deployCardWhatsappBtn');
   if (deployCardWhatsappBtn) {
     deployCardWhatsappBtn.addEventListener('click', () => {
-      openWhatsappModal('Preciso de ajuda com a instalação e testes do GAU v5.');
+      openWhatsappModal('Olá! Preciso de ajuda com a instalação e testes do GAU v5.');
     });
   }
 
@@ -673,36 +551,8 @@ ${stepsTable}
   const mainSectionWhatsappCta = document.getElementById('mainSectionWhatsappCta');
   if (mainSectionWhatsappCta) {
     mainSectionWhatsappCta.addEventListener('click', () => {
-      openWhatsappModal('Olá! Gostaria de falar com o suporte do GAU v5.');
+      startOnlineWhatsappChat('Olá! Gostaria de falar com o suporte do GAU v5.');
     });
-  }
-
-  // Send WhatsApp Button inside modal
-  if (whatsappSendBtn) {
-    whatsappSendBtn.addEventListener('click', () => {
-      const text = (whatsappMessageInput ? whatsappMessageInput.value : '').trim();
-      if (text) {
-        sendUserMessage(text);
-      }
-    });
-  }
-
-  // Enter to send
-  if (whatsappMessageInput) {
-    whatsappMessageInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const text = whatsappMessageInput.value.trim();
-        if (text) {
-          sendUserMessage(text);
-        }
-      }
-    });
-  }
-
-  // External redirect button
-  if (whatsappWebRedirectBtn) {
-    whatsappWebRedirectBtn.addEventListener('click', openExternalWhatsapp);
   }
 
   // Close modal when clicking outside
