@@ -1987,4 +1987,878 @@ ${stepsTable}
     // Inicializar em 50%
     setSliderPosition(50, false);
   }
+
+  // ==========================================
+  // MEGA PACK V5 (v5.5.0) — SUPER-CAPACIDADES
+  // ==========================================
+
+  // ------------------------------------------
+  // 1. Matrix Mode & Digital Rain Canvas
+  // ------------------------------------------
+  function initMatrixMode() {
+    const canvas = document.getElementById('matrixCanvas');
+    const brandLogo = document.getElementById('gauBrandLogo');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    const chars = '0123456789ABCDEF01アイウエオカキクケコサシスセソタチツテト';
+    const fontSize = 14;
+    let columns = Math.floor(width / fontSize);
+    let drops = Array(columns).fill(1);
+    let matrixAnimId = null;
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      columns = Math.floor(width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+
+    function drawMatrix() {
+      if (!document.body.classList.contains('matrix-mode')) {
+        ctx.clearRect(0, 0, width, height);
+        matrixAnimId = null;
+        return;
+      }
+
+      ctx.fillStyle = 'rgba(2, 4, 8, 0.08)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.fillStyle = '#00ff66';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+
+      matrixAnimId = requestAnimationFrame(drawMatrix);
+    }
+
+    function toggleMatrixMode() {
+      const active = document.body.classList.toggle('matrix-mode');
+      if (active) {
+        showToast('🔓 SISTEMA DE ALTO PRIVILÉGIO ATIVADO • MODO MATRIX');
+        playCyberSound('terminal');
+        if (!matrixAnimId) {
+          ctx.clearRect(0, 0, width, height);
+          drawMatrix();
+        }
+      } else {
+        showToast('Retornando ao Modo Padrão GAU');
+        playCyberSound('click');
+        if (matrixAnimId) {
+          cancelAnimationFrame(matrixAnimId);
+          matrixAnimId = null;
+          ctx.clearRect(0, 0, width, height);
+        }
+      }
+    }
+
+    // Secret Key Sequence: "gau"
+    let keyBuffer = '';
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      keyBuffer += e.key.toLowerCase();
+      if (keyBuffer.length > 5) keyBuffer = keyBuffer.slice(-5);
+      if (keyBuffer.endsWith('gau')) {
+        toggleMatrixMode();
+      }
+    });
+
+    // Triple click on Logo
+    if (brandLogo) {
+      let clickCount = 0;
+      let clickTimer = null;
+      brandLogo.addEventListener('click', (e) => {
+        clickCount++;
+        if (clickCount === 3) {
+          e.preventDefault();
+          toggleMatrixMode();
+          clickCount = 0;
+        }
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => { clickCount = 0; }, 600);
+      });
+    }
+
+    window.addEventListener('resize', resize);
+  }
+
+  // ------------------------------------------
+  // 2. DAG Workflow Simulator
+  // ------------------------------------------
+  function initDagSimulator() {
+    const playBtn = document.getElementById('dagPlayBtn');
+    const pauseBtn = document.getElementById('dagPauseBtn');
+    const resetBtn = document.getElementById('dagResetBtn');
+    const stateBadge = document.getElementById('dagStateBadge');
+    const scenBtns = document.querySelectorAll('.dag-scen-btn');
+    const inspTitle = document.getElementById('inspTitle');
+    const inspBadge = document.getElementById('inspBadge');
+    const inspBody = document.getElementById('inspBody');
+    const nodes = document.querySelectorAll('.dag-node');
+
+    const edges = {
+      1: document.getElementById('dagEdge1'),
+      '2a': document.getElementById('dagEdge2a'),
+      '2b': document.getElementById('dagEdge2b'),
+      '3a': document.getElementById('dagEdge3a'),
+      '3b': document.getElementById('dagEdge3b'),
+      4: document.getElementById('dagEdge4')
+    };
+
+    const nodeData = {
+      req: {
+        name: 'gau-requirements',
+        tag: 'E0 Baseline & Invariantes',
+        icon: '📋',
+        desc: 'Decompõe o objetivo em critérios formais e invariantes matemáticos antes da primeira linha de código.',
+        rule: 'Regra Inviolável: Nenhum agente programa antes dos contratos de aceitação estarem aprovados.',
+        logs: '[REQ-01] Meta decomposta em 3 contratos de interface.\n[REQ-02] Testes de fronteira e edge cases definidos.\n[REQ-03] Baseline E0 selado com hash de integridade.',
+        hash: 'sha256:d8a9f01c4e7239ba8c01bfe01289cf789'
+      },
+      arch: {
+        name: 'gau-architect',
+        tag: 'Freeze Gate #107',
+        icon: '🏛️',
+        desc: 'Congela as assinaturas de tipos e interfaces de comunicação antes de despachar o coding swarm.',
+        rule: 'Regra Inviolável: O coder não pode alterar assinaturas públicas sem reabertura formal pelo Arquiteto.',
+        logs: '[ARCH-01] Interface AuthSession congelada em AST.\n[ARCH-02] Contrato de chamadas REST/gRPC bloqueado.\n[ARCH-03] Worktrees paralelas autorizadas para fork.',
+        hash: 'sha256:4b1e8f9901dcefa0021b7642ea802f012'
+      },
+      coderA: {
+        name: 'gau-implementer-a',
+        tag: 'Worktree Swarm /core (#08)',
+        icon: '⚡',
+        desc: 'Implementação de baixo acoplamento focada exclusivamente na lógica central do microsserviço.',
+        rule: 'Regra Inviolável: Operação estritamente isolada em worktree sem interferência na branch main.',
+        logs: '[SWARM-A] Forking branch worktree/core-auth...\n[SWARM-A] Implementando validação de token JWT assíncrono.\n[SWARM-A] 142 linhas geradas sob tipagem estrita.',
+        hash: 'sha256:7c92a54b321e09dfa4b189cc01a765089'
+      },
+      coderB: {
+        name: 'gau-implementer-b',
+        tag: 'Worktree Swarm /adapter (#08)',
+        icon: '🔌',
+        desc: 'Implementação paralela dos adaptadores de persistência e rate limiting sob o mesmo contrato.',
+        rule: 'Regra Inviolável: Não reinventar tipos; consumir a interface congelada pelo arquiteto.',
+        logs: '[SWARM-B] Forking branch worktree/rate-limiter...\n[SWARM-B] Criando Token Bucket com persistência em memória.\n[SWARM-B] 98 linhas geradas e compiladas com sucesso.',
+        hash: 'sha256:2f81de9a008cba76541098ef765219084'
+      },
+      adv: {
+        name: 'gau-adversarial',
+        tag: 'Stress Probe & Red Team (#103)',
+        icon: '🗡️',
+        desc: 'Gera vetores sintéticos maliciosos e edge cases extremos para tentar quebrar a solução do coder.',
+        rule: 'Regra Inviolável: O código só avança se resistir a injeções SQL, XSS, race conditions e ReDoS.',
+        logs: '[ADV-01] Disparando 450 probes de estresse sintético...\n[ADV-02] Verificação contra bypass de cabeçalho: 0 falhas.\n[ADV-03] Auditoria de concorrência: livre de race conditions.',
+        hash: 'sha256:e310c98f554019a87bcfe901289ef7601'
+      },
+      verif: {
+        name: 'gau-verifier',
+        tag: 'Verificação Cega E5 (#108)',
+        icon: '🛡️',
+        desc: 'Árbitro final sem viés de autoria: executa a suíte física de testes no terminal do Antigravity.',
+        rule: 'Regra Inviolável: Nenhuma tarefa é concluída sem teste executado com Exit Code 0.',
+        logs: '[VERIF] py -3 -m unittest discover: 24/24 PASS.\n[VERIF] Exit Code 0 verificado fisicamente no terminal.\n[VERIF] Gate de conclusão E5 selado e comprovado!',
+        hash: 'sha256:9a41b2289f0102cd8bbaef8901256fe43'
+      }
+    };
+
+    let simInterval = null;
+    let currentStep = 0;
+    let isRunning = false;
+
+    function renderInspector(key) {
+      const data = nodeData[key];
+      if (!data || !inspTitle || !inspBody) return;
+
+      inspTitle.innerHTML = `${data.icon} ${data.name}`;
+      inspBadge.textContent = data.tag;
+      inspBody.innerHTML = `
+        <p><strong>Propósito:</strong> ${escapeHtml(data.desc)}</p>
+        <p style="color: #ffbd2e; margin-top: 6px;"><strong>${escapeHtml(data.rule)}</strong></p>
+        <div class="insp-terminal">${escapeHtml(data.logs)}</div>
+        <div class="insp-hash-box">🔑 Selo Criptográfico: ${data.hash}</div>
+      `;
+      playCyberSound('click');
+    }
+
+    nodes.forEach(node => {
+      node.addEventListener('click', () => {
+        const key = node.dataset.node;
+        renderInspector(key);
+      });
+    });
+
+    function setEdgeState(edge, state) {
+      if (!edge) return;
+      edge.classList.remove('active', 'passed');
+      if (state === 'active') edge.classList.add('active');
+      if (state === 'passed') edge.classList.add('passed');
+    }
+
+    function resetSimulation() {
+      if (simInterval) clearInterval(simInterval);
+      isRunning = false;
+      currentStep = 0;
+      if (playBtn) playBtn.style.display = 'inline-flex';
+      if (pauseBtn) pauseBtn.style.display = 'none';
+      if (stateBadge) stateBadge.textContent = 'IDLE • Aguardando Início';
+
+      nodes.forEach(n => n.classList.remove('active-sim', 'verified-sim'));
+      Object.values(edges).forEach(e => setEdgeState(e, 'default'));
+    }
+
+    function stepSimulation() {
+      currentStep++;
+
+      if (currentStep === 1) {
+        stateBadge.textContent = 'ETAPA 1/5 • gau-requirements decompondo meta';
+        document.getElementById('dagNodeReq')?.classList.add('active-sim');
+        renderInspector('req');
+        playCyberSound('terminal');
+      } else if (currentStep === 2) {
+        document.getElementById('dagNodeReq')?.classList.replace('active-sim', 'verified-sim');
+        setEdgeState(edges[1], 'passed');
+        document.getElementById('dagNodeArch')?.classList.add('active-sim');
+        setEdgeState(edges['2a'], 'active');
+        setEdgeState(edges['2b'], 'active');
+        stateBadge.textContent = 'ETAPA 2/5 • gau-architect congelando interfaces';
+        renderInspector('arch');
+        playCyberSound('terminal');
+      } else if (currentStep === 3) {
+        document.getElementById('dagNodeArch')?.classList.replace('active-sim', 'verified-sim');
+        setEdgeState(edges['2a'], 'passed');
+        setEdgeState(edges['2b'], 'passed');
+        document.getElementById('dagNodeCoderA')?.classList.add('active-sim');
+        document.getElementById('dagNodeCoderB')?.classList.add('active-sim');
+        setEdgeState(edges['3a'], 'active');
+        setEdgeState(edges['3b'], 'active');
+        stateBadge.textContent = 'ETAPA 3/5 • Coding Swarm paralelo em worktrees';
+        renderInspector('coderA');
+        playCyberSound('terminal');
+      } else if (currentStep === 4) {
+        document.getElementById('dagNodeCoderA')?.classList.replace('active-sim', 'verified-sim');
+        document.getElementById('dagNodeCoderB')?.classList.replace('active-sim', 'verified-sim');
+        setEdgeState(edges['3a'], 'passed');
+        setEdgeState(edges['3b'], 'passed');
+        document.getElementById('dagNodeAdv')?.classList.add('active-sim');
+        setEdgeState(edges[4], 'active');
+        stateBadge.textContent = 'ETAPA 4/5 • gau-adversarial estressando inputs';
+        renderInspector('adv');
+        playCyberSound('terminal');
+      } else if (currentStep === 5) {
+        document.getElementById('dagNodeAdv')?.classList.replace('active-sim', 'verified-sim');
+        setEdgeState(edges[4], 'passed');
+        document.getElementById('dagNodeVerif')?.classList.add('active-sim');
+        stateBadge.textContent = 'ETAPA 5/5 • gau-verifier executando suíte física';
+        renderInspector('verif');
+        playCyberSound('terminal');
+      } else if (currentStep >= 6) {
+        document.getElementById('dagNodeVerif')?.classList.replace('active-sim', 'verified-sim');
+        stateBadge.textContent = '✔ CONCLUÍDO • E5 PROVA SELADA COM SUCESSO';
+        clearInterval(simInterval);
+        isRunning = false;
+        if (playBtn) playBtn.style.display = 'inline-flex';
+        if (pauseBtn) pauseBtn.style.display = 'none';
+        playCyberSound('success');
+        showToast('🎯 DAG Concluído com Verificação E5 (Exit Code 0)!');
+      }
+    }
+
+    if (playBtn) {
+      playBtn.addEventListener('click', () => {
+        if (currentStep >= 6) resetSimulation();
+        isRunning = true;
+        playBtn.style.display = 'none';
+        if (pauseBtn) pauseBtn.style.display = 'inline-flex';
+        stepSimulation();
+        simInterval = setInterval(stepSimulation, 1500);
+      });
+    }
+
+    if (pauseBtn) {
+      pauseBtn.addEventListener('click', () => {
+        clearInterval(simInterval);
+        isRunning = false;
+        pauseBtn.style.display = 'none';
+        if (playBtn) playBtn.style.display = 'inline-flex';
+        stateBadge.textContent = 'PAUSADO';
+        playCyberSound('click');
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        resetSimulation();
+        playCyberSound('click');
+      });
+    }
+
+    scenBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        scenBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        resetSimulation();
+        showToast(`Cenário DAG carregado: ${btn.textContent.trim()}`);
+        playCyberSound('click');
+      });
+    });
+  }
+
+  // ------------------------------------------
+  // 3. Model Tournament Arena (#03 & #45)
+  // ------------------------------------------
+  function initModelArena() {
+    const fightBtn = document.getElementById('startDuelBtn');
+    const challengeSelect = document.getElementById('arenaChallengeSelect');
+    const fighterASelect = document.getElementById('fighterASelect');
+    const fighterBSelect = document.getElementById('fighterBSelect');
+
+    const panelA = document.getElementById('fighterPanelA');
+    const panelB = document.getElementById('fighterPanelB');
+    const codeA = document.getElementById('fighterCodeA');
+    const codeB = document.getElementById('fighterCodeB');
+    const statusA = document.getElementById('fighterStatusA');
+    const statusB = document.getElementById('fighterStatusB');
+    const speedA = document.getElementById('fighterSpeedA');
+    const speedB = document.getElementById('fighterSpeedB');
+    const testsA = document.getElementById('fighterTestsA');
+    const testsB = document.getElementById('fighterTestsB');
+    const compA = document.getElementById('fighterCompA');
+    const compB = document.getElementById('fighterCompB');
+    const verdictBox = document.getElementById('arenaVerdictBox');
+    const verdictTitle = document.getElementById('verdictTitle');
+    const verdictReason = document.getElementById('verdictReason');
+    const verdictEloBadges = document.getElementById('verdictEloBadges');
+
+    if (!fightBtn || !codeA || !codeB) return;
+
+    const codeSnippets = {
+      kahn: {
+        claude: `def detect_cycle_kahn(num_nodes: int, edges: list[tuple[int, int]]) -> bool:
+    in_degree = [0] * num_nodes
+    adj = collections.defaultdict(list)
+    for u, v in edges:
+        adj[u].append(v)
+        in_degree[v] += 1
+    
+    queue = collections.deque([i for i in range(num_nodes) if in_degree[i] == 0])
+    visited_count = 0
+    
+    while queue:
+        curr = queue.popleft()
+        visited_count += 1
+        for neighbor in adj[curr]:
+            in_degree[neighbor] -= 1
+            if in_degree[neighbor] == 0:
+                queue.append(neighbor)
+                
+    return visited_count != num_nodes  # True if cycle detected O(V+E)`,
+        gpt4o: `def detect_cycle_dfs(num_nodes: int, edges: list[tuple[int, int]]) -> bool:
+    WHITE, GRAY, BLACK = 0, 1, 2
+    state = [WHITE] * num_nodes
+    graph = collections.defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+        
+    def dfs(u):
+        state[u] = GRAY
+        for v in graph[u]:
+            if state[v] == GRAY:
+                return True
+            if state[v] == WHITE and dfs(v):
+                return True
+        state[u] = BLACK
+        return False
+        
+    return any(state[i] == WHITE and dfs(i) for i in range(num_nodes))`
+      },
+      tokenbucket: {
+        claude: `class AsyncTokenBucket:
+    def __init__(self, capacity: int, refill_rate: float):
+        self.capacity = capacity
+        self.refill_rate = refill_rate
+        self.tokens = capacity
+        self.last_update = time.monotonic()
+        self._lock = asyncio.Lock()
+
+    async def consume(self, amount: int = 1) -> bool:
+        async with self._lock:
+            now = time.monotonic()
+            elapsed = now - self.last_update
+            self.tokens = min(self.capacity, self.tokens + elapsed * self.refill_rate)
+            self.last_update = now
+            if self.tokens >= amount:
+                self.tokens -= amount
+                return True
+            return False`,
+        gpt4o: `class RateLimiter:
+    def __init__(self, limit: int, window: int):
+        self.limit = limit
+        self.window = window
+        self.requests = []
+
+    def allow_request(self) -> bool:
+        now = time.time()
+        self.requests = [t for t in self.requests if now - t < self.window]
+        if len(self.requests) < self.limit:
+            self.requests.append(now)
+            return True
+        return False`
+      },
+      owasp: {
+        claude: `def sanitize_owasp_input(raw: str, max_len: int = 256) -> str:
+    if not isinstance(raw, str):
+        raise TypeError("Input must be string")
+    trimmed = raw.strip()[:max_len]
+    # Neutralize XSS characters
+    sanitized = html.escape(trimmed, quote=True)
+    # Block SQL injection signatures
+    if re.search(r'(--|;|/\\*|union\\s+select)', sanitized, re.I):
+        raise SecurityValidationError("Potential SQLi pattern rejected")
+    return sanitized`,
+        gpt4o: `def clean_input(user_string: str) -> str:
+    cleaned = user_string.replace("<script>", "").replace("</script>", "")
+    cleaned = re.sub(r"[;'\"\\\\]", "", cleaned)
+    return cleaned.strip()`
+      }
+    };
+
+    let duelTimer = null;
+
+    fightBtn.addEventListener('click', () => {
+      const challengeKey = challengeSelect.value;
+      const modelA = fighterASelect.value;
+      const modelB = fighterBSelect.value;
+
+      if (duelTimer) clearInterval(duelTimer);
+      verdictBox.style.display = 'none';
+      panelA.className = 'fighter-panel';
+      panelB.className = 'fighter-panel';
+
+      const snippetA = codeSnippets[challengeKey]?.claude || '// Code...';
+      const snippetB = codeSnippets[challengeKey]?.gpt4o || '// Code...';
+
+      statusA.className = 'fighter-status-badge typing';
+      statusA.textContent = 'Digitando...';
+      statusB.className = 'fighter-status-badge typing';
+      statusB.textContent = 'Digitando...';
+
+      speedA.textContent = '125 tok/s';
+      speedB.textContent = '140 tok/s';
+      testsA.textContent = '0/3';
+      testsB.textContent = '0/3';
+      compA.textContent = 'O(V+E)';
+      compB.textContent = 'O(V+E)';
+
+      codeA.textContent = '';
+      codeB.textContent = '';
+
+      let idxA = 0;
+      let idxB = 0;
+      playCyberSound('terminal');
+
+      duelTimer = setInterval(() => {
+        idxA += 8;
+        idxB += 7;
+
+        codeA.textContent = snippetA.slice(0, idxA);
+        codeB.textContent = snippetB.slice(0, idxB);
+
+        if (idxA >= snippetA.length && idxB >= snippetB.length) {
+          clearInterval(duelTimer);
+          codeA.textContent = snippetA;
+          codeB.textContent = snippetB;
+
+          // Judge evaluation
+          testsA.textContent = '3/3 PASS';
+          testsB.textContent = challengeKey === 'owasp' ? '2/3 PASS (Bypass)' : '3/3 PASS';
+
+          statusA.className = 'fighter-status-badge winner';
+          statusA.textContent = 'Vencedor 🏆';
+          panelA.classList.add('winner-card');
+
+          statusB.className = 'fighter-status-badge';
+          statusB.textContent = 'Finalizado';
+          panelB.classList.add('loser-card');
+
+          verdictBox.style.display = 'flex';
+          verdictTitle.textContent = `Vitória Decisiva: ${fighterASelect.options[fighterASelect.selectedIndex].text.split(' ')[0]}`;
+          verdictReason.textContent = challengeKey === 'owasp'
+            ? 'O modelo 1 utilizou html.escape com rejeição ativa de padrões SQLi, enquanto o modelo 2 tentou replace ingênuo suscetível a bypass com tags aninhadas.'
+            : 'O modelo 1 implementou o algoritmo ideal com menor footprint de memória e sem recursão profunda suscetível a estouro de pilha.';
+
+          verdictEloBadges.innerHTML = `
+            <span class="elo-pill gain">+16 Elo (Novo: 1866)</span>
+            <span class="elo-pill loss">-16 Elo (Novo: 1764)</span>
+          `;
+
+          playCyberSound('success');
+          showToast('⚔️ Duelo Finalizado! Juiz do GAU emitiu a sentença.');
+        }
+      }, 40);
+    });
+  }
+
+  // ------------------------------------------
+  // 4. Squad Builder (Montador de Esquadrão)
+  // ------------------------------------------
+  function initSquadBuilder() {
+    const archetypes = document.querySelectorAll('.archetype-card');
+    const archetypeName = document.getElementById('rosterArchetypeName');
+    const hoursSaved = document.getElementById('rosterHoursSaved');
+    const chipsWrap = document.getElementById('rosterChipsWrap');
+    const cliCode = document.getElementById('squadCliCode');
+    const copyBtn = document.getElementById('squadCopyBtn');
+
+    if (!archetypes.length || !chipsWrap) return;
+
+    const archetypeRosters = {
+      web: {
+        title: 'Web Fullstack & APIs',
+        hours: '~140 horas/mês',
+        cmd: '/gau-goal "Construir arquitetura Web Fullstack com contratos de API, autenticação segura e testes E5"',
+        agents: [
+          { name: 'gau-orchestrator', role: 'Coordenação DAG Kahn', icon: '🧠' },
+          { name: 'gau-requirements', role: 'Baseline & Tipos', icon: '📋' },
+          { name: 'gau-architect', role: 'Freeze Gate #107', icon: '🏛️' },
+          { name: 'gau-implementer', role: 'Coding Swarm Worktrees', icon: '⚡' },
+          { name: 'gau-security', role: 'Sanitização OWASP', icon: '🛡️' },
+          { name: 'gau-verifier', role: 'Testes Físicos Exit 0', icon: '✔' }
+        ]
+      },
+      win: {
+        title: 'Automação Windows & CLIs',
+        hours: '~95 horas/mês',
+        cmd: '/gau-goal "Automatizar rotinas de arquivos e processos locais no Windows com guardrails de segurança A1"',
+        agents: [
+          { name: 'gau-computer-layer', role: 'Scripts PowerShell & CMD', icon: '🖥️' },
+          { name: 'gau-orchestrator', role: 'Orquestração Local', icon: '🧠' },
+          { name: 'gau-evidence', role: 'Hashes SHA-256 e Logs', icon: '💾' },
+          { name: 'gau-verifier', role: 'Validação de Execução', icon: '✔' }
+        ]
+      },
+      sec: {
+        title: 'Segurança & Pentest',
+        hours: '~180 horas/mês',
+        cmd: '/gau-goal "Executar varredura de vulnerabilidades OWASP Top 10, caça a segredos e quarentena de falhas"',
+        agents: [
+          { name: 'gau-security', role: 'Auditoria de Permissões', icon: '🛡️' },
+          { name: 'gau-adversarial', role: 'Synthetic Adversary #103', icon: '🗡️' },
+          { name: 'gau-inquisitor', role: 'Testes Metamórficos #111', icon: '🔬' },
+          { name: 'gau-secret-broker', role: 'Vault Cifrado #105', icon: '🔒' },
+          { name: 'gau-verifier', role: 'Prova de Imunidade E5', icon: '✔' }
+        ]
+      },
+      db: {
+        title: 'Banco de Dados & WAL',
+        hours: '~110 horas/mês',
+        cmd: '/gau-goal "Configurar banco SQLite em modo WAL, criar migrações seguras e auditar ausência de deadlocks"',
+        agents: [
+          { name: 'gau-database', role: 'Schemas e Migrations', icon: '🗄️' },
+          { name: 'gau-architect', role: 'Modelagem de Entidades', icon: '🏛️' },
+          { name: 'gau-performance', role: 'Benchmarking e Índices', icon: '⚡' },
+          { name: 'gau-verifier', role: 'Integridade Referencial', icon: '✔' }
+        ]
+      }
+    };
+
+    function renderArchetype(key) {
+      const data = archetypeRosters[key];
+      if (!data) return;
+
+      if (archetypeName) archetypeName.textContent = data.title;
+      if (hoursSaved) hoursSaved.textContent = `⏱️ Economia Estimada: ${data.hours}`;
+      if (cliCode) cliCode.textContent = data.cmd;
+      if (copyBtn) copyBtn.dataset.copy = data.cmd;
+
+      chipsWrap.innerHTML = data.agents.map(a => `
+        <div class="roster-chip">
+          <span class="roster-chip-icon">${a.icon}</span>
+          <div>
+            <div class="roster-chip-name">${escapeHtml(a.name)}</div>
+            <div class="roster-chip-role">${escapeHtml(a.role)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    archetypes.forEach(card => {
+      card.addEventListener('click', () => {
+        archetypes.forEach(c => c.classList.remove('active'));
+        card.classList.add('active');
+        const arch = card.dataset.archetype;
+        renderArchetype(arch);
+        playCyberSound('click');
+      });
+    });
+
+    renderArchetype('web');
+  }
+
+  // ------------------------------------------
+  // 5. Cockpit HUD & Wave Oscilloscope (#120)
+  // ------------------------------------------
+  function initCockpitHud() {
+    const toggleBtn = document.getElementById('cockpitToggleBtn');
+    const closeBtn = document.getElementById('cockpitCloseBtn');
+    const backdrop = document.getElementById('cockpitBackdrop');
+    const modal = document.getElementById('cockpitModal');
+    const canvas = document.getElementById('cockpitWaveCanvas');
+    const stream = document.getElementById('cockpitEventsStream');
+    const clearBtn = document.getElementById('cockpitClearEvents');
+
+    if (!toggleBtn || !modal || !backdrop) return;
+
+    let waveCtx = canvas ? canvas.getContext('2d') : null;
+    let waveAnimId = null;
+    let waveOffset = 0;
+    let eventStreamInterval = null;
+
+    function drawWave() {
+      if (!modal || modal.style.display === 'none' || !waveCtx) return;
+      const w = canvas.width;
+      const h = canvas.height;
+
+      waveCtx.fillStyle = 'rgba(6, 8, 16, 0.2)';
+      waveCtx.fillRect(0, 0, w, h);
+
+      waveCtx.beginPath();
+      waveCtx.strokeStyle = '#62e6ff';
+      waveCtx.lineWidth = 1.8;
+
+      for (let x = 0; x < w; x++) {
+        const rad = (x + waveOffset) * 0.04;
+        let y = h / 2 + Math.sin(rad) * 18;
+        // Jitter simulation
+        if (Math.sin(rad * 0.5) > 0.85) {
+          y += (Math.random() - 0.5) * 22;
+        }
+        if (x === 0) waveCtx.moveTo(x, y);
+        else waveCtx.lineTo(x, y);
+      }
+      waveCtx.stroke();
+      waveOffset += 2;
+      waveAnimId = requestAnimationFrame(drawWave);
+    }
+
+    const mockEvents = [
+      'EVENT_SPINE: SQLite WAL mode confirmed (.gau/events.sqlite3)',
+      'CAPABILITY_LEASE: Lease granted for gau-security (TTL: 300s)',
+      'WORKTREE_SWARM: Branch "swarm-feature-auth" isolated from main',
+      'SECRET_BROKER: Secure token emitted SEC_TOKEN_819...',
+      'PROOF_CARRIER: SHA-256 seal computed: a7f8c24b9102...',
+      'METAMORPHIC_PROBE: 120 input mutations tested with 0 invariants broken',
+      'GATE_VERIFIED: Exit code 0 attest verified in terminal'
+    ];
+
+    function appendEvent() {
+      if (!stream || modal.style.display === 'none') return;
+      const line = document.createElement('div');
+      const time = new Date().toTimeString().split(' ')[0];
+      const ev = mockEvents[Math.floor(Math.random() * mockEvents.length)];
+      line.textContent = `[${time}] ${ev}`;
+      stream.appendChild(line);
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function openCockpit() {
+      backdrop.style.display = 'block';
+      modal.style.display = 'flex';
+      playCyberSound('whoosh');
+      drawWave();
+      if (!eventStreamInterval) {
+        eventStreamInterval = setInterval(appendEvent, 2200);
+      }
+    }
+
+    function closeCockpit() {
+      backdrop.style.display = 'none';
+      modal.style.display = 'none';
+      if (waveAnimId) cancelAnimationFrame(waveAnimId);
+      if (eventStreamInterval) {
+        clearInterval(eventStreamInterval);
+        eventStreamInterval = null;
+      }
+      playCyberSound('click');
+    }
+
+    toggleBtn.addEventListener('click', openCockpit);
+    closeBtn.addEventListener('click', closeCockpit);
+    backdrop.addEventListener('click', closeCockpit);
+
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (stream) stream.innerHTML = '';
+        playCyberSound('click');
+      });
+    }
+  }
+
+  // ------------------------------------------
+  // 6. 60s Guided Cinematic Presentation Tour
+  // ------------------------------------------
+  function initGuidedTour() {
+    const startTopBtn = document.getElementById('startTourBtn');
+    const startHeroBtn = document.getElementById('heroTourBtn');
+    const backdrop = document.getElementById('tourBackdrop');
+    const card = document.getElementById('tourCard');
+    const closeBtn = document.getElementById('tourCloseBtn');
+    const prevBtn = document.getElementById('tourPrevBtn');
+    const nextBtn = document.getElementById('tourNextBtn');
+    const playPauseBtn = document.getElementById('tourPlayPauseBtn');
+    const stepBadge = document.getElementById('tourStepBadge');
+    const stepTitle = document.getElementById('tourStepTitle');
+    const stepText = document.getElementById('tourStepText');
+    const progressBar = document.getElementById('tourProgressBar');
+
+    if (!card || !backdrop) return;
+
+    const tourSteps = [
+      {
+        target: '#top',
+        title: '1. O que é o GAU v5?',
+        text: 'O GAU v5 transforma o comando nativo /goal do Antigravity em uma usina de engenharia autônoma orientada por evidências físicas, zero falsos "Done" e orçamentos rígidos.'
+      },
+      {
+        target: '#architecture',
+        title: '2. Arquitetura Cognitiva em 6 Camadas',
+        text: 'Topologia tri-modal completa: Governança de Subagentes, Raciocínio Concorrente, Memória SQLite WAL, Resiliência Física e o motor Intent-to-Reality.'
+      },
+      {
+        target: '#dagSimulatorSection',
+        title: '3. Grafo DAG Kahn & Coding Swarm',
+        text: 'Nenhum coder colide: tarefas são compiladas em DAG sem ciclos, as interfaces são congeladas e coders trabalham em worktrees isoladas do Git.'
+      },
+      {
+        target: '#comercial',
+        title: '4. Demonstração em Vídeo Comercial (38s)',
+        text: 'Uma visão cinematográfica condensada de como a inteligência do GAU opera em tempo real dentro do ecossistema do Google Antigravity.'
+      },
+      {
+        target: '#roi',
+        title: '5. Calculadora de Impacto Cognitivo',
+        text: 'Cada bug eliminado antes da main salva em média 3.5 horas de debug e poupa milhões de tokens desperdiçados em loops infinitos.'
+      },
+      {
+        target: '#modelArenaSection',
+        title: '6. Arena de Duelo & Leaderboard Elo',
+        text: 'Os modelos de IA duelam sob a mesma suíte de testes unitários. O árbitro formal pontua eficiência assintótica e ajusta o rating Elo ao vivo.'
+      },
+      {
+        target: '#ideas',
+        title: '7. O Atlas das 69 Ideias Aprovadas',
+        text: 'Do Roteamento Adaptativo ao Tribunal de Evidências, 69 mecanismos cognitivos prontos para consulta com regras invioláveis de governança.'
+      },
+      {
+        target: '#deploy',
+        title: '8. Instalação e Execução Imediata',
+        text: 'Pacote Master com 9.087 arquivos pronto para instalação no seu workspace local. Um comando ativa o GAU e preserva seu /goal nativo.'
+      }
+    ];
+
+    let currentStep = 0;
+    let tourTimer = null;
+    let isAutoPlaying = true;
+
+    function showStep(idx) {
+      currentStep = Math.max(0, Math.min(tourSteps.length - 1, idx));
+      const step = tourSteps[currentStep];
+
+      stepBadge.textContent = `${currentStep + 1} de ${tourSteps.length}`;
+      stepTitle.textContent = step.title;
+      stepText.textContent = step.text;
+      progressBar.style.width = `${((currentStep + 1) / tourSteps.length) * 100}%`;
+
+      const targetEl = document.querySelector(step.target);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      playCyberSound('switch');
+    }
+
+    function nextStep() {
+      if (currentStep < tourSteps.length - 1) {
+        showStep(currentStep + 1);
+      } else {
+        stopTour();
+        showToast('🎬 Apresentação do GAU v5 Concluída!');
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        showStep(currentStep - 1);
+      }
+    }
+
+    function startAutoTimer() {
+      if (tourTimer) clearInterval(tourTimer);
+      if (isAutoPlaying) {
+        tourTimer = setInterval(() => {
+          nextStep();
+        }, 7500);
+      }
+    }
+
+    function startTour() {
+      backdrop.style.display = 'block';
+      card.style.display = 'flex';
+      isAutoPlaying = true;
+      playPauseBtn.textContent = '⏸ Pausar';
+      showStep(0);
+      startAutoTimer();
+      playCyberSound('whoosh');
+    }
+
+    function stopTour() {
+      backdrop.style.display = 'none';
+      card.style.display = 'none';
+      if (tourTimer) clearInterval(tourTimer);
+      playCyberSound('click');
+    }
+
+    if (startTopBtn) startTopBtn.addEventListener('click', startTour);
+    if (startHeroBtn) startHeroBtn.addEventListener('click', startTour);
+    closeBtn.addEventListener('click', stopTour);
+    nextBtn.addEventListener('click', () => {
+      nextStep();
+      startAutoTimer();
+    });
+    prevBtn.addEventListener('click', () => {
+      prevStep();
+      startAutoTimer();
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      isAutoPlaying = !isAutoPlaying;
+      if (isAutoPlaying) {
+        playPauseBtn.textContent = '⏸ Pausar';
+        startAutoTimer();
+      } else {
+        playPauseBtn.textContent = '▶ Continuar';
+        if (tourTimer) clearInterval(tourTimer);
+      }
+      playCyberSound('click');
+    });
+  }
+
+  // Inicializar Mega Pack V5 (v5.5.0)
+  initMatrixMode();
+  initDagSimulator();
+  initModelArena();
+  initSquadBuilder();
+  initCockpitHud();
+  initGuidedTour();
 })();
