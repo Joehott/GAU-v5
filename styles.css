@@ -1206,131 +1206,381 @@
 }
 
 /* ==========================================================================
-   DESKTOP MOBILE SIMULATOR
+   1. QUANTUM REACTIVE CANVAS (Background Particles)
    ========================================================================== */
-.mobile-sim-toggle {
-  background: rgba(154, 124, 255, 0.12);
-  color: #c7b9ff;
-  border: 1px solid rgba(154, 124, 255, 0.32);
-  border-radius: 11px;
-  padding: 8px 12px;
-  font-size: 12.5px;
-  font-weight: 700;
-  cursor: pointer;
+.quantum-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+}
+
+/* ==========================================================================
+   2. AUDIO FEEDBACK TOGGLE BUTTON (Web Audio API)
+   ========================================================================== */
+.audio-toggle-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 6px 11px;
+  color: #a6b0c3;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
 }
-.mobile-sim-toggle:hover {
-  background: rgba(154, 124, 255, 0.25);
-  border-color: var(--violet);
+.audio-toggle-btn:hover {
+  background: rgba(98, 230, 255, 0.12);
+  border-color: rgba(98, 230, 255, 0.4);
   color: #fff;
   transform: translateY(-1px);
 }
-@media (max-width: 980px) {
-  .mobile-sim-toggle {
-    display: none !important;
+.audio-toggle-btn.sound-on {
+  background: rgba(37, 211, 102, 0.14);
+  border-color: rgba(37, 211, 102, 0.45);
+  color: #80ffd4;
+}
+
+/* ==========================================================================
+   3. MOBILE QUICK ACTION BAR (Visible automatically on smartphones <= 768px)
+   ========================================================================== */
+.mobile-quick-bar {
+  display: none;
+}
+@media (max-width: 768px) {
+  .mobile-quick-bar {
+    display: block;
+    position: sticky;
+    top: 60px;
+    z-index: 990;
+    background: rgba(8, 11, 18, 0.92);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mobile-quick-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .mobile-quick-track {
+    display: inline-flex;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .mobile-quick-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .mobile-quick-chip:active,
+  .mobile-quick-chip.active {
+    background: rgba(98, 230, 255, 0.18);
+    border-color: var(--cyan);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(98, 230, 255, 0.35);
+  }
+  .chip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 6px var(--cyan);
   }
 }
 
-/* Floating Banner when Mobile Simulator is active on Desktop */
-.mobile-sim-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 42px;
-  background: linear-gradient(90deg, #181236, #0e172e);
-  border-bottom: 1px solid rgba(154, 124, 255, 0.35);
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #e2e8f0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
+/* ==========================================================================
+   4. 3D HOLOGRAPHIC TILT & SPECULAR GLARE
+   ========================================================================== */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.2s ease-out;
+  position: relative;
+  will-change: transform;
 }
-.sim-banner-content {
-  width: min(1000px, 92%);
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle 300px at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  z-index: 5;
+}
+.tilt-card:hover .tilt-glare {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   5. CALCULADORA DE EFICIÊNCIA & ROI COGNITIVO (#roi)
+   ========================================================================== */
+.roi-card {
+  background: linear-gradient(165deg, rgba(16, 21, 36, 0.9), rgba(8, 11, 20, 0.94));
+  border: 1px solid rgba(98, 230, 255, 0.22);
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+}
+.roi-header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 32px auto;
+}
+.roi-header h2 {
+  font-size: clamp(24px, 3.2vw, 36px);
+  margin: 10px 0;
+}
+.roi-header p {
+  color: #94a3b8;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.roi-slider-block {
+  max-width: 640px;
+  margin: 0 auto 32px auto;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+.roi-slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #cbd5e1;
+}
+.roi-slider-label strong {
+  font-size: 18px;
+  color: var(--cyan);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.roi-slider-block input[type="range"] {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  accent-color: var(--cyan);
+}
+.roi-slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 8px;
+}
+.roi-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+.roi-metric-item {
+  background: rgba(12, 16, 28, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.roi-metric-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(98, 230, 255, 0.35);
+}
+.roi-metric-icon {
+  font-size: 26px;
+}
+.roi-metric-val {
+  font-size: clamp(24px, 2.5vw, 32px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.roi-metric-label {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   6. INTERACTIVE CLI TERMINAL PLAYGROUND (#deploy)
+   ========================================================================== */
+.interactive-terminal-card {
+  margin-top: 24px;
+  border-radius: 16px;
+  background: #080b12;
+  border: 1px solid rgba(98, 230, 255, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.terminal-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 16px;
+  background: #0d121f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-.sim-exit-btn {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #fff;
-  padding: 5px 14px;
-  border-radius: 6px;
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+.t-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.t-dot.red { background: #ff5f56; }
+.t-dot.yellow { background: #ffbd2e; }
+.t-dot.green { background: #27c93f; }
+.terminal-title {
   font-size: 11px;
-  font-weight: 700;
+  color: #8c97ad;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+}
+.terminal-clear-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  color: #7a869e;
+  font-size: 10px;
+  padding: 2px 6px;
   cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
 }
-.sim-exit-btn:hover {
-  background: #ff4757;
-  border-color: #ff4757;
+.terminal-clear-btn:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
 }
-
-/* Simulated Phone Mode on Desktop (when body has .simulating-mobile) */
-body.simulating-mobile {
-  padding-top: 54px !important;
-  padding-bottom: 84px !important;
-  background: #020408 !important;
+.terminal-body {
+  padding: 16px 20px;
+  min-height: 170px;
+  max-height: 280px;
+  overflow-y: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-body.simulating-mobile .section-shell {
-  width: min(412px, 94%) !important;
+.terminal-line.system-msg {
+  color: #64748b;
+  font-style: italic;
 }
-body.simulating-mobile .topbar {
-  width: min(412px, 94%) !important;
-  margin: 10px auto 0 !important;
+.terminal-line.prompt-line {
+  display: flex;
+  gap: 8px;
+  color: #fff;
+  font-weight: 600;
 }
-body.simulating-mobile .nav,
-body.simulating-mobile .mini-cta,
-body.simulating-mobile .mobile-sim-toggle {
-  display: none !important;
+.t-prompt {
+  color: var(--cyan);
+  font-weight: 800;
+  user-select: none;
 }
-body.simulating-mobile .mobile-menu-btn {
-  display: flex !important;
+.terminal-output {
+  color: #94a3b8;
+  padding-left: 16px;
 }
-body.simulating-mobile .mobile-bottom-dock {
-  display: flex !important;
-  max-width: 412px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  border-radius: 18px 18px 0 0;
+.t-green { color: #80ffd4; }
+.t-cyan { color: var(--cyan); }
+.t-yellow { color: #ffbd2e; }
+.t-red { color: #ff708a; }
+.terminal-quick-commands {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(13, 18, 31, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
 }
-body.simulating-mobile .whatsapp-floating {
-  bottom: 74px !important;
-  right: calc(50% - 195px) !important;
+.quick-cmd-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
 }
-body.simulating-mobile .hero {
-  grid-template-columns: 1fr !important;
-  padding-top: 30px !important;
-  text-align: center;
+.cli-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #a6b0c3;
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
-body.simulating-mobile .hero-brand-badge img {
-  margin-inline: auto !important;
+.cli-chip:hover {
+  background: rgba(98, 230, 255, 0.15);
+  border-color: var(--cyan);
+  color: #fff;
 }
-body.simulating-mobile .hero h1 {
-  font-size: 30px !important;
+.terminal-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #090d16;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
-body.simulating-mobile .hero-actions {
-  flex-direction: column !important;
+.terminal-input-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  color: #fff;
 }
-body.simulating-mobile .leaderboard-podium,
-body.simulating-mobile .agents-grid,
-body.simulating-mobile .layer-grid,
-body.simulating-mobile .ideas-grid,
-body.simulating-mobile .console-grid,
-body.simulating-mobile .deploy-card {
-  grid-template-columns: 1fr !important;
+.terminal-input-bar input::placeholder {
+  color: #475569;
+}
+.terminal-enter-btn {
+  background: rgba(98, 230, 255, 0.15);
+  border: 1px solid rgba(98, 230, 255, 0.3);
+  border-radius: 6px;
+  color: var(--cyan);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.terminal-enter-btn:hover {
+  background: rgba(98, 230, 255, 0.3);
+  color: #fff;
 }
 
 /* ==========================================================================
@@ -1367,6 +1617,12 @@ body.simulating-mobile .deploy-card {
     font-size: 11px !important;
   }
   .topbar-actions .whatsapp-btn-header span {
+    display: none !important;
+  }
+  .topbar-actions .audio-toggle-btn {
+    padding: 6px 8px !important;
+  }
+  .topbar-actions .audio-toggle-btn .audio-txt {
     display: none !important;
   }
 

@@ -35,7 +35,7 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.3.1" />
+  <link rel="stylesheet" href="styles.css?v=5.4.0" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -81,13 +81,7 @@
   <div class="noise" aria-hidden="true"></div>
   <div class="aurora aurora-a" aria-hidden="true"></div>
   <div class="aurora aurora-b" aria-hidden="true"></div>
-
-  <div class="mobile-sim-banner" id="mobileSimBanner" style="display: none;">
-    <div class="sim-banner-content">
-      <span>📱 <b>Modo Celular Ativo</b> &bull; Visualização de Smartphone</span>
-      <button class="sim-exit-btn" id="exitMobileSimBtn">Voltar ao Computador ✕</button>
-    </div>
-  </div>
+  <canvas id="quantumCanvas" class="quantum-canvas" aria-hidden="true"></canvas>
 
   <header class="topbar" id="top">
     <a class="brand" href="#top" aria-label="GAU v5 - início">
@@ -98,6 +92,7 @@
       <a href="#architecture">Arquitetura</a>
       <a href="#lab">Laboratório</a>
       <a href="#comercial" style="color: #62e6ff; font-weight: 700;">Vídeo Comercial</a>
+      <a href="#roi">Eficiência</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#ideas">69 ideias</a>
       <a href="#goal">/goal</a>
@@ -109,8 +104,9 @@
         <span class="search-k-txt">Buscar</span>
         <kbd class="search-k-badge">Ctrl K</kbd>
       </button>
-      <button class="mobile-sim-toggle" id="mobileSimToggleBtn" title="Alternar visão de celular">
-        <span>📱 Modo Celular</span>
+      <button class="audio-toggle-btn" id="audioToggleBtn" title="Ativar/Desativar Efeitos Sonoros Cyberpunk">
+        <span class="audio-icon" id="audioIcon">🔇</span>
+        <span class="audio-txt">Som</span>
       </button>
       <a class="whatsapp-btn-header" id="headerWhatsappBtn" href="https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V" target="_blank" rel="noopener noreferrer" title="Canal Oficial no WhatsApp">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
@@ -124,6 +120,21 @@
       </button>
     </div>
   </header>
+
+  <!-- Dedicated Mobile Quick Access Bar (Only visible on Smartphones <= 768px) -->
+  <nav class="mobile-quick-bar" id="mobileQuickBar" aria-label="Acesso Rápido Mobile">
+    <div class="mobile-quick-track">
+      <a href="#top" class="mobile-quick-chip active"><span class="chip-dot"></span> Início</a>
+      <a href="#architecture" class="mobile-quick-chip">🏛️ Arquitetura</a>
+      <a href="#lab" class="mobile-quick-chip">🧪 Lab Missões</a>
+      <a href="#comercial" class="mobile-quick-chip">🎬 Vídeo 38s</a>
+      <a href="#roi" class="mobile-quick-chip">🧮 Eficiência</a>
+      <a href="#leaderboard" class="mobile-quick-chip">🏆 Leaderboard</a>
+      <a href="#ideas" class="mobile-quick-chip">💡 69 Ideias</a>
+      <a href="#goal" class="mobile-quick-chip">🎯 /goal</a>
+      <a href="#deploy" class="mobile-quick-chip">⚡ Instalar</a>
+    </div>
+  </nav>
 
   <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
   <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Menu Mobile">
@@ -139,11 +150,11 @@
       <a href="#comercial" class="drawer-link highlight-commercial"><span class="drawer-icon">🎬</span> Vídeo Comercial <small class="badge-new">38s</small></a>
       <a href="#architecture" class="drawer-link"><span class="drawer-icon">🏛️</span> Arquitetura</a>
       <a href="#lab" class="drawer-link"><span class="drawer-icon">🧪</span> Laboratório de Missões</a>
+      <a href="#roi" class="drawer-link"><span class="drawer-icon">🧮</span> Calculadora de Eficiência</a>
       <a href="#leaderboard" class="drawer-link"><span class="drawer-icon">🏆</span> Leaderboard Elo</a>
       <a href="#ideas" class="drawer-link"><span class="drawer-icon">💡</span> 69 Ideias Aprovadas</a>
       <a href="#goal" class="drawer-link"><span class="drawer-icon">🎯</span> Comando /goal</a>
       <a href="#deploy" class="drawer-link"><span class="drawer-icon">📦</span> Instalação</a>
-      <a href="javascript:void(0)" class="drawer-link" id="drawerMobileSimBtn"><span class="drawer-icon">📱</span> Alternar Modo Celular</a>
       <a href="#contato" class="drawer-link highlight-wa"><span class="drawer-icon">💬</span> Canal Oficial WhatsApp</a>
       <a href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer" class="drawer-link"><span class="drawer-icon">↗️</span> GitHub Oficial</a>
     </nav>
@@ -450,6 +461,50 @@
       </div>
     </section>
 
+    <!-- ROI & Token Efficiency Calculator -->
+    <section class="section-shell section-block" id="roi">
+      <div class="roi-card reveal">
+        <div class="roi-header">
+          <div class="eyebrow"><span class="pulse-dot"></span> CALCULADORA DE IMPACTO COGNITIVO</div>
+          <h2>Quanto o GAU v5 economiza para sua equipe?</h2>
+          <p>Eliminar alucinações, falsos "Done" e loops de repetição converte-se diretamente em horas salvas e milhões de tokens poupados por mês.</p>
+        </div>
+        <div class="roi-calculator" id="roiCalculator">
+          <div class="roi-slider-block">
+            <div class="roi-slider-label">
+              <span>Tarefas de Engenharia / Semana:</span>
+              <strong id="roiTasksCount">25 tarefas</strong>
+            </div>
+            <input type="range" id="roiTasksRange" min="5" max="100" value="25" step="5" aria-label="Tarefas por semana" />
+            <div class="roi-slider-ticks">
+              <span>5 tarefas</span>
+              <span>25 tarefas</span>
+              <span>50 tarefas</span>
+              <span>75 tarefas</span>
+              <span>100 tarefas</span>
+            </div>
+          </div>
+          <div class="roi-metrics-grid">
+            <div class="roi-metric-item">
+              <span class="roi-metric-icon">⏱️</span>
+              <strong class="roi-metric-val" id="roiHoursSaved">87.5h</strong>
+              <span class="roi-metric-label">Horas de debug economizadas / mês</span>
+            </div>
+            <div class="roi-metric-item">
+              <span class="roi-metric-icon">🪙</span>
+              <strong class="roi-metric-val" id="roiTokensSaved">12.5M</strong>
+              <span class="roi-metric-label">Tokens poupados em loops / mês</span>
+            </div>
+            <div class="roi-metric-item">
+              <span class="roi-metric-icon">🛡️</span>
+              <strong class="roi-metric-val" id="roiSuccessRate">100%</strong>
+              <span class="roi-metric-label">Conclusão validada com Exit Code 0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section-shell section-block" id="leaderboard">
       <div class="section-heading reveal split-heading">
         <div>
@@ -660,6 +715,45 @@
           <div class="codebox os-pane" id="panePython" style="display: none;">
             <div class="codebox-top"><span>Instalação Local (após extrair ZIP)</span><button class="copy-btn" data-copy="py -3 GAU-v5/install.py --project .">Copiar</button></div>
             <code>py -3 GAU-v5/install.py --project .</code>
+          </div>
+
+          <!-- Interactive CLI Terminal Playground -->
+          <div class="interactive-terminal-card" id="interactiveCliTerminal">
+            <div class="terminal-head">
+              <div class="terminal-dots">
+                <span class="t-dot red"></span>
+                <span class="t-dot yellow"></span>
+                <span class="t-dot green"></span>
+              </div>
+              <span class="terminal-title">GAU v5 CLI Playground &bull; Simulador ao Vivo</span>
+              <button type="button" class="terminal-clear-btn" id="terminalClearBtn" title="Limpar Console">Limpar</button>
+            </div>
+            <div class="terminal-body" id="terminalBody">
+              <div class="terminal-line system-msg">GAU v5.4.0 Cognitive Runtime Initialized. Experimente comandos reais do terminal:</div>
+              <div class="terminal-line prompt-line">
+                <span class="t-prompt">gau&gt;</span>
+                <span class="t-text">gau doctor</span>
+              </div>
+              <div class="terminal-output">
+                <span class="t-green">✔ Python 3.13.2 detected</span><br>
+                <span class="t-green">✔ SQLite WAL journal mode verified</span><br>
+                <span class="t-green">✔ Git Worktree Swarm isolated</span><br>
+                <span class="t-cyan">🛡️ 69 Ideias e 16 Subagentes prontos para execução.</span>
+              </div>
+            </div>
+            <div class="terminal-quick-commands">
+              <span class="quick-cmd-label">Comandos Rápidos:</span>
+              <button type="button" class="cli-chip" data-cmd="gau doctor">gau doctor</button>
+              <button type="button" class="cli-chip" data-cmd="gau match 'auth'">gau match "auth"</button>
+              <button type="button" class="cli-chip" data-cmd="/goal">/goal</button>
+              <button type="button" class="cli-chip" data-cmd="gau leaderboard">gau leaderboard</button>
+              <button type="button" class="cli-chip" data-cmd="help">help</button>
+            </div>
+            <div class="terminal-input-bar">
+              <span class="t-prompt">gau&gt;</span>
+              <input type="text" id="terminalInput" placeholder="Digite um comando aqui... (ex: gau doctor, /goal)" autocomplete="off" />
+              <button type="button" id="terminalSendBtn" class="terminal-enter-btn" title="Executar">↵</button>
+            </div>
           </div>
         </div>
         <div class="deploy-notice" style="margin-top: 1.5rem;"><span>⚑</span><p>Este site é a interface do projeto. A execução real de subagentes depende do Antigravity e das credenciais disponíveis na máquina onde o GAU for instalado.</p></div>
@@ -892,7 +986,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.3.1"></script>
-  <script src="app.js?v=5.3.1"></script>
+  <script src="ideas.js?v=5.4.0"></script>
+  <script src="app.js?v=5.4.0"></script>
 </body>
 </html>

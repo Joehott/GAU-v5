@@ -154,6 +154,10 @@
         if (item) openIdeaModal(item);
       });
     });
+
+    if (typeof applyTiltToElements === 'function') {
+      applyTiltToElements(grid.querySelectorAll('.idea-card'));
+    }
   }
   search.addEventListener('input', renderIdeas);
   renderFilters(); renderIdeas();
@@ -767,6 +771,9 @@ ${stepsTable}
     if (!toastEl) return;
     toastEl.textContent = message;
     toastEl.classList.add('show');
+    if (typeof playCyberSound === 'function') {
+      playCyberSound('switch');
+    }
     if (toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {
       toastEl.classList.remove('show');
@@ -1116,47 +1123,495 @@ ${stepsTable}
     countElements.forEach(el => countObserver.observe(el));
   }
 
-  // Desktop Mobile Simulator Toggle
-  const mobileSimToggleBtn = document.getElementById('mobileSimToggleBtn');
-  const drawerMobileSimBtn = document.getElementById('drawerMobileSimBtn');
-  const exitMobileSimBtn = document.getElementById('exitMobileSimBtn');
-  const mobileSimBanner = document.getElementById('mobileSimBanner');
-
-  function enableMobileSimulator() {
-    document.body.classList.add('simulating-mobile');
-    if (mobileSimBanner) mobileSimBanner.style.display = 'flex';
-    showToast('📱 Modo Celular Ativado!');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // ==========================================
+  // Cyberpunk Audio Feedback (Web Audio API)
+  // ==========================================
+  let audioCtx = null;
+  function isSoundEnabled() {
+    return localStorage.getItem('gau_sound_enabled') === 'true';
   }
 
-  function disableMobileSimulator() {
-    document.body.classList.remove('simulating-mobile');
-    if (mobileSimBanner) mobileSimBanner.style.display = 'none';
-    showToast('Retornando ao Modo Computador');
-  }
+  function playCyberSound(type = 'click') {
+    if (!isSoundEnabled()) return;
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      if (!audioCtx) {
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
 
-  function toggleMobileSimulator() {
-    if (document.body.classList.contains('simulating-mobile')) {
-      disableMobileSimulator();
-    } else {
-      enableMobileSimulator();
+      if (type === 'click') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      } else if (type === 'switch') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.07);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.start(now);
+        osc.stop(now + 0.07);
+      } else if (type === 'whoosh') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
+        osc.frequency.exponentialRampToValueAtTime(180, now + 0.12);
+        gain.gain.setValueAtTime(0.04, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        osc.start(now);
+        osc.stop(now + 0.12);
+      } else if (type === 'terminal') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(1100, now);
+        gain.gain.setValueAtTime(0.03, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+        osc.start(now);
+        osc.stop(now + 0.025);
+      } else if (type === 'success') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.setValueAtTime(660, now + 0.06);
+        osc.frequency.setValueAtTime(880, now + 0.12);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
+    } catch (e) {
+      // Audio silently ignored if blocked by browser policy
     }
   }
 
-  if (mobileSimToggleBtn) {
-    mobileSimToggleBtn.addEventListener('click', toggleMobileSimulator);
+  function initAudioFeedback() {
+    const audioToggleBtn = document.getElementById('audioToggleBtn');
+    const audioIcon = document.getElementById('audioIcon');
+
+    function updateAudioUI() {
+      const enabled = isSoundEnabled();
+      if (audioToggleBtn) {
+        if (enabled) {
+          audioToggleBtn.classList.add('sound-on');
+          if (audioIcon) audioIcon.textContent = '🔊';
+          audioToggleBtn.setAttribute('aria-label', 'Desativar Sons');
+        } else {
+          audioToggleBtn.classList.remove('sound-on');
+          if (audioIcon) audioIcon.textContent = '🔇';
+          audioToggleBtn.setAttribute('aria-label', 'Ativar Sons');
+        }
+      }
+    }
+
+    if (audioToggleBtn) {
+      audioToggleBtn.addEventListener('click', () => {
+        const nextState = !isSoundEnabled();
+        localStorage.setItem('gau_sound_enabled', String(nextState));
+        updateAudioUI();
+        if (nextState) {
+          playCyberSound('success');
+          showToast('🔊 Efeitos Sonoros Cyberpunk Ativados!');
+        } else {
+          showToast('🔇 Sons Desativados');
+        }
+      });
+    }
+
+    updateAudioUI();
   }
 
-  if (drawerMobileSimBtn) {
-    drawerMobileSimBtn.addEventListener('click', () => {
-      closeMobileDrawer();
-      toggleMobileSimulator();
+  // ==========================================
+  // Quantum Reactive Starfield Canvas
+  // ==========================================
+  function initQuantumCanvas() {
+    const canvas = document.getElementById('quantumCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = 0;
+    let height = 0;
+    let particles = [];
+    let animId = null;
+    let mouse = { x: -1000, y: -1000, radius: 140 };
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      createParticles();
+    }
+
+    function createParticles() {
+      if (width <= 768) {
+        particles = [];
+        return;
+      }
+      const count = Math.min(50, Math.floor(width / 28));
+      particles = [];
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.4,
+          radius: Math.random() * 1.6 + 0.8,
+          baseAlpha: Math.random() * 0.35 + 0.2,
+          color: Math.random() > 0.4 ? 'rgba(98, 230, 255,' : 'rgba(167, 139, 250,'
+        });
+      }
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    }, { passive: true });
+
+    window.addEventListener('mouseleave', () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    });
+
+    function loop() {
+      if (document.hidden || width <= 768 || particles.length === 0) {
+        animId = requestAnimationFrame(loop);
+        return;
+      }
+
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        const dxMouse = p.x - mouse.x;
+        const dyMouse = p.y - mouse.y;
+        const distMouse = Math.hypot(dxMouse, dyMouse);
+        if (distMouse < mouse.radius && distMouse > 0) {
+          const force = (mouse.radius - distMouse) / mouse.radius;
+          p.x += (dxMouse / distMouse) * force * 1.1;
+          p.y += (dyMouse / distMouse) * force * 1.1;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `${p.color} ${p.baseAlpha})`;
+        ctx.fill();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const p2 = particles[j];
+          const dx = p.x - p2.x;
+          const dy = p.y - p2.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 105) {
+            const alpha = (1 - dist / 105) * 0.16;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(98, 230, 255, ${alpha})`;
+            ctx.lineWidth = 0.55;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animId = requestAnimationFrame(loop);
+    }
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && width > 768 && !animId) {
+        loop();
+      }
+    });
+
+    resize();
+    loop();
+  }
+
+  // ==========================================
+  // 3D Holographic Tilt with Specular Glare
+  // ==========================================
+  function applyTiltToElements(elements) {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    elements.forEach(card => {
+      if (card.dataset.tiltApplied) return;
+      card.dataset.tiltApplied = 'true';
+      card.classList.add('tilt-card');
+      let glare = card.querySelector('.tilt-glare');
+      if (!glare) {
+        glare = document.createElement('div');
+        glare.className = 'tilt-glare';
+        card.appendChild(glare);
+      }
+
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top) / rect.height;
+        const rotX = (0.5 - y) * 10;
+        const rotY = (x - 0.5) * 10;
+        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
+        glare.style.transform = `translate(${((x - 0.5) * 100).toFixed(1)}%, ${((y - 0.5) * 100).toFixed(1)}%)`;
+        glare.style.opacity = '0.35';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        glare.style.opacity = '0';
+      });
     });
   }
 
-  if (exitMobileSimBtn) {
-    exitMobileSimBtn.addEventListener('click', disableMobileSimulator);
+  function init3DTilt() {
+    applyTiltToElements(document.querySelectorAll('.layer-card, .podium-card, .roi-card, .deploy-card'));
   }
+
+  // ==========================================
+  // Cognitive ROI & Token Efficiency Calculator
+  // ==========================================
+  function initRoiCalculator() {
+    const range = document.getElementById('roiTasksRange');
+    const tasksCount = document.getElementById('roiTasksCount');
+    const hoursSaved = document.getElementById('roiHoursSaved');
+    const tokensSaved = document.getElementById('roiTokensSaved');
+    const successRate = document.getElementById('roiSuccessRate');
+
+    if (!range || !tasksCount || !hoursSaved || !tokensSaved) return;
+
+    function calculateROI() {
+      const tasks = parseInt(range.value, 10) || 25;
+      tasksCount.textContent = `${tasks} tarefas`;
+
+      // Cada tarefa autônoma economiza ~3.5 horas de debug e triagem por mês
+      const hours = (tasks * 3.5).toFixed(1);
+      hoursSaved.textContent = `${hours}h`;
+
+      // Economia de tokens: ~0.5M tokens poupados em loops prevenidos
+      const tokens = (tasks * 0.5).toFixed(1);
+      tokensSaved.textContent = `${tokens}M`;
+
+      if (successRate) {
+        successRate.textContent = '100%';
+      }
+    }
+
+    range.addEventListener('input', () => {
+      calculateROI();
+      playCyberSound('click');
+    });
+
+    calculateROI();
+  }
+
+  // ==========================================
+  // Interactive CLI Terminal Playground
+  // ==========================================
+  function initCliPlayground() {
+    const terminalBody = document.getElementById('terminalBody');
+    const terminalInput = document.getElementById('terminalInput');
+    const terminalSendBtn = document.getElementById('terminalSendBtn');
+    const terminalClearBtn = document.getElementById('terminalClearBtn');
+    const cliChips = document.querySelectorAll('.cli-chip');
+
+    if (!terminalBody || !terminalInput) return;
+
+    function appendLine(type, content) {
+      const line = document.createElement('div');
+      if (type === 'prompt') {
+        line.className = 'terminal-line prompt-line';
+        line.innerHTML = `<span class="t-prompt">gau&gt;</span> <span class="t-text">${escapeHtml(content)}</span>`;
+      } else if (type === 'output') {
+        line.className = 'terminal-output';
+        line.innerHTML = content;
+      } else if (type === 'system') {
+        line.className = 'terminal-line system-msg';
+        line.textContent = content;
+      }
+      terminalBody.appendChild(line);
+      terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+
+    function runCommand(rawCmd) {
+      const cmd = (rawCmd || '').trim();
+      if (!cmd) return;
+
+      appendLine('prompt', cmd);
+      playCyberSound('terminal');
+
+      const lower = cmd.toLowerCase();
+
+      if (lower === 'clear' || lower === 'cls') {
+        terminalBody.innerHTML = '';
+        appendLine('system', 'Console limpo. Digite um comando ou use os botões rápidos.');
+        return;
+      }
+
+      if (lower === 'help') {
+        appendLine('output', `
+          <span class="t-cyan">Comandos disponíveis no simulador:</span><br>
+          &bull; <span class="t-green">gau doctor</span> &mdash; Validação de integridade e ambiente do runtime<br>
+          &bull; <span class="t-green">gau match &lt;termo&gt;</span> &mdash; Busca semântica de ideias e subagentes<br>
+          &bull; <span class="t-green">/goal</span> &mdash; Disparo de engenharia autônoma sob evidências físicas<br>
+          &bull; <span class="t-green">gau leaderboard</span> &mdash; Consulta do ranking Elo atualizado<br>
+          &bull; <span class="t-green">clear</span> &mdash; Limpar histórico do console
+        `);
+        return;
+      }
+
+      if (lower === 'gau doctor') {
+        appendLine('output', `
+          <span class="t-green">✔ Python 3.13.2 detected (64-bit Windows)</span><br>
+          <span class="t-green">✔ SQLite WAL journal mode verified (.gau/events.sqlite3)</span><br>
+          <span class="t-green">✔ Git Worktree Swarm isolated and healthy</span><br>
+          <span class="t-green">✔ JEV Decision Fabric: Loop Sentinel & Verifier online</span><br>
+          <span class="t-cyan">🛡️ 69 Ideias, 16 Subagentes e Provas E0-E5 ativas. Runtime operacional!</span>
+        `);
+        return;
+      }
+
+      if (lower.startsWith('gau match')) {
+        const query = cmd.replace(/^gau\s+match\s*/i, '').replace(/["']/g, '').trim() || 'auth';
+        appendLine('output', `
+          <span class="t-cyan">Buscando mecanismos para: "${escapeHtml(query)}"</span><br>
+          &bull; <strong>Idea #25: Security Council</strong> (Pontuação: 98.4%) &mdash; Sanitização e OWASP<br>
+          &bull; <strong>Subagente gau-security</strong> &mdash; Auditoria de permissões e vazamentos<br>
+          &bull; <strong>Idea #05: Adversarial Council</strong> &mdash; Testes de quebra de autenticação
+        `);
+        return;
+      }
+
+      if (lower === '/goal' || lower.startsWith('/goal')) {
+        appendLine('output', `
+          <span class="t-cyan">Orquestrando missão autônoma via /goal...</span><br>
+          1. Decomposição de requisitos pelo <em>gau-requirements</em><br>
+          2. Congelamento de interfaces pelo <em>gau-architect</em><br>
+          3. Coding Swarm paralelo em worktrees isoladas<br>
+          4. Verificação independente cega pelo <em>gau-verifier</em> (Exit Code 0)<br>
+          <span class="t-green">✔ Missão concluída com 100% de evidências comprovadas!</span>
+        `);
+        return;
+      }
+
+      if (lower === 'gau leaderboard') {
+        appendLine('output', `
+          <span class="t-cyan">🏆 Leaderboard Elo Atualizado:</span><br>
+          1. 🥇 Claude 3.7 Sonnet &mdash; <strong>1850 Elo</strong> (94% win rate)<br>
+          2. 🥈 GPT-4o &mdash; <strong>1780 Elo</strong> (88% win rate)<br>
+          3. 🥉 Gemini 2.0 Flash &mdash; <strong>1710 Elo</strong> (85% win rate)<br>
+          4. 🏅 DeepSeek-V3 &mdash; <strong>1690 Elo</strong> (82% win rate)
+        `);
+        return;
+      }
+
+      appendLine('output', `
+        <span class="t-yellow">Comando "${escapeHtml(cmd)}" não reconhecido.</span><br>
+        Digite <span class="t-cyan">help</span> para visualizar os comandos suportados no simulador.
+      `);
+    }
+
+    if (terminalSendBtn) {
+      terminalSendBtn.addEventListener('click', () => {
+        const val = terminalInput.value;
+        terminalInput.value = '';
+        runCommand(val);
+      });
+    }
+
+    terminalInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const val = terminalInput.value;
+        terminalInput.value = '';
+        runCommand(val);
+      }
+    });
+
+    if (terminalClearBtn) {
+      terminalClearBtn.addEventListener('click', () => {
+        terminalBody.innerHTML = '';
+        appendLine('system', 'Console limpo.');
+        playCyberSound('click');
+      });
+    }
+
+    cliChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        const cmd = chip.dataset.cmd;
+        if (cmd) {
+          runCommand(cmd);
+        }
+      });
+    });
+  }
+
+  // ==========================================
+  // Dedicated Mobile Quick Action Bar (<= 768px)
+  // ==========================================
+  function initMobileQuickBar() {
+    const quickBar = document.getElementById('mobileQuickBar');
+    if (!quickBar) return;
+
+    const chips = quickBar.querySelectorAll('.mobile-quick-chip');
+    if (!chips.length) return;
+
+    const sectionIds = ['top', 'architecture', 'lab', 'comercial', 'roi', 'leaderboard', 'ideas', 'goal', 'deploy'];
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const targetId = `#${entry.target.id}`;
+          chips.forEach(chip => {
+            if (chip.getAttribute('href') === targetId) {
+              chip.classList.add('active');
+              chip.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else {
+              chip.classList.remove('active');
+            }
+          });
+        }
+      });
+    }, { threshold: 0.25 });
+
+    sections.forEach(sec => observer.observe(sec));
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        playCyberSound('click');
+      });
+    });
+  }
+
+  // Inicializar novos módulos
+  initAudioFeedback();
+  initQuantumCanvas();
+  init3DTilt();
+  initRoiCalculator();
+  initCliPlayground();
+  initMobileQuickBar();
 
   // ==========================================
   // UX 1: Spotlight Command Palette (Ctrl+K)
@@ -1196,6 +1651,9 @@ ${stepsTable}
 
   function openSpotlight() {
     if (!spotlightModal || !spotlightBackdrop) return;
+    if (typeof playCyberSound === 'function') {
+      playCyberSound('whoosh');
+    }
     spotlightBackdrop.style.display = 'block';
     spotlightModal.style.display = 'flex';
     requestAnimationFrame(() => {
@@ -1211,6 +1669,9 @@ ${stepsTable}
 
   function closeSpotlight() {
     if (!spotlightModal || !spotlightBackdrop) return;
+    if (typeof playCyberSound === 'function') {
+      playCyberSound('click');
+    }
     spotlightBackdrop.classList.remove('open');
     spotlightModal.classList.remove('open');
     setTimeout(() => {
