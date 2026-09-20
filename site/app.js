@@ -535,18 +535,22 @@ ${stepsTable}
   ];
 
   const MODEL_LEADERBOARD = [
-    { rank: 1, id: 'claude-3-7-sonnet', name: 'Claude 3.7 Sonnet', rating: 1865, wins: 48, losses: 7, draws: 3, duels: 58, winRate: 83, status: 'CALIBRATED', specialty: 'Raciocínio híbrido (Extended Thinking), refatoração de alta precisão e síntese arquitetural', category: 'Anthropic' },
-    { rank: 2, id: 'grok-3', name: 'Grok 3 (Reasoning)', rating: 1860, wins: 45, losses: 8, draws: 4, duels: 57, winRate: 79, status: 'CALIBRATED', specialty: 'Raciocínio matemático e científico profundo com fronteira de STEM e coding', category: 'xAI' },
-    { rank: 3, id: 'gemini-2-pro', name: 'Gemini 2.0 Pro Exp', rating: 1855, wins: 43, losses: 9, draws: 5, duels: 57, winRate: 75, status: 'CALIBRATED', specialty: 'Janela de contexto ultra-longa, análise multimodal e síntese de código complexo', category: 'Google DeepMind' },
-    { rank: 4, id: 'deepseek-r1', name: 'DeepSeek-R1', rating: 1850, wins: 42, losses: 10, draws: 4, duels: 56, winRate: 75, status: 'CALIBRATED', specialty: 'Cadeia de pensamento aberta (<think>), provas formais e quebra de contraexemplos', category: 'DeepSeek' },
-    { rank: 5, id: 'o3-mini', name: 'o3-mini (High)', rating: 1845, wins: 39, losses: 9, draws: 6, duels: 54, winRate: 72, status: 'CALIBRATED', specialty: 'Raciocínio lógico compacto de alta densidade e geração ultra veloz de algoritmos', category: 'OpenAI' },
-    { rank: 6, id: 'o1', name: 'o1 (Deep Reasoning)', rating: 1840, wins: 38, losses: 11, draws: 5, duels: 54, winRate: 70, status: 'CALIBRATED', specialty: 'Resolução profunda de problemas de ponta a ponta sem alucinação de APIs', category: 'OpenAI' },
-    { rank: 7, id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet v2', rating: 1820, wins: 44, losses: 16, draws: 6, duels: 66, winRate: 67, status: 'CALIBRATED', specialty: 'Benchmark histórico clássico em engenharia autônoma e ferramentas no Antigravity', category: 'Anthropic' },
-    { rank: 8, id: 'gpt-4o', name: 'GPT-4o (Omni)', rating: 1790, wins: 36, losses: 18, draws: 6, duels: 60, winRate: 60, status: 'CALIBRATED', specialty: 'Execução rápida de pipelines, integração de tooling e geração robusta de APIs', category: 'OpenAI' },
-    { rank: 9, id: 'deepseek-v3', name: 'DeepSeek-V3 (671B)', rating: 1785, wins: 35, losses: 17, draws: 6, duels: 58, winRate: 60, status: 'CALIBRATED', specialty: 'Arquitetura MoE de altíssima eficiência e densidade semântica de ponta', category: 'DeepSeek' },
-    { rank: 10, id: 'gemini-2-flash', name: 'Gemini 2.0 Flash', rating: 1775, wins: 33, losses: 19, draws: 6, duels: 58, winRate: 57, status: 'CALIBRATED', specialty: 'Ultra-baixa latência e taxa de geração de 220 tok/s para loops agênticos rápidos', category: 'Google DeepMind' },
-    { rank: 11, id: 'qwen-2-5-coder', name: 'Qwen 2.5 Coder 32B', rating: 1750, wins: 28, losses: 20, draws: 4, duels: 52, winRate: 54, status: 'CALIBRATED', specialty: 'Melhor modelo open-weights para codificação pura e parsing sintático', category: 'Alibaba' },
-    { rank: 12, id: 'llama-3-3-70b', name: 'Llama 3.3 70B', rating: 1740, wins: 26, losses: 21, draws: 5, duels: 52, winRate: 50, status: 'CALIBRATED', specialty: 'Soberania local, execução privada e alinhamento de instruções em código aberto', category: 'Meta' }
+    { rank: 1, id: 'claude-fable-5-1', name: 'Claude Fable 5.1', rating: 1925, wins: 52, losses: 5, draws: 3, duels: 60, winRate: 87, status: 'CALIBRATED', specialty: 'Agência contínua, zero atalhos e refatoração cirúrgica com cache read -75%', category: 'Anthropic' },
+    { rank: 2, id: 'gpt-6-astra', name: 'GPT-6 Astra', rating: 1920, wins: 50, losses: 6, draws: 4, duels: 60, winRate: 83, status: 'CALIBRATED', specialty: 'Flagship multi-agente, navegação web e controle nativo de SO (Computer Use)', category: 'OpenAI' },
+    { rank: 3, id: 'claude-mythos-5-1', name: 'Claude Mythos 5.1', rating: 1915, wins: 49, losses: 7, draws: 4, duels: 60, winRate: 82, status: 'CALIBRATED', specialty: 'Engenharia de alta densidade sem filtros restritivos para pesquisa e red-teaming', category: 'Anthropic' },
+    { rank: 4, id: 'gemini-3-8-flash', name: 'Gemini 3.8 Flash', rating: 1910, wins: 48, losses: 8, draws: 4, duels: 60, winRate: 80, status: 'CALIBRATED', specialty: 'Cavalo de batalha inteligente, streaming a 240 tok/s e Agentic Video nativo', category: 'Google DeepMind' },
+    { rank: 5, id: 'gemini-3-8-flash-cyber', name: 'Gemini 3.8 Cyber', rating: 1905, wins: 47, losses: 9, draws: 4, duels: 60, winRate: 78, status: 'CALIBRATED', specialty: 'Detecção autônoma de vulnerabilidades 0-day, sandbox estrita e auto-patching', category: 'Google DeepMind' },
+    { rank: 6, id: 'deepseek-v4-flash', name: 'DeepSeek V4.1-Flash', rating: 1895, wins: 46, losses: 9, draws: 5, duels: 60, winRate: 77, status: 'CALIBRATED', specialty: 'MoE Manifold Hyper-Connections, 1M context e custo de inferência hiper-reduzido', category: 'DeepSeek' },
+    { rank: 7, id: 'qwen-3-8-max', name: 'Qwen 3.8-Max (2.4T)', rating: 1890, wins: 45, losses: 10, draws: 5, duels: 60, winRate: 75, status: 'CALIBRATED', specialty: '2.4 Trilhões de parâmetros Sparse MoE, multimodalidade e raciocínio de código', category: 'Alibaba' },
+    { rank: 8, id: 'grok-4-6', name: 'Grok 4.6 (Colleague)', rating: 1885, wins: 44, losses: 11, draws: 5, duels: 60, winRate: 73, status: 'CALIBRATED', specialty: 'Digital Colleague, reflexão científica em cadeia e resolução formal STEM', category: 'xAI' },
+    { rank: 9, id: 'claude-3-7-sonnet', name: 'Claude 3.7 Sonnet', rating: 1865, wins: 48, losses: 15, draws: 5, duels: 68, winRate: 71, status: 'CALIBRATED', specialty: 'Raciocínio híbrido (Extended Thinking), refatoração e síntese de código', category: 'Anthropic' },
+    { rank: 10, id: 'grok-3', name: 'Grok 3 (Reasoning)', rating: 1860, wins: 45, losses: 16, draws: 5, duels: 66, winRate: 68, status: 'CALIBRATED', specialty: 'Raciocínio matemático e científico profundo com fronteira de STEM e coding', category: 'xAI' },
+    { rank: 11, id: 'gemini-2-pro', name: 'Gemini 2.0 Pro Exp', rating: 1855, wins: 43, losses: 17, draws: 5, duels: 65, winRate: 66, status: 'CALIBRATED', specialty: 'Janela de contexto ultra-longa, análise multimodal e síntese de código complexo', category: 'Google DeepMind' },
+    { rank: 12, id: 'deepseek-r1', name: 'DeepSeek-R1', rating: 1850, wins: 42, losses: 18, draws: 5, duels: 65, winRate: 65, status: 'CALIBRATED', specialty: 'Cadeia de pensamento aberta (<think>), provas formais e quebra de contraexemplos', category: 'DeepSeek' },
+    { rank: 13, id: 'o3-mini', name: 'o3-mini (High)', rating: 1845, wins: 40, losses: 18, draws: 6, duels: 64, winRate: 63, status: 'CALIBRATED', specialty: 'Raciocínio lógico compacto de alta densidade e geração veloz de algoritmos', category: 'OpenAI' },
+    { rank: 14, id: 'qwen-3-8-omni-flash', name: 'Qwen 3.8-Omni', rating: 1840, wins: 38, losses: 19, draws: 5, duels: 62, winRate: 61, status: 'CALIBRATED', specialty: 'Interações omni-modais em tempo real (áudio/vídeo) com baixa latência', category: 'Alibaba' },
+    { rank: 15, id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet v2', rating: 1820, wins: 44, losses: 26, draws: 6, duels: 76, winRate: 58, status: 'CALIBRATED', specialty: 'Benchmark clássico em engenharia autônoma e ferramentas no Antigravity', category: 'Anthropic' },
+    { rank: 16, id: 'gpt-4o', name: 'GPT-4o (Omni)', rating: 1790, wins: 36, losses: 28, draws: 6, duels: 70, winRate: 51, status: 'CALIBRATED', specialty: 'Execução rápida de pipelines, integração de tooling e geração robusta de APIs', category: 'OpenAI' }
   ];
 
   let currentLbDimension = 'agents';
@@ -2359,6 +2363,118 @@ ${stepsTable}
 
     // Comprehensive Registry of Current AI Models by Platform
     const MODELS_REGISTRY = {
+      'claude-fable-5-1': {
+        name: 'Claude Fable 5.1',
+        platform: 'Anthropic',
+        platClass: 'plat-anthropic',
+        elo: 1925,
+        speed: '140 tok/s',
+        stepSize: 9,
+        comp: 'O(V+E) Surgical',
+        thinking: `/* [Claude Fable 5.1 • Agentic Knowledge Architecture]
+ * • Zero-shortcut root-cause invariant analysis.
+ * • Cache read efficiency optimized (-75% cost).
+ * • Proving acyclic Kahn ordering with isolated memory state.
+ */\n\n`
+      },
+      'claude-mythos-5-1': {
+        name: 'Claude Mythos 5.1',
+        platform: 'Anthropic',
+        platClass: 'plat-anthropic',
+        elo: 1915,
+        speed: '135 tok/s',
+        stepSize: 9,
+        comp: 'O(V+E) Unrestricted',
+        thinking: `/* [Claude Mythos 5.1 • Unrestricted Research & RedTeam]
+ * • Deep AST inspection without guardrail latency.
+ */\n\n`
+      },
+      'gpt-6-astra': {
+        name: 'GPT-6 Astra',
+        platform: 'OpenAI',
+        platClass: 'plat-openai',
+        elo: 1920,
+        speed: '150 tok/s',
+        stepSize: 10,
+        comp: 'O(V+E) Autonomous',
+        thinking: `# [OpenAI GPT-6 Astra • Autonomous OS & Agentic Runtime]
+# 1. Native software control & environment DAG verification
+# 2. Mathematical invariant: Kahn queue BFS visits exactly N nodes
+# 3. Stack-safe zero-overhead execution confirmed\n\n`
+      },
+      'gemini-3-8-flash': {
+        name: 'Gemini 3.8 Flash',
+        platform: 'Google DeepMind',
+        platClass: 'plat-google',
+        elo: 1910,
+        speed: '240 tok/s',
+        stepSize: 16,
+        comp: 'O(V+E) UltraStream',
+        thinking: `# [Gemini 3.8 Flash • Agentic Workhorse 240 tok/s]
+# Context compiled in 14ms with Agentic Video & Code understanding.
+# In-degree queue initialization completed O(V).\n\n`
+      },
+      'gemini-3-8-flash-cyber': {
+        name: 'Gemini 3.8 Cyber',
+        platform: 'Google DeepMind',
+        platClass: 'plat-google',
+        elo: 1905,
+        speed: '210 tok/s',
+        stepSize: 14,
+        comp: 'O(V+E) Hardened',
+        thinking: `# [Gemini 3.8 Flash Cyber • Zero-Day Hardened Sandbox]
+# AST vulnerability check: zero tainted input patterns detected.\n\n`
+      },
+      'deepseek-v4-flash': {
+        name: 'DeepSeek V4.1-Flash',
+        platform: 'DeepSeek',
+        platClass: 'plat-deepseek',
+        elo: 1895,
+        speed: '190 tok/s',
+        stepSize: 12,
+        comp: 'O(V+E) Manifold MoE',
+        thinking: `<think>
+1. Architecture: Manifold-Constrained Hyper-Connections (MCHC).
+2. Optimization: KV Cache footprint minimized for 1M context.
+3. Kahn algorithm logic: in_degree map + deque BFS popleft.
+4. Correctness: returns visited_count != num_nodes.
+</think>\n\n`
+      },
+      'qwen-3-8-max': {
+        name: 'Qwen 3.8-Max (2.4T)',
+        platform: 'Alibaba',
+        platClass: 'plat-alibaba',
+        elo: 1890,
+        speed: '130 tok/s',
+        stepSize: 9,
+        comp: 'O(V+E) 2.4T MoE',
+        thinking: `# [Alibaba Qwen 3.8-Max 0902 • 2.4T Sparse MoE Architecture]
+# Global topological traversal verified across full AST graph.
+# Linear O(V+E) bounds enforced.\n\n`
+      },
+      'qwen-3-8-omni-flash': {
+        name: 'Qwen 3.8-Omni',
+        platform: 'Alibaba',
+        platClass: 'plat-alibaba',
+        elo: 1840,
+        speed: '200 tok/s',
+        stepSize: 13,
+        comp: 'O(V+E) Realtime',
+        thinking: `# [Qwen 3.8-Omni-Flash • Realtime Multimodal Stream]\n\n`
+      },
+      'grok-4-6': {
+        name: 'Grok 4.6 (Colleague)',
+        platform: 'xAI',
+        platClass: 'plat-xai',
+        elo: 1885,
+        speed: '135 tok/s',
+        stepSize: 9,
+        comp: 'O(V+E) Colossus CoT',
+        thinking: `// [xAI Grok 4.6 • Digital Colleague Reflection]
+// Invariant Proof: DAG exists <=> topological ordering covers all V vertices.
+// Using double-ended queue for optimal O(1) removals.
+// Verified against cycloid edge cases.\n\n`
+      },
       'claude-3-7-sonnet': {
         name: 'Claude 3.7 Sonnet',
         platform: 'Anthropic',
@@ -2667,8 +2783,8 @@ ${stepsTable}
       const keyA = fighterASelect.value;
       const keyB = fighterBSelect.value;
 
-      const metaA = MODELS_REGISTRY[keyA] || MODELS_REGISTRY['claude-3-7-sonnet'];
-      const metaB = MODELS_REGISTRY[keyB] || MODELS_REGISTRY['deepseek-r1'];
+      const metaA = MODELS_REGISTRY[keyA] || MODELS_REGISTRY['claude-fable-5-1'];
+      const metaB = MODELS_REGISTRY[keyB] || MODELS_REGISTRY['gpt-6-astra'];
 
       if (duelTimer) clearInterval(duelTimer);
       verdictBox.style.display = 'none';
