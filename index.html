@@ -35,7 +35,7 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.5.0" />
+  <link rel="stylesheet" href="styles.css?v=5.5.1" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -86,19 +86,19 @@
 
   <header class="topbar" id="top">
     <a class="brand" href="#top" aria-label="GAU v5 - início" id="gauBrandLogo">
-      <img src="assets/gau-icon.png" alt="GAU" width="34" height="34" />
+      <img src="assets/gau-icon.png" alt="GAU" width="36" height="36" />
       <span>GAU <b>v5</b></span>
     </a>
     <nav class="nav" aria-label="Navegação principal">
       <a href="#architecture">Arquitetura</a>
       <a href="#lab">Laboratório</a>
-      <a href="#dagSimulatorSection" style="color: #a78bfa; font-weight: 700;">Grafo DAG</a>
-      <a href="#comercial" style="color: #62e6ff; font-weight: 700;">Vídeo Comercial</a>
+      <a href="#dagSimulatorSection" class="nav-accent-purple"><span class="nav-dot purple"></span> Grafo DAG</a>
+      <a href="#comercial" class="nav-accent-cyan"><span class="nav-dot cyan"></span> Vídeo</a>
       <a href="#roi">Eficiência</a>
       <a href="#leaderboard">Leaderboard</a>
-      <a href="#modelArenaSection" style="color: #ff9800; font-weight: 700;">Arena IA</a>
+      <a href="#modelArenaSection" class="nav-accent-amber"><span class="nav-dot amber"></span> Arena IA</a>
       <a href="#ideas">69 ideias</a>
-      <a href="#squadBuilderSection" style="color: #80ffd4; font-weight: 700;">Esquadrão</a>
+      <a href="#squadBuilderSection" class="nav-accent-mint"><span class="nav-dot mint"></span> Esquadrão</a>
       <a href="#goal">/goal</a>
       <a href="#deploy">Instalação</a>
     </nav>
@@ -699,18 +699,68 @@
             <div class="fighter-select-box">
               <label for="fighterASelect">MODELO 1:</label>
               <select id="fighterASelect" class="arena-select">
-                <option value="claude">Claude 3.7 Sonnet (1850 Elo)</option>
-                <option value="gpt4o">GPT-4o (1780 Elo)</option>
-                <option value="gemini">Gemini 2.0 Flash (1710 Elo)</option>
+                <optgroup label="Anthropic">
+                  <option value="claude-3-7-sonnet" selected>Claude 3.7 Sonnet (Hybrid Thinking) — 1865 Elo</option>
+                  <option value="claude-3-5-sonnet">Claude 3.5 Sonnet v2 — 1820 Elo</option>
+                  <option value="claude-3-5-haiku">Claude 3.5 Haiku — 1730 Elo</option>
+                </optgroup>
+                <optgroup label="OpenAI">
+                  <option value="o3-mini">o3-mini (High Reasoning) — 1845 Elo</option>
+                  <option value="o1">o1 (Deep Reasoning) — 1840 Elo</option>
+                  <option value="gpt-4o">GPT-4o (Omni Frontier) — 1790 Elo</option>
+                </optgroup>
+                <optgroup label="Google DeepMind">
+                  <option value="gemini-2-pro">Gemini 2.0 Pro Experimental — 1855 Elo</option>
+                  <option value="gemini-2-flash">Gemini 2.0 Flash (220 tok/s) — 1775 Elo</option>
+                  <option value="gemini-1-5-pro">Gemini 1.5 Pro (2M Context) — 1760 Elo</option>
+                </optgroup>
+                <optgroup label="DeepSeek">
+                  <option value="deepseek-r1">DeepSeek-R1 (Open Reasoning &lt;think&gt;) — 1850 Elo</option>
+                  <option value="deepseek-v3">DeepSeek-V3 (671B MoE) — 1785 Elo</option>
+                </optgroup>
+                <optgroup label="xAI">
+                  <option value="grok-3">Grok 3 (Frontier Reasoning) — 1860 Elo</option>
+                  <option value="grok-2">Grok 2 — 1745 Elo</option>
+                </optgroup>
+                <optgroup label="Meta &amp; Open Weights">
+                  <option value="qwen-2-5-coder">Qwen 2.5 Coder 32B (Alibaba) — 1750 Elo</option>
+                  <option value="llama-3-3-70b">Llama 3.3 70B Instruct (Meta) — 1740 Elo</option>
+                  <option value="mistral-large-2">Mistral Large 2 (Mistral AI) — 1735 Elo</option>
+                </optgroup>
               </select>
             </div>
             <div class="arena-vs-badge">VS</div>
             <div class="fighter-select-box">
               <label for="fighterBSelect">MODELO 2:</label>
               <select id="fighterBSelect" class="arena-select">
-                <option value="gpt4o">GPT-4o (1780 Elo)</option>
-                <option value="claude">Claude 3.7 Sonnet (1850 Elo)</option>
-                <option value="gemini">Gemini 2.0 Flash (1710 Elo)</option>
+                <optgroup label="DeepSeek">
+                  <option value="deepseek-r1" selected>DeepSeek-R1 (Open Reasoning &lt;think&gt;) — 1850 Elo</option>
+                  <option value="deepseek-v3">DeepSeek-V3 (671B MoE) — 1785 Elo</option>
+                </optgroup>
+                <optgroup label="Anthropic">
+                  <option value="claude-3-7-sonnet">Claude 3.7 Sonnet (Hybrid Thinking) — 1865 Elo</option>
+                  <option value="claude-3-5-sonnet">Claude 3.5 Sonnet v2 — 1820 Elo</option>
+                  <option value="claude-3-5-haiku">Claude 3.5 Haiku — 1730 Elo</option>
+                </optgroup>
+                <optgroup label="OpenAI">
+                  <option value="o3-mini">o3-mini (High Reasoning) — 1845 Elo</option>
+                  <option value="o1">o1 (Deep Reasoning) — 1840 Elo</option>
+                  <option value="gpt-4o">GPT-4o (Omni Frontier) — 1790 Elo</option>
+                </optgroup>
+                <optgroup label="Google DeepMind">
+                  <option value="gemini-2-pro">Gemini 2.0 Pro Experimental — 1855 Elo</option>
+                  <option value="gemini-2-flash">Gemini 2.0 Flash (220 tok/s) — 1775 Elo</option>
+                  <option value="gemini-1-5-pro">Gemini 1.5 Pro (2M Context) — 1760 Elo</option>
+                </optgroup>
+                <optgroup label="xAI">
+                  <option value="grok-3">Grok 3 (Frontier Reasoning) — 1860 Elo</option>
+                  <option value="grok-2">Grok 2 — 1745 Elo</option>
+                </optgroup>
+                <optgroup label="Meta &amp; Open Weights">
+                  <option value="qwen-2-5-coder">Qwen 2.5 Coder 32B (Alibaba) — 1750 Elo</option>
+                  <option value="llama-3-3-70b">Llama 3.3 70B Instruct (Meta) — 1740 Elo</option>
+                  <option value="mistral-large-2">Mistral Large 2 (Mistral AI) — 1735 Elo</option>
+                </optgroup>
               </select>
             </div>
             <button type="button" class="button primary arena-fight-btn" id="startDuelBtn">
@@ -723,7 +773,11 @@
           <!-- Fighter A Panel -->
           <div class="fighter-panel" id="fighterPanelA">
             <div class="fighter-panel-head">
-              <span class="fighter-name" id="fighterNameA">Claude 3.7 Sonnet</span>
+              <div class="fighter-info-head">
+                <span class="fighter-platform-badge plat-anthropic" id="fighterPlatformA">Anthropic</span>
+                <span class="fighter-name" id="fighterNameA">Claude 3.7 Sonnet</span>
+                <span class="fighter-elo-badge" id="fighterEloA">1865 Elo</span>
+              </div>
               <span class="fighter-status-badge idle" id="fighterStatusA">Aguardando Duelo</span>
             </div>
             <div class="fighter-code-wrap">
@@ -739,7 +793,11 @@
           <!-- Fighter B Panel -->
           <div class="fighter-panel" id="fighterPanelB">
             <div class="fighter-panel-head">
-              <span class="fighter-name" id="fighterNameB">GPT-4o</span>
+              <div class="fighter-info-head">
+                <span class="fighter-platform-badge plat-deepseek" id="fighterPlatformB">DeepSeek</span>
+                <span class="fighter-name" id="fighterNameB">DeepSeek-R1</span>
+                <span class="fighter-elo-badge" id="fighterEloB">1850 Elo</span>
+              </div>
               <span class="fighter-status-badge idle" id="fighterStatusB">Aguardando Duelo</span>
             </div>
             <div class="fighter-code-wrap">
@@ -1377,7 +1435,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.5.0"></script>
-  <script src="app.js?v=5.5.0"></script>
+  <script src="ideas.js?v=5.5.1"></script>
+  <script src="app.js?v=5.5.1"></script>
 </body>
 </html>
