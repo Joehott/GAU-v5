@@ -35,7 +35,7 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.5.1" />
+  <link rel="stylesheet" href="styles.css?v=5.5.2" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -700,30 +700,39 @@
               <label for="fighterASelect">MODELO 1:</label>
               <select id="fighterASelect" class="arena-select">
                 <optgroup label="Anthropic">
-                  <option value="claude-3-7-sonnet" selected>Claude 3.7 Sonnet (Hybrid Thinking) — 1865 Elo</option>
+                  <option value="claude-fable-5-1" selected>Claude Fable 5.1 (Agentic Frontier) — 1925 Elo</option>
+                  <option value="claude-mythos-5-1">Claude Mythos 5.1 (Restricted Research) — 1915 Elo</option>
+                  <option value="claude-3-7-sonnet">Claude 3.7 Sonnet (Hybrid Thinking) — 1865 Elo</option>
                   <option value="claude-3-5-sonnet">Claude 3.5 Sonnet v2 — 1820 Elo</option>
-                  <option value="claude-3-5-haiku">Claude 3.5 Haiku — 1730 Elo</option>
                 </optgroup>
                 <optgroup label="OpenAI">
+                  <option value="gpt-6-astra">GPT-6 Astra (Autonomous OS &amp; Agentic) — 1920 Elo</option>
                   <option value="o3-mini">o3-mini (High Reasoning) — 1845 Elo</option>
                   <option value="o1">o1 (Deep Reasoning) — 1840 Elo</option>
                   <option value="gpt-4o">GPT-4o (Omni Frontier) — 1790 Elo</option>
                 </optgroup>
                 <optgroup label="Google DeepMind">
+                  <option value="gemini-3-8-flash">Gemini 3.8 Flash (Agentic Video &amp; 240 tok/s) — 1910 Elo</option>
+                  <option value="gemini-3-8-flash-cyber">Gemini 3.8 Flash Cyber (Sec &amp; 0-Day) — 1905 Elo</option>
                   <option value="gemini-2-pro">Gemini 2.0 Pro Experimental — 1855 Elo</option>
                   <option value="gemini-2-flash">Gemini 2.0 Flash (220 tok/s) — 1775 Elo</option>
-                  <option value="gemini-1-5-pro">Gemini 1.5 Pro (2M Context) — 1760 Elo</option>
                 </optgroup>
                 <optgroup label="DeepSeek">
+                  <option value="deepseek-v4-flash">DeepSeek V4.1-Flash (Manifold MoE) — 1895 Elo</option>
                   <option value="deepseek-r1">DeepSeek-R1 (Open Reasoning &lt;think&gt;) — 1850 Elo</option>
                   <option value="deepseek-v3">DeepSeek-V3 (671B MoE) — 1785 Elo</option>
                 </optgroup>
+                <optgroup label="Alibaba">
+                  <option value="qwen-3-8-max">Qwen 3.8-Max (2.4T Sparse MoE 0902) — 1890 Elo</option>
+                  <option value="qwen-3-8-omni-flash">Qwen 3.8-Omni-Flash (Realtime) — 1840 Elo</option>
+                  <option value="qwen-2-5-coder">Qwen 2.5 Coder 32B — 1750 Elo</option>
+                </optgroup>
                 <optgroup label="xAI">
+                  <option value="grok-4-6">Grok 4.6 (Digital Colleague CoT) — 1885 Elo</option>
                   <option value="grok-3">Grok 3 (Frontier Reasoning) — 1860 Elo</option>
                   <option value="grok-2">Grok 2 — 1745 Elo</option>
                 </optgroup>
                 <optgroup label="Meta &amp; Open Weights">
-                  <option value="qwen-2-5-coder">Qwen 2.5 Coder 32B (Alibaba) — 1750 Elo</option>
                   <option value="llama-3-3-70b">Llama 3.3 70B Instruct (Meta) — 1740 Elo</option>
                   <option value="mistral-large-2">Mistral Large 2 (Mistral AI) — 1735 Elo</option>
                 </optgroup>
@@ -733,31 +742,40 @@
             <div class="fighter-select-box">
               <label for="fighterBSelect">MODELO 2:</label>
               <select id="fighterBSelect" class="arena-select">
-                <optgroup label="DeepSeek">
-                  <option value="deepseek-r1" selected>DeepSeek-R1 (Open Reasoning &lt;think&gt;) — 1850 Elo</option>
-                  <option value="deepseek-v3">DeepSeek-V3 (671B MoE) — 1785 Elo</option>
-                </optgroup>
-                <optgroup label="Anthropic">
-                  <option value="claude-3-7-sonnet">Claude 3.7 Sonnet (Hybrid Thinking) — 1865 Elo</option>
-                  <option value="claude-3-5-sonnet">Claude 3.5 Sonnet v2 — 1820 Elo</option>
-                  <option value="claude-3-5-haiku">Claude 3.5 Haiku — 1730 Elo</option>
-                </optgroup>
                 <optgroup label="OpenAI">
+                  <option value="gpt-6-astra" selected>GPT-6 Astra (Autonomous OS &amp; Agentic) — 1920 Elo</option>
                   <option value="o3-mini">o3-mini (High Reasoning) — 1845 Elo</option>
                   <option value="o1">o1 (Deep Reasoning) — 1840 Elo</option>
                   <option value="gpt-4o">GPT-4o (Omni Frontier) — 1790 Elo</option>
                 </optgroup>
+                <optgroup label="DeepSeek">
+                  <option value="deepseek-v4-flash">DeepSeek V4.1-Flash (Manifold MoE) — 1895 Elo</option>
+                  <option value="deepseek-r1">DeepSeek-R1 (Open Reasoning &lt;think&gt;) — 1850 Elo</option>
+                  <option value="deepseek-v3">DeepSeek-V3 (671B MoE) — 1785 Elo</option>
+                </optgroup>
                 <optgroup label="Google DeepMind">
+                  <option value="gemini-3-8-flash">Gemini 3.8 Flash (Agentic Video &amp; 240 tok/s) — 1910 Elo</option>
+                  <option value="gemini-3-8-flash-cyber">Gemini 3.8 Flash Cyber (Sec &amp; 0-Day) — 1905 Elo</option>
                   <option value="gemini-2-pro">Gemini 2.0 Pro Experimental — 1855 Elo</option>
                   <option value="gemini-2-flash">Gemini 2.0 Flash (220 tok/s) — 1775 Elo</option>
-                  <option value="gemini-1-5-pro">Gemini 1.5 Pro (2M Context) — 1760 Elo</option>
+                </optgroup>
+                <optgroup label="Anthropic">
+                  <option value="claude-fable-5-1">Claude Fable 5.1 (Agentic Frontier) — 1925 Elo</option>
+                  <option value="claude-mythos-5-1">Claude Mythos 5.1 (Restricted Research) — 1915 Elo</option>
+                  <option value="claude-3-7-sonnet">Claude 3.7 Sonnet (Hybrid Thinking) — 1865 Elo</option>
+                  <option value="claude-3-5-sonnet">Claude 3.5 Sonnet v2 — 1820 Elo</option>
+                </optgroup>
+                <optgroup label="Alibaba">
+                  <option value="qwen-3-8-max">Qwen 3.8-Max (2.4T Sparse MoE 0902) — 1890 Elo</option>
+                  <option value="qwen-3-8-omni-flash">Qwen 3.8-Omni-Flash (Realtime) — 1840 Elo</option>
+                  <option value="qwen-2-5-coder">Qwen 2.5 Coder 32B — 1750 Elo</option>
                 </optgroup>
                 <optgroup label="xAI">
+                  <option value="grok-4-6">Grok 4.6 (Digital Colleague CoT) — 1885 Elo</option>
                   <option value="grok-3">Grok 3 (Frontier Reasoning) — 1860 Elo</option>
                   <option value="grok-2">Grok 2 — 1745 Elo</option>
                 </optgroup>
                 <optgroup label="Meta &amp; Open Weights">
-                  <option value="qwen-2-5-coder">Qwen 2.5 Coder 32B (Alibaba) — 1750 Elo</option>
                   <option value="llama-3-3-70b">Llama 3.3 70B Instruct (Meta) — 1740 Elo</option>
                   <option value="mistral-large-2">Mistral Large 2 (Mistral AI) — 1735 Elo</option>
                 </optgroup>
@@ -775,8 +793,8 @@
             <div class="fighter-panel-head">
               <div class="fighter-info-head">
                 <span class="fighter-platform-badge plat-anthropic" id="fighterPlatformA">Anthropic</span>
-                <span class="fighter-name" id="fighterNameA">Claude 3.7 Sonnet</span>
-                <span class="fighter-elo-badge" id="fighterEloA">1865 Elo</span>
+                <span class="fighter-name" id="fighterNameA">Claude Fable 5.1</span>
+                <span class="fighter-elo-badge" id="fighterEloA">1925 Elo</span>
               </div>
               <span class="fighter-status-badge idle" id="fighterStatusA">Aguardando Duelo</span>
             </div>
@@ -794,9 +812,9 @@
           <div class="fighter-panel" id="fighterPanelB">
             <div class="fighter-panel-head">
               <div class="fighter-info-head">
-                <span class="fighter-platform-badge plat-deepseek" id="fighterPlatformB">DeepSeek</span>
-                <span class="fighter-name" id="fighterNameB">DeepSeek-R1</span>
-                <span class="fighter-elo-badge" id="fighterEloB">1850 Elo</span>
+                <span class="fighter-platform-badge plat-openai" id="fighterPlatformB">OpenAI</span>
+                <span class="fighter-name" id="fighterNameB">GPT-6 Astra</span>
+                <span class="fighter-elo-badge" id="fighterEloB">1920 Elo</span>
               </div>
               <span class="fighter-status-badge idle" id="fighterStatusB">Aguardando Duelo</span>
             </div>
@@ -1435,7 +1453,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.5.1"></script>
-  <script src="app.js?v=5.5.1"></script>
+  <script src="ideas.js?v=5.5.2"></script>
+  <script src="app.js?v=5.5.2"></script>
 </body>
 </html>
