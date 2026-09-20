@@ -35,7 +35,7 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.4.0" />
+  <link rel="stylesheet" href="styles.css?v=5.5.0" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -82,23 +82,35 @@
   <div class="aurora aurora-a" aria-hidden="true"></div>
   <div class="aurora aurora-b" aria-hidden="true"></div>
   <canvas id="quantumCanvas" class="quantum-canvas" aria-hidden="true"></canvas>
+  <canvas id="matrixCanvas" class="matrix-canvas" aria-hidden="true"></canvas>
 
   <header class="topbar" id="top">
-    <a class="brand" href="#top" aria-label="GAU v5 - início">
+    <a class="brand" href="#top" aria-label="GAU v5 - início" id="gauBrandLogo">
       <img src="assets/gau-icon.png" alt="GAU" width="34" height="34" />
       <span>GAU <b>v5</b></span>
     </a>
     <nav class="nav" aria-label="Navegação principal">
       <a href="#architecture">Arquitetura</a>
       <a href="#lab">Laboratório</a>
+      <a href="#dagSimulatorSection" style="color: #a78bfa; font-weight: 700;">Grafo DAG</a>
       <a href="#comercial" style="color: #62e6ff; font-weight: 700;">Vídeo Comercial</a>
       <a href="#roi">Eficiência</a>
       <a href="#leaderboard">Leaderboard</a>
+      <a href="#modelArenaSection" style="color: #ff9800; font-weight: 700;">Arena IA</a>
       <a href="#ideas">69 ideias</a>
+      <a href="#squadBuilderSection" style="color: #80ffd4; font-weight: 700;">Esquadrão</a>
       <a href="#goal">/goal</a>
       <a href="#deploy">Instalação</a>
     </nav>
     <div class="topbar-actions">
+      <button class="tour-top-btn" id="startTourBtn" title="Apresentação Guiada do GAU v5 em 60s">
+        <span class="tour-icon">▶️</span>
+        <span class="tour-txt">Apresentação 60s</span>
+      </button>
+      <button class="cockpit-toggle-btn" id="cockpitToggleBtn" title="Abrir Cockpit de Telemetria Sci-Fi HUD">
+        <span class="cockpit-icon">🛰️</span>
+        <span class="cockpit-txt">Cockpit HUD</span>
+      </button>
       <button class="search-k-btn" id="spotlightTriggerBtn" title="Busca Rápida de Ideias, Agentes e Comandos (Ctrl+K)">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <span class="search-k-txt">Buscar</span>
@@ -127,10 +139,13 @@
       <a href="#top" class="mobile-quick-chip active"><span class="chip-dot"></span> Início</a>
       <a href="#architecture" class="mobile-quick-chip">🏛️ Arquitetura</a>
       <a href="#lab" class="mobile-quick-chip">🧪 Lab Missões</a>
+      <a href="#dagSimulatorSection" class="mobile-quick-chip">🎮 Grafo DAG</a>
       <a href="#comercial" class="mobile-quick-chip">🎬 Vídeo 38s</a>
       <a href="#roi" class="mobile-quick-chip">🧮 Eficiência</a>
       <a href="#leaderboard" class="mobile-quick-chip">🏆 Leaderboard</a>
+      <a href="#modelArenaSection" class="mobile-quick-chip">⚔️ Duelo IA</a>
       <a href="#ideas" class="mobile-quick-chip">💡 69 Ideias</a>
+      <a href="#squadBuilderSection" class="mobile-quick-chip">🧩 Esquadrão</a>
       <a href="#goal" class="mobile-quick-chip">🎯 /goal</a>
       <a href="#deploy" class="mobile-quick-chip">⚡ Instalar</a>
     </div>
@@ -171,9 +186,10 @@
         <p class="hero-lead">O GAU v5 transforma o <code>/goal</code> em uma missão adaptativa: roteia modelos, convoca especialistas, preserva memória, testa hipóteses e exige evidência antes de declarar sucesso.</p>
         <div class="hero-actions">
           <a class="button primary" href="#deploy">Instalar no Antigravity <span>↓</span></a>
+          <button type="button" class="button tour-hero-btn" id="heroTourBtn" style="background: rgba(167, 139, 250, 0.16); border: 1px solid #a78bfa; color: #c4b5fd; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;"><span>🎬</span> Apresentação Guiada (60s)</button>
           <a class="button commercial-btn" href="#comercial" style="background: rgba(37, 211, 102, 0.15); border: 1px solid #25D366; color: #25D366; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;"><span>▶</span> Assistir Comercial (38s)</a>
-          <a class="button ghost" href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">Ver no GitHub ↗</a>
-          <a class="button ghost" href="#lab">Executar simulação <span>▶</span></a>
+          <a class="button ghost" href="#dagSimulatorSection" style="border-color: rgba(98, 230, 255, 0.35); color: #62e6ff;"><span>🎮</span> Grafo DAG ao Vivo</a>
+          <a class="button ghost" href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
         </div>
         <div class="hero-prompts" id="heroPrompts">
           <span class="hero-prompts-label">PROMPTS RÁPIDOS PARA TESTAR:</span>
@@ -458,6 +474,136 @@
             </div>
           </div>
         </div>
+
+        <!-- Interactive Visual DAG Workflow Simulator -->
+        <div class="dag-simulator-card reveal" id="dagSimulatorSection">
+          <div class="dag-sim-header">
+            <div class="eyebrow"><span class="pulse-dot"></span> SIMULADOR DE WORKFLOW DAG &amp; SWARM CONCORRENTE</div>
+            <h3>Grafo Cognitivo de Execução Autônoma</h3>
+            <p>Veja como o motor do GAU v5 compila o DAG Kahn, congela interfaces e orquestra coders e auditores em paralelo sem colisão de branches.</p>
+          </div>
+
+          <div class="dag-sim-controls">
+            <div class="dag-scenario-group">
+              <span class="dag-label">MISSÃO:</span>
+              <button type="button" class="dag-scen-btn active" data-scenario="auth">⚡ Auth OAuth2</button>
+              <button type="button" class="dag-scen-btn" data-scenario="sqlite">🗄️ SQLite WAL</button>
+              <button type="button" class="dag-scen-btn" data-scenario="security">🛡️ Auditoria OWASP</button>
+            </div>
+            <div class="dag-action-group">
+              <button type="button" class="button primary small" id="dagPlayBtn"><span>▶</span> Simular DAG</button>
+              <button type="button" class="button ghost small" id="dagPauseBtn" style="display:none;"><span>⏸</span> Pausar</button>
+              <button type="button" class="button ghost small" id="dagResetBtn"><span>↺</span> Resetar</button>
+              <span class="dag-status-badge" id="dagStateBadge">IDLE • Aguardando Início</span>
+            </div>
+          </div>
+
+          <div class="dag-workspace">
+            <div class="dag-graph-view" id="dagGraphView">
+              <!-- SVG Connector Lines -->
+              <svg class="dag-svg-lines" id="dagSvgLines" viewBox="0 0 860 340" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="laserGradCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#62e6ff" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#a78bfa" stop-opacity="0.8"/>
+                  </linearGradient>
+                  <linearGradient id="laserGradGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#25D366" stop-opacity="0.9"/>
+                    <stop offset="100%" stop-color="#80ffd4" stop-opacity="0.9"/>
+                  </linearGradient>
+                  <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+                <!-- Dynamic SVG connection paths drawn by JS -->
+                <path id="dagEdge1" class="dag-edge-line" d="M 120 170 L 260 170" />
+                <path id="dagEdge2a" class="dag-edge-line" d="M 260 170 C 330 170, 330 90, 410 90" />
+                <path id="dagEdge2b" class="dag-edge-line" d="M 260 170 C 330 170, 330 250, 410 250" />
+                <path id="dagEdge3a" class="dag-edge-line" d="M 530 90 C 600 90, 600 170, 660 170" />
+                <path id="dagEdge3b" class="dag-edge-line" d="M 530 250 C 600 250, 600 170, 660 170" />
+                <path id="dagEdge4" class="dag-edge-line" d="M 660 170 L 780 170" />
+              </svg>
+
+              <!-- Interactive Node 1: Requirements -->
+              <div class="dag-node node-req" id="dagNodeReq" data-node="req" style="left: 40px; top: 135px;">
+                <div class="node-glow"></div>
+                <div class="node-icon">📋</div>
+                <div class="node-info">
+                  <span class="node-title">gau-requirements</span>
+                  <small class="node-tag">E0 Baseline</small>
+                </div>
+                <span class="node-status-dot"></span>
+              </div>
+
+              <!-- Interactive Node 2: Architect -->
+              <div class="dag-node node-arch" id="dagNodeArch" data-node="arch" style="left: 200px; top: 135px;">
+                <div class="node-glow"></div>
+                <div class="node-icon">🏛️</div>
+                <div class="node-info">
+                  <span class="node-title">gau-architect</span>
+                  <small class="node-tag">Freeze Gate #107</small>
+                </div>
+                <span class="node-status-dot"></span>
+              </div>
+
+              <!-- Interactive Node 3: Implementer A -->
+              <div class="dag-node node-coder" id="dagNodeCoderA" data-node="coderA" style="left: 360px; top: 55px;">
+                <div class="node-glow"></div>
+                <div class="node-icon">⚡</div>
+                <div class="node-info">
+                  <span class="node-title">gau-implementer-a</span>
+                  <small class="node-tag">Worktree /core</small>
+                </div>
+                <span class="node-status-dot"></span>
+              </div>
+
+              <!-- Interactive Node 4: Implementer B -->
+              <div class="dag-node node-coder" id="dagNodeCoderB" data-node="coderB" style="left: 360px; top: 215px;">
+                <div class="node-glow"></div>
+                <div class="node-icon">🔌</div>
+                <div class="node-info">
+                  <span class="node-title">gau-implementer-b</span>
+                  <small class="node-tag">Worktree /adapter</small>
+                </div>
+                <span class="node-status-dot"></span>
+              </div>
+
+              <!-- Interactive Node 5: Adversarial -->
+              <div class="dag-node node-adv" id="dagNodeAdv" data-node="adv" style="left: 560px; top: 135px;">
+                <div class="node-glow"></div>
+                <div class="node-icon">🗡️</div>
+                <div class="node-info">
+                  <span class="node-title">gau-adversarial</span>
+                  <small class="node-tag">Stress Probe #103</small>
+                </div>
+                <span class="node-status-dot"></span>
+              </div>
+
+              <!-- Interactive Node 6: Verifier -->
+              <div class="dag-node node-verif" id="dagNodeVerif" data-node="verif" style="left: 720px; top: 135px;">
+                <div class="node-glow"></div>
+                <div class="node-icon">🛡️</div>
+                <div class="node-info">
+                  <span class="node-title">gau-verifier</span>
+                  <small class="node-tag">E5 PASS • Exit 0</small>
+                </div>
+                <span class="node-status-dot"></span>
+              </div>
+            </div>
+
+            <!-- Dynamic Node Inspector Panel -->
+            <div class="dag-inspector-panel" id="dagInspectorPanel">
+              <div class="inspector-head">
+                <span class="inspector-title" id="inspTitle">🔍 Inspecionar Nó do DAG</span>
+                <span class="inspector-badge" id="inspBadge">Clique em um agente</span>
+              </div>
+              <div class="inspector-body" id="inspBody">
+                <p class="insp-hint">Clique em qualquer um dos 6 nós no grafo acima para visualizar seu papel formal, hash SHA-256 e terminal de evidências físicas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -531,6 +677,92 @@
       <div class="filter-row" id="agentLeaderboardFilters" aria-label="Filtros de Agentes"></div>
 
       <div class="agents-grid" id="agentLeaderboardGrid"></div>
+
+      <!-- Interactive Model Tournament Arena (#03 & #45) -->
+      <div class="model-arena-card reveal" id="modelArenaSection">
+        <div class="arena-head-intro">
+          <div class="eyebrow"><span class="pulse-dot"></span> ARENA DE DUELO DE MODELOS &bull; IDEIAS #03 &amp; #45</div>
+          <h3>Torneio de Código ao Vivo: Quem Resolve com Mais Eficiência?</h3>
+          <p>Selecione um desafio de engenharia real e coloque os modelos frente a frente. O <code>gau-judge</code> submete ambas as implementações aos mesmos testes e atualiza o ranking Elo na hora.</p>
+        </div>
+
+        <div class="arena-setup-bar">
+          <div class="arena-select-col">
+            <label for="arenaChallengeSelect">DESAFIO DE CÓDIGO:</label>
+            <select id="arenaChallengeSelect" class="arena-select">
+              <option value="kahn">⚡ Detecção de Ciclos em Grafos Kahn O(V+E)</option>
+              <option value="tokenbucket">🪣 Token Bucket Rate Limiter Assíncrono</option>
+              <option value="owasp">🛡️ Sanitizador de Input OWASP contra XSS &amp; SQLi</option>
+            </select>
+          </div>
+          <div class="arena-fighters-row">
+            <div class="fighter-select-box">
+              <label for="fighterASelect">MODELO 1:</label>
+              <select id="fighterASelect" class="arena-select">
+                <option value="claude">Claude 3.7 Sonnet (1850 Elo)</option>
+                <option value="gpt4o">GPT-4o (1780 Elo)</option>
+                <option value="gemini">Gemini 2.0 Flash (1710 Elo)</option>
+              </select>
+            </div>
+            <div class="arena-vs-badge">VS</div>
+            <div class="fighter-select-box">
+              <label for="fighterBSelect">MODELO 2:</label>
+              <select id="fighterBSelect" class="arena-select">
+                <option value="gpt4o">GPT-4o (1780 Elo)</option>
+                <option value="claude">Claude 3.7 Sonnet (1850 Elo)</option>
+                <option value="gemini">Gemini 2.0 Flash (1710 Elo)</option>
+              </select>
+            </div>
+            <button type="button" class="button primary arena-fight-btn" id="startDuelBtn">
+              <span>⚔️</span> Iniciar Duelo
+            </button>
+          </div>
+        </div>
+
+        <div class="arena-battleground">
+          <!-- Fighter A Panel -->
+          <div class="fighter-panel" id="fighterPanelA">
+            <div class="fighter-panel-head">
+              <span class="fighter-name" id="fighterNameA">Claude 3.7 Sonnet</span>
+              <span class="fighter-status-badge idle" id="fighterStatusA">Aguardando Duelo</span>
+            </div>
+            <div class="fighter-code-wrap">
+              <pre><code id="fighterCodeA">// Selecione os parâmetros e clique em "Iniciar Duelo"...</code></pre>
+            </div>
+            <div class="fighter-stats-row">
+              <span>Velocidade: <b id="fighterSpeedA">-- tok/s</b></span>
+              <span>Testes: <b id="fighterTestsA">0/3 PASS</b></span>
+              <span>Complexidade: <b id="fighterCompA">--</b></span>
+            </div>
+          </div>
+
+          <!-- Fighter B Panel -->
+          <div class="fighter-panel" id="fighterPanelB">
+            <div class="fighter-panel-head">
+              <span class="fighter-name" id="fighterNameB">GPT-4o</span>
+              <span class="fighter-status-badge idle" id="fighterStatusB">Aguardando Duelo</span>
+            </div>
+            <div class="fighter-code-wrap">
+              <pre><code id="fighterCodeB">// Selecione os parâmetros e clique em "Iniciar Duelo"...</code></pre>
+            </div>
+            <div class="fighter-stats-row">
+              <span>Velocidade: <b id="fighterSpeedB">-- tok/s</b></span>
+              <span>Testes: <b id="fighterTestsB">0/3 PASS</b></span>
+              <span>Complexidade: <b id="fighterCompB">--</b></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verdict Banner -->
+        <div class="arena-verdict-box" id="arenaVerdictBox" style="display: none;">
+          <div class="verdict-icon" id="verdictIcon">🏆</div>
+          <div class="verdict-content">
+            <h4 id="verdictTitle">Vencedor por Decisão Unânime</h4>
+            <p id="verdictReason">Avaliando propriedades assintóticas e isolamento de estado...</p>
+            <div class="verdict-elo-badges" id="verdictEloBadges"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="section-shell section-block" id="ideas">
@@ -642,6 +874,61 @@
               <span>‹ ›</span>
             </div>
             <div class="handle-line"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Squad Builder Section -->
+    <section class="section-shell section-block" id="squadBuilderSection">
+      <div class="squad-builder-card reveal">
+        <div class="squad-head-intro">
+          <div class="eyebrow"><span class="pulse-dot"></span> MONTADOR DE ESQUADRÃO AUTÔNOMO &bull; SQUAD BUILDER</div>
+          <h2>Qual é a sua meta de engenharia hoje?</h2>
+          <p>Selecione o arquétipo do seu projeto. O algoritmo do GAU v5 monta automaticamente o esquadrão ideal dentre os 31 subagentes, calcula o ganho de tempo e gera o comando pronto para o Antigravity.</p>
+        </div>
+
+        <div class="squad-archetypes-grid" id="squadArchetypesGrid">
+          <button type="button" class="archetype-card active" data-archetype="web">
+            <span class="arch-icon">🌐</span>
+            <h4>Web Fullstack &amp; APIs</h4>
+            <p>React, Next.js, Node, FastAPI e microsserviços com contratos REST/GraphQL rígidos.</p>
+            <span class="arch-badge">6 Subagentes</span>
+          </button>
+          <button type="button" class="archetype-card" data-archetype="win">
+            <span class="arch-icon">🖥️</span>
+            <h4>Automação Windows &amp; CLIs</h4>
+            <p>Processos locais, scripts PowerShell/CMD, filesystem e computer-use no Windows.</p>
+            <span class="arch-badge">4 Subagentes</span>
+          </button>
+          <button type="button" class="archetype-card" data-archetype="sec">
+            <span class="arch-icon">🛡️</span>
+            <h4>Segurança &amp; Pentest</h4>
+            <p>Auditoria OWASP, caça a edge cases, sanitização profunda e quarentena de falhas.</p>
+            <span class="arch-badge">5 Subagentes</span>
+          </button>
+          <button type="button" class="archetype-card" data-archetype="db">
+            <span class="arch-icon">🗄️</span>
+            <h4>Banco de Dados &amp; WAL</h4>
+            <p>SQLite em modo WAL, migrations seguras, integridade referencial e índices O(log N).</p>
+            <span class="arch-badge">4 Subagentes</span>
+          </button>
+        </div>
+
+        <div class="squad-roster-display">
+          <div class="roster-head">
+            <span class="roster-title">ESQUADRÃO MOBILIZADO: <strong id="rosterArchetypeName">Web Fullstack &amp; APIs</strong></span>
+            <span class="roster-meta" id="rosterHoursSaved">⏱️ Economia Estimada: ~140 horas/mês</span>
+          </div>
+          <div class="roster-chips-wrap" id="rosterChipsWrap">
+            <!-- Dynamic Agent Roster Chips -->
+          </div>
+          <div class="squad-cli-generator">
+            <div class="squad-cli-head">
+              <span>COMANDO DE DISPARO NO ANTIGRAVITY:</span>
+              <button type="button" class="copy-btn" id="squadCopyBtn" data-copy="/gau-goal &quot;Construir arquitetura Web Fullstack com contratos de API, autenticação segura e testes E5&quot;">Copiar Comando</button>
+            </div>
+            <code id="squadCliCode">/gau-goal &quot;Construir arquitetura Web Fullstack com contratos de API, autenticação segura e testes E5&quot;</code>
           </div>
         </div>
       </div>
@@ -984,9 +1271,113 @@
     </div>
   </div>
 
+  <!-- Sci-Fi HUD Cockpit Modal (Observability #120) -->
+  <div class="cockpit-backdrop" id="cockpitBackdrop" style="display: none;"></div>
+  <div class="cockpit-modal" id="cockpitModal" role="dialog" aria-modal="true" aria-label="Cockpit de Telemetria Sci-Fi HUD" style="display: none;">
+    <div class="cockpit-header">
+      <div class="cockpit-title-group">
+        <span class="cockpit-tag"><span class="pulse-dot"></span> LIVE HUD</span>
+        <h3>🛰️ GAU v5 COGNITIVE COCKPIT &bull; TELEMETRY HUD</h3>
+      </div>
+      <div class="cockpit-header-right">
+        <span class="cockpit-status-pill">WAL MODE &bull; LOCK LIBERADO</span>
+        <button type="button" class="cockpit-close-btn" id="cockpitCloseBtn" aria-label="Fechar Cockpit">&times;</button>
+      </div>
+    </div>
+    <div class="cockpit-body">
+      <!-- Radial Gauges Row -->
+      <div class="cockpit-gauges-grid">
+        <div class="gauge-card">
+          <div class="gauge-svg-wrap">
+            <svg viewBox="0 0 100 100" class="gauge-svg">
+              <circle class="gauge-bg" cx="50" cy="50" r="40" />
+              <circle class="gauge-fill val-100" cx="50" cy="50" r="40" stroke="#25D366" />
+            </svg>
+            <span class="gauge-val">100%</span>
+          </div>
+          <span class="gauge-label">INTEGRIDADE DE TESTES (EXIT CODE 0)</span>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-svg-wrap">
+            <svg viewBox="0 0 100 100" class="gauge-svg">
+              <circle class="gauge-bg" cx="50" cy="50" r="40" />
+              <circle class="gauge-fill val-84" cx="50" cy="50" r="40" stroke="#62e6ff" />
+            </svg>
+            <span class="gauge-val">84%</span>
+          </div>
+          <span class="gauge-label">TOKENS POUPADOS EM LOOPS</span>
+        </div>
+        <div class="gauge-card">
+          <div class="gauge-svg-wrap">
+            <svg viewBox="0 0 100 100" class="gauge-svg">
+              <circle class="gauge-bg" cx="50" cy="50" r="40" />
+              <circle class="gauge-fill val-0" cx="50" cy="50" r="40" stroke="#a78bfa" />
+            </svg>
+            <span class="gauge-val">0.0%</span>
+          </div>
+          <span class="gauge-label">TAXA DE ALUCINAÇÃO COMPROVADA</span>
+        </div>
+      </div>
+
+      <!-- Realtime Latency & Heartbeat Wave -->
+      <div class="cockpit-wave-card">
+        <div class="wave-card-head">
+          <span>OSCILOSCÓPIO DE LATÊNCIA &bull; EVENT SPINE SQLite WAL (#101)</span>
+          <span class="wave-hz">60 FPS &bull; JITTER &lt; 2ms</span>
+        </div>
+        <canvas id="cockpitWaveCanvas" class="cockpit-wave-canvas" width="800" height="90"></canvas>
+      </div>
+
+      <!-- Event Stream Terminal -->
+      <div class="cockpit-terminal-card">
+        <div class="terminal-card-head">
+          <span>BARRAMENTO DE EVENTOS DO SISTEMA (STREAMING EM TEMPO REAL):</span>
+          <button type="button" class="terminal-clear-btn" id="cockpitClearEvents">Limpar</button>
+        </div>
+        <div class="cockpit-events-stream" id="cockpitEventsStream">
+          <!-- Real-time dynamic events appended via JS -->
+        </div>
+      </div>
+
+      <!-- System Telemetry Badges -->
+      <div class="cockpit-system-pills">
+        <span class="sys-pill green">✔ SQLite WAL Mode: ENABLED</span>
+        <span class="sys-pill green">✔ Git Swarm Isolation: READY</span>
+        <span class="sys-pill cyan">🛡️ Secret Broker (#105): ACTIVE</span>
+        <span class="sys-pill cyan">🔒 Emergency Lock (#119): UNLOCKED</span>
+        <span class="sys-pill violet">👑 Intent Engine (#121-#130): LIVE</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 60s Guided Cinematic Presentation Tour Overlay -->
+  <div class="tour-backdrop" id="tourBackdrop" style="display: none;"></div>
+  <div class="tour-card" id="tourCard" style="display: none;" role="dialog" aria-modal="true" aria-label="Apresentação Guiada do GAU v5">
+    <div class="tour-header">
+      <div class="tour-step-info">
+        <span class="tour-step-badge" id="tourStepBadge">1 de 8</span>
+        <h4 id="tourStepTitle">Visão Geral &amp; Propósito</h4>
+      </div>
+      <button type="button" class="tour-close-btn" id="tourCloseBtn" aria-label="Encerrar Tour">&times;</button>
+    </div>
+    <div class="tour-body">
+      <p id="tourStepText">Bem-vindo ao GAU v5: uma camada de inteligência e orquestração cognitiva que transforma o comando nativo /goal em uma máquina de execução autônoma orientada por evidências físicas.</p>
+    </div>
+    <div class="tour-progress-wrap">
+      <div class="tour-progress-bar" id="tourProgressBar" style="width: 12.5%;"></div>
+    </div>
+    <div class="tour-footer">
+      <button type="button" class="tour-play-pause-btn" id="tourPlayPauseBtn" title="Pausar/Retomar Avanço Automático">⏸ Pausar</button>
+      <div class="tour-nav-btns">
+        <button type="button" class="button ghost small" id="tourPrevBtn">‹ Anterior</button>
+        <button type="button" class="button primary small" id="tourNextBtn">Próximo ›</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.4.0"></script>
-  <script src="app.js?v=5.4.0"></script>
+  <script src="ideas.js?v=5.5.0"></script>
+  <script src="app.js?v=5.5.0"></script>
 </body>
 </html>

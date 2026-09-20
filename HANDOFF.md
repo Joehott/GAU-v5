@@ -1,6 +1,6 @@
 # HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.4.0  
+**Versão**: 5.5.0  
 **Data da Última Atualização**: 20 de Setembro de 2026  
 **Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
 **URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
@@ -20,7 +20,23 @@ O ecossistema implementa integralmente as **69 ideias aprovadas** no documento c
 
 ## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 2.1. Lançamento V4 (v5.4.0) — Experiência Mobile Automática & UI/UX Avançada
+### 2.1. Lançamento Mega Pack V5 (v5.5.0) — O Show de Engenharia Interativa
+* **1. 🎮 Simulador Visual de Workflow DAG & Swarm ao Vivo (`#dagSimulatorSection`):**
+  * Grafo vetorial SVG animado demonstrando como tarefas são compiladas pelo algoritmo Kahn e executadas por 6 agentes especializados sem conflito.
+  * 3 cenários prontos (`Auth OAuth2`, `SQLite WAL`, `Auditoria OWASP`), controles de play/pause/reset e painel holográfico que inspeciona o nó clicado exibindo logs do terminal, papel formal e selo SHA-256.
+* **2. ⚔️ Arena de Duelo de Modelos & Torneio ao Vivo (`#modelArenaSection`):**
+  * Mini-game de torneio de código: selecione o desafio (Kahn Cycle Detection, Token Bucket ou Sanitizador OWASP) e os modelos competidores (Claude 3.7 vs GPT-4o vs Gemini 2.0).
+  * Digitação simultânea de código em tempo real, checagem física de asserts e veredito do árbitro com ajuste do ranking Elo na tela.
+* **3. 📊 Cockpit de Telemetria Sci-Fi / NASA (HUD — Ideia #120):**
+  * Painel flutuante de observabilidade com tacômetros SVG circulares (100% integridade, 84% tokens poupados, 0.0% alucinação), osciloscópio de latência em canvas a 60 FPS e streaming em tempo real do barramento *Event Spine*.
+* **4. 🧩 Montador de Esquadrão Autônomo ("Squad Builder" - `#squadBuilderSection`):**
+  * Configurador por arquétipo (Web Fullstack, Automação Windows, Segurança/Pentest, Banco de Dados) que mobiliza a equipe cirúrgica dentre os 31 subagentes, calcula as horas salvas e cospe o comando CLI pronto para o Antigravity.
+* **5. 🎬 Modo Apresentação Guiada em 60s (Tour Cinemático):**
+  * Botão na topbar e hero que aciona um tour cinemático suave com foco holofote pelas 8 áreas chave do site, timer regressivo de auto-play, navegação anterior/próximo e controle de pausa.
+* **6. 🕹️ Easter Egg Cyberpunk / Modo Hacker Matrix:**
+  * Ativação secreta digitando `gau` no teclado ou com 3 cliques rápidos no logotipo: transmutação para paleta verde neon Matrix com chuva de caracteres digitais em canvas.
+
+### 2.2. Lançamento V4 (v5.4.0) — Experiência Mobile Automática & UI/UX Avançada
 * **1. Experiência Mobile 100% Automática (Sem aba "Modo Celular" no Desktop):**
   * **Zero poluição no desktop:** Removidos todos os botões de simulação e banners da visualização de computador. O desktop é 100% desktop limpo.
   * **Ativação Automática no Celular:** Visitantes em smartphones ou viewports $\le 768\text{px}$ entram imediatamente no layout móvel nativo.
