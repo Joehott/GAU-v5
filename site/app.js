@@ -535,13 +535,18 @@ ${stepsTable}
   ];
 
   const MODEL_LEADERBOARD = [
-    { rank: 1, id: 'claude-3-7-sonnet', name: 'Claude 3.7 Sonnet', rating: 1680, wins: 28, losses: 6, draws: 2, duels: 36, winRate: 78, status: 'CALIBRATED', specialty: 'Raciocínio híbrido, refatoração de alta precisão e síntese arquitetural', category: 'Modelos' },
-    { rank: 2, id: 'gemini-2-5-pro', name: 'Gemini 2.5 Pro', rating: 1665, wins: 25, losses: 6, draws: 3, duels: 34, winRate: 74, status: 'CALIBRATED', specialty: 'Janela de 2M tokens, análise multimodal profunda e auditoria de repositórios', category: 'Modelos' },
-    { rank: 3, id: 'gpt-4o', name: 'GPT-4o (Omni)', rating: 1640, wins: 26, losses: 9, draws: 3, duels: 38, winRate: 68, status: 'CALIBRATED', specialty: 'Execução rápida de pipelines, tooling e geração robusta de código', category: 'Modelos' },
-    { rank: 4, id: 'deepseek-r1', name: 'DeepSeek R1', rating: 1625, wins: 21, losses: 7, draws: 2, duels: 30, winRate: 70, status: 'CALIBRATED', specialty: 'Raciocínio matemático rigoroso, testes de invariantes e contraexemplos', category: 'Modelos' },
-    { rank: 5, id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet', rating: 1610, wins: 32, losses: 12, draws: 4, duels: 48, winRate: 67, status: 'CALIBRATED', specialty: 'Benchmark histórico clássico em engenharia autônoma no Antigravity', category: 'Modelos' },
-    { rank: 6, id: 'gemini-2-5-flash', name: 'Gemini 2.5 Flash', rating: 1590, wins: 24, losses: 11, draws: 5, duels: 40, winRate: 60, status: 'CALIBRATED', specialty: 'Ultra baixa latência (<200ms) para routers, classificadores e loop sentinels', category: 'Modelos' },
-    { rank: 7, id: 'llama-3-3-70b', name: 'Llama 3.3 70B', rating: 1560, wins: 14, losses: 9, draws: 2, duels: 25, winRate: 56, status: 'CALIBRATED', specialty: 'Execução local privada e soberania de dados sem dependência de nuvem', category: 'Modelos' }
+    { rank: 1, id: 'claude-3-7-sonnet', name: 'Claude 3.7 Sonnet', rating: 1865, wins: 48, losses: 7, draws: 3, duels: 58, winRate: 83, status: 'CALIBRATED', specialty: 'Raciocínio híbrido (Extended Thinking), refatoração de alta precisão e síntese arquitetural', category: 'Anthropic' },
+    { rank: 2, id: 'grok-3', name: 'Grok 3 (Reasoning)', rating: 1860, wins: 45, losses: 8, draws: 4, duels: 57, winRate: 79, status: 'CALIBRATED', specialty: 'Raciocínio matemático e científico profundo com fronteira de STEM e coding', category: 'xAI' },
+    { rank: 3, id: 'gemini-2-pro', name: 'Gemini 2.0 Pro Exp', rating: 1855, wins: 43, losses: 9, draws: 5, duels: 57, winRate: 75, status: 'CALIBRATED', specialty: 'Janela de contexto ultra-longa, análise multimodal e síntese de código complexo', category: 'Google DeepMind' },
+    { rank: 4, id: 'deepseek-r1', name: 'DeepSeek-R1', rating: 1850, wins: 42, losses: 10, draws: 4, duels: 56, winRate: 75, status: 'CALIBRATED', specialty: 'Cadeia de pensamento aberta (<think>), provas formais e quebra de contraexemplos', category: 'DeepSeek' },
+    { rank: 5, id: 'o3-mini', name: 'o3-mini (High)', rating: 1845, wins: 39, losses: 9, draws: 6, duels: 54, winRate: 72, status: 'CALIBRATED', specialty: 'Raciocínio lógico compacto de alta densidade e geração ultra veloz de algoritmos', category: 'OpenAI' },
+    { rank: 6, id: 'o1', name: 'o1 (Deep Reasoning)', rating: 1840, wins: 38, losses: 11, draws: 5, duels: 54, winRate: 70, status: 'CALIBRATED', specialty: 'Resolução profunda de problemas de ponta a ponta sem alucinação de APIs', category: 'OpenAI' },
+    { rank: 7, id: 'claude-3-5-sonnet', name: 'Claude 3.5 Sonnet v2', rating: 1820, wins: 44, losses: 16, draws: 6, duels: 66, winRate: 67, status: 'CALIBRATED', specialty: 'Benchmark histórico clássico em engenharia autônoma e ferramentas no Antigravity', category: 'Anthropic' },
+    { rank: 8, id: 'gpt-4o', name: 'GPT-4o (Omni)', rating: 1790, wins: 36, losses: 18, draws: 6, duels: 60, winRate: 60, status: 'CALIBRATED', specialty: 'Execução rápida de pipelines, integração de tooling e geração robusta de APIs', category: 'OpenAI' },
+    { rank: 9, id: 'deepseek-v3', name: 'DeepSeek-V3 (671B)', rating: 1785, wins: 35, losses: 17, draws: 6, duels: 58, winRate: 60, status: 'CALIBRATED', specialty: 'Arquitetura MoE de altíssima eficiência e densidade semântica de ponta', category: 'DeepSeek' },
+    { rank: 10, id: 'gemini-2-flash', name: 'Gemini 2.0 Flash', rating: 1775, wins: 33, losses: 19, draws: 6, duels: 58, winRate: 57, status: 'CALIBRATED', specialty: 'Ultra-baixa latência e taxa de geração de 220 tok/s para loops agênticos rápidos', category: 'Google DeepMind' },
+    { rank: 11, id: 'qwen-2-5-coder', name: 'Qwen 2.5 Coder 32B', rating: 1750, wins: 28, losses: 20, draws: 4, duels: 52, winRate: 54, status: 'CALIBRATED', specialty: 'Melhor modelo open-weights para codificação pura e parsing sintático', category: 'Alibaba' },
+    { rank: 12, id: 'llama-3-3-70b', name: 'Llama 3.3 70B', rating: 1740, wins: 26, losses: 21, draws: 5, duels: 52, winRate: 50, status: 'CALIBRATED', specialty: 'Soberania local, execução privada e alinhamento de instruções em código aberto', category: 'Meta' }
   ];
 
   let currentLbDimension = 'agents';
@@ -2318,6 +2323,8 @@ ${stepsTable}
   // ------------------------------------------
   // 3. Model Tournament Arena (#03 & #45)
   // ------------------------------------------
+  // 3. Model Tournament Arena (#03 & #45)
+  // ------------------------------------------
   function initModelArena() {
     const fightBtn = document.getElementById('startDuelBtn');
     const challengeSelect = document.getElementById('arenaChallengeSelect');
@@ -2326,6 +2333,13 @@ ${stepsTable}
 
     const panelA = document.getElementById('fighterPanelA');
     const panelB = document.getElementById('fighterPanelB');
+    const platformA = document.getElementById('fighterPlatformA');
+    const platformB = document.getElementById('fighterPlatformB');
+    const nameA = document.getElementById('fighterNameA');
+    const nameB = document.getElementById('fighterNameB');
+    const eloA = document.getElementById('fighterEloA');
+    const eloB = document.getElementById('fighterEloB');
+
     const codeA = document.getElementById('fighterCodeA');
     const codeB = document.getElementById('fighterCodeB');
     const statusA = document.getElementById('fighterStatusA');
@@ -2343,9 +2357,190 @@ ${stepsTable}
 
     if (!fightBtn || !codeA || !codeB) return;
 
-    const codeSnippets = {
+    // Comprehensive Registry of Current AI Models by Platform
+    const MODELS_REGISTRY = {
+      'claude-3-7-sonnet': {
+        name: 'Claude 3.7 Sonnet',
+        platform: 'Anthropic',
+        platClass: 'plat-anthropic',
+        elo: 1865,
+        speed: '95 tok/s',
+        stepSize: 7,
+        comp: 'O(V+E) Formal',
+        thinking: `/* [Claude 3.7 Sonnet • Hybrid Thinking Mode: Ativo]
+ * • Invariante: Grafo acíclico direcionado sse ordenação topológica cobre todos os vértices.
+ * • Tipagem forte, tratamento de nós isolados e complexidade assintótica O(V + E).
+ */\n\n`
+      },
+      'claude-3-5-sonnet': {
+        name: 'Claude 3.5 Sonnet v2',
+        platform: 'Anthropic',
+        platClass: 'plat-anthropic',
+        elo: 1820,
+        speed: '115 tok/s',
+        stepSize: 8,
+        comp: 'O(V+E)',
+        thinking: `// [Claude 3.5 Sonnet • Fast CoT Pipeline]\n// Validação de contratos e tratamento de grafos desconexos.\n\n`
+      },
+      'claude-3-5-haiku': {
+        name: 'Claude 3.5 Haiku',
+        platform: 'Anthropic',
+        platClass: 'plat-anthropic',
+        elo: 1730,
+        speed: '175 tok/s',
+        stepSize: 12,
+        comp: 'O(V+E) Light',
+        thinking: `// [Claude 3.5 Haiku • Instant Response]\n\n`
+      },
+      'o3-mini': {
+        name: 'o3-mini (High)',
+        platform: 'OpenAI',
+        platClass: 'plat-openai',
+        elo: 1845,
+        speed: '145 tok/s',
+        stepSize: 10,
+        comp: 'O(V+E) STEM',
+        thinking: `# [o3-mini • High Reasoning CoT]
+# 1. Zero-indegree queue initialized O(V)
+# 2. Invariant: BFS visits exactly N nodes iff acyclic
+# 3. Verified zero recursion overhead\n\n`
+      },
+      'o1': {
+        name: 'o1 (Deep Reasoning)',
+        platform: 'OpenAI',
+        platClass: 'plat-openai',
+        elo: 1840,
+        speed: '80 tok/s',
+        stepSize: 6,
+        comp: 'O(V+E) Proved',
+        thinking: `# [OpenAI o1 • Deep Logical Proof]
+# Proof obligation: Cycle presence <==> visited_count < num_nodes
+# Inductive step verified across all edge cases.\n\n`
+      },
+      'gpt-4o': {
+        name: 'GPT-4o (Omni)',
+        platform: 'OpenAI',
+        platClass: 'plat-openai',
+        elo: 1790,
+        speed: '135 tok/s',
+        stepSize: 9,
+        comp: 'O(V+E)',
+        thinking: `# [GPT-4o • Direct Production Implementation]\n\n`
+      },
+      'gemini-2-pro': {
+        name: 'Gemini 2.0 Pro Exp',
+        platform: 'Google DeepMind',
+        platClass: 'plat-google',
+        elo: 1855,
+        speed: '120 tok/s',
+        stepSize: 8,
+        comp: 'O(V+E) Scaled',
+        thinking: `# [Gemini 2.0 Pro • Deep Reasoning Engine]
+# Multimodal & AST context compiled.
+# Topological sorting with zero memory leakage.\n\n`
+      },
+      'gemini-2-flash': {
+        name: 'Gemini 2.0 Flash',
+        platform: 'Google DeepMind',
+        platClass: 'plat-google',
+        elo: 1775,
+        speed: '220 tok/s',
+        stepSize: 15,
+        comp: 'O(V+E) Blazing',
+        thinking: `# [Gemini 2.0 Flash • 220 tok/s Stream]\n\n`
+      },
+      'gemini-1-5-pro': {
+        name: 'Gemini 1.5 Pro',
+        platform: 'Google DeepMind',
+        platClass: 'plat-google',
+        elo: 1760,
+        speed: '75 tok/s',
+        stepSize: 6,
+        comp: 'O(V+E)',
+        thinking: `# [Gemini 1.5 Pro • 2M Context Buffer]\n\n`
+      },
+      'deepseek-r1': {
+        name: 'DeepSeek-R1',
+        platform: 'DeepSeek',
+        platClass: 'plat-deepseek',
+        elo: 1850,
+        speed: '85 tok/s',
+        stepSize: 6,
+        comp: 'O(V+E) CoT',
+        thinking: `<think>
+1. Compreensão do problema: Kahn cycle detection.
+2. Contrato: in_degree array + queue BFS.
+3. Se total_visitado < N => existe ciclo direcionado.
+4. Complexidade espacial O(V+E), sem estouro de pilha.
+</think>\n\n`
+      },
+      'deepseek-v3': {
+        name: 'DeepSeek-V3 (671B)',
+        platform: 'DeepSeek',
+        platClass: 'plat-deepseek',
+        elo: 1785,
+        speed: '140 tok/s',
+        stepSize: 10,
+        comp: 'O(V+E) MoE',
+        thinking: `# [DeepSeek-V3 671B MoE Architecture]\n\n`
+      },
+      'grok-3': {
+        name: 'Grok 3 (Reasoning)',
+        platform: 'xAI',
+        platClass: 'plat-xai',
+        elo: 1860,
+        speed: '110 tok/s',
+        stepSize: 8,
+        comp: 'O(V+E) Frontier',
+        thinking: `// [xAI Grok 3 • Frontier STEM Mode]
+// Direct topological invariants with edge-case guardrails.\n\n`
+      },
+      'grok-2': {
+        name: 'Grok 2',
+        platform: 'xAI',
+        platClass: 'plat-xai',
+        elo: 1745,
+        speed: '95 tok/s',
+        stepSize: 7,
+        comp: 'O(V+E)',
+        thinking: `// [xAI Grok 2]\n\n`
+      },
+      'qwen-2-5-coder': {
+        name: 'Qwen 2.5 Coder 32B',
+        platform: 'Alibaba',
+        platClass: 'plat-alibaba',
+        elo: 1750,
+        speed: '120 tok/s',
+        stepSize: 9,
+        comp: 'O(V+E) AST',
+        thinking: `# [Qwen 2.5 Coder • Open Coding Champion]\n\n`
+      },
+      'llama-3-3-70b': {
+        name: 'Llama 3.3 70B',
+        platform: 'Meta',
+        platClass: 'plat-meta',
+        elo: 1740,
+        speed: '90 tok/s',
+        stepSize: 7,
+        comp: 'O(V+E)',
+        thinking: `# [Meta Llama 3.3 70B Instruct • Open Weights]\n\n`
+      },
+      'mistral-large-2': {
+        name: 'Mistral Large 2',
+        platform: 'Mistral AI',
+        platClass: 'plat-mistral',
+        elo: 1735,
+        speed: '105 tok/s',
+        stepSize: 8,
+        comp: 'O(V+E)',
+        thinking: `# [Mistral Large 2 • Reasoning Model]\n\n`
+      }
+    };
+
+    // Code Snippet Implementations by Challenge
+    const CHALLENGE_SNIPPETS = {
       kahn: {
-        claude: `def detect_cycle_kahn(num_nodes: int, edges: list[tuple[int, int]]) -> bool:
+        optimal: (thinking) => `${thinking}def detect_cycle_kahn(num_nodes: int, edges: list[tuple[int, int]]) -> bool:
     in_degree = [0] * num_nodes
     adj = collections.defaultdict(list)
     for u, v in edges:
@@ -2364,7 +2559,7 @@ ${stepsTable}
                 queue.append(neighbor)
                 
     return visited_count != num_nodes  # True if cycle detected O(V+E)`,
-        gpt4o: `def detect_cycle_dfs(num_nodes: int, edges: list[tuple[int, int]]) -> bool:
+        alternative: (thinking) => `${thinking}def detect_cycle_dfs(num_nodes: int, edges: list[tuple[int, int]]) -> bool:
     WHITE, GRAY, BLACK = 0, 1, 2
     state = [WHITE] * num_nodes
     graph = collections.defaultdict(list)
@@ -2384,11 +2579,11 @@ ${stepsTable}
     return any(state[i] == WHITE and dfs(i) for i in range(num_nodes))`
       },
       tokenbucket: {
-        claude: `class AsyncTokenBucket:
+        optimal: (thinking) => `${thinking}class AsyncTokenBucket:
     def __init__(self, capacity: int, refill_rate: float):
         self.capacity = capacity
         self.refill_rate = refill_rate
-        self.tokens = capacity
+        self.tokens = float(capacity)
         self.last_update = time.monotonic()
         self._lock = asyncio.Lock()
 
@@ -2402,7 +2597,7 @@ ${stepsTable}
                 self.tokens -= amount
                 return True
             return False`,
-        gpt4o: `class RateLimiter:
+        alternative: (thinking) => `${thinking}class RateLimiter:
     def __init__(self, limit: int, window: int):
         self.limit = limit
         self.window = window
@@ -2417,49 +2612,89 @@ ${stepsTable}
         return False`
       },
       owasp: {
-        claude: `def sanitize_owasp_input(raw: str, max_len: int = 256) -> str:
+        optimal: (thinking) => `${thinking}def sanitize_owasp_input(raw: str, max_len: int = 256) -> str:
     if not isinstance(raw, str):
         raise TypeError("Input must be string")
     trimmed = raw.strip()[:max_len]
-    # Neutralize XSS characters
+    # Neutralize HTML/XSS entities
     sanitized = html.escape(trimmed, quote=True)
-    # Block SQL injection signatures
+    # Reject active SQL injection signatures
     if re.search(r'(--|;|/\\*|union\\s+select)', sanitized, re.I):
         raise SecurityValidationError("Potential SQLi pattern rejected")
     return sanitized`,
-        gpt4o: `def clean_input(user_string: str) -> str:
+        alternative: (thinking) => `${thinking}def clean_input(user_string: str) -> str:
     cleaned = user_string.replace("<script>", "").replace("</script>", "")
     cleaned = re.sub(r"[;'\"\\\\]", "", cleaned)
     return cleaned.strip()`
       }
     };
 
+    // Synchronize UI headers when user changes dropdown selects
+    function updateFighterHeader(selectEl, platformEl, nameEl, eloEl) {
+      const key = selectEl.value;
+      const meta = MODELS_REGISTRY[key] || {
+        name: key,
+        platform: 'IA',
+        platClass: 'plat-anthropic',
+        elo: 1750
+      };
+      if (platformEl) {
+        platformEl.textContent = meta.platform;
+        platformEl.className = 'fighter-platform-badge ' + meta.platClass;
+      }
+      if (nameEl) nameEl.textContent = meta.name;
+      if (eloEl) eloEl.textContent = `${meta.elo} Elo`;
+    }
+
+    fighterASelect.addEventListener('change', () => {
+      updateFighterHeader(fighterASelect, platformA, nameA, eloA);
+      playCyberSound('click');
+    });
+
+    fighterBSelect.addEventListener('change', () => {
+      updateFighterHeader(fighterBSelect, platformB, nameB, eloB);
+      playCyberSound('click');
+    });
+
+    // Initial sync
+    updateFighterHeader(fighterASelect, platformA, nameA, eloA);
+    updateFighterHeader(fighterBSelect, platformB, nameB, eloB);
+
     let duelTimer = null;
 
     fightBtn.addEventListener('click', () => {
       const challengeKey = challengeSelect.value;
-      const modelA = fighterASelect.value;
-      const modelB = fighterBSelect.value;
+      const keyA = fighterASelect.value;
+      const keyB = fighterBSelect.value;
+
+      const metaA = MODELS_REGISTRY[keyA] || MODELS_REGISTRY['claude-3-7-sonnet'];
+      const metaB = MODELS_REGISTRY[keyB] || MODELS_REGISTRY['deepseek-r1'];
 
       if (duelTimer) clearInterval(duelTimer);
       verdictBox.style.display = 'none';
       panelA.className = 'fighter-panel';
       panelB.className = 'fighter-panel';
 
-      const snippetA = codeSnippets[challengeKey]?.claude || '// Code...';
-      const snippetB = codeSnippets[challengeKey]?.gpt4o || '// Code...';
+      // Decide optimal vs alternative implementation based on relative Elo
+      const isAWinner = metaA.elo >= metaB.elo;
+      const snippetA = isAWinner
+        ? CHALLENGE_SNIPPETS[challengeKey].optimal(metaA.thinking)
+        : CHALLENGE_SNIPPETS[challengeKey].alternative(metaA.thinking);
+      const snippetB = !isAWinner
+        ? CHALLENGE_SNIPPETS[challengeKey].optimal(metaB.thinking)
+        : CHALLENGE_SNIPPETS[challengeKey].alternative(metaB.thinking);
 
       statusA.className = 'fighter-status-badge typing';
-      statusA.textContent = 'Digitando...';
+      statusA.textContent = metaA.thinking.includes('think') || metaA.thinking.includes('Thinking') ? 'Raciocinando CoT...' : 'Digitando...';
       statusB.className = 'fighter-status-badge typing';
-      statusB.textContent = 'Digitando...';
+      statusB.textContent = metaB.thinking.includes('think') || metaB.thinking.includes('Thinking') ? 'Raciocinando CoT...' : 'Digitando...';
 
-      speedA.textContent = '125 tok/s';
-      speedB.textContent = '140 tok/s';
+      speedA.textContent = metaA.speed;
+      speedB.textContent = metaB.speed;
       testsA.textContent = '0/3';
       testsB.textContent = '0/3';
-      compA.textContent = 'O(V+E)';
-      compB.textContent = 'O(V+E)';
+      compA.textContent = metaA.comp;
+      compB.textContent = metaB.comp;
 
       codeA.textContent = '';
       codeB.textContent = '';
@@ -2469,8 +2704,8 @@ ${stepsTable}
       playCyberSound('terminal');
 
       duelTimer = setInterval(() => {
-        idxA += 8;
-        idxB += 7;
+        idxA += metaA.stepSize || 8;
+        idxB += metaB.stepSize || 8;
 
         codeA.textContent = snippetA.slice(0, idxA);
         codeB.textContent = snippetB.slice(0, idxB);
@@ -2480,33 +2715,69 @@ ${stepsTable}
           codeA.textContent = snippetA;
           codeB.textContent = snippetB;
 
-          // Judge evaluation
-          testsA.textContent = '3/3 PASS';
-          testsB.textContent = challengeKey === 'owasp' ? '2/3 PASS (Bypass)' : '3/3 PASS';
+          // Judge evaluation scores
+          const scoreA = isAWinner ? '3/3 PASS' : (challengeKey === 'owasp' ? '2/3 PASS (Bypass)' : '3/3 PASS (Maior Latência)');
+          const scoreB = !isAWinner ? '3/3 PASS' : (challengeKey === 'owasp' ? '2/3 PASS (Bypass)' : '3/3 PASS (Maior Latência)');
 
-          statusA.className = 'fighter-status-badge winner';
-          statusA.textContent = 'Vencedor 🏆';
-          panelA.classList.add('winner-card');
+          testsA.textContent = scoreA;
+          testsB.textContent = scoreB;
 
-          statusB.className = 'fighter-status-badge';
-          statusB.textContent = 'Finalizado';
-          panelB.classList.add('loser-card');
+          // Calculate genuine Elo delta based on standard formula
+          const expectedA = 1 / (1 + Math.pow(10, (metaB.elo - metaA.elo) / 400));
+          const deltaA = Math.round(32 * ((isAWinner ? 1 : 0) - expectedA));
+          const deltaB = -deltaA;
+
+          const newEloA = metaA.elo + deltaA;
+          const newEloB = metaB.elo + deltaB;
+
+          if (isAWinner) {
+            statusA.className = 'fighter-status-badge winner';
+            statusA.textContent = 'Vencedor 🏆';
+            panelA.classList.add('winner-card');
+
+            statusB.className = 'fighter-status-badge';
+            statusB.textContent = 'Finalizado';
+            panelB.classList.add('loser-card');
+
+            verdictTitle.textContent = `Vitória Decisiva: ${metaA.name} (${metaA.platform})`;
+          } else {
+            statusB.className = 'fighter-status-badge winner';
+            statusB.textContent = 'Vencedor 🏆';
+            panelB.classList.add('winner-card');
+
+            statusA.className = 'fighter-status-badge';
+            statusA.textContent = 'Finalizado';
+            panelA.classList.add('loser-card');
+
+            verdictTitle.textContent = `Vitória Decisiva: ${metaB.name} (${metaB.platform})`;
+          }
 
           verdictBox.style.display = 'flex';
-          verdictTitle.textContent = `Vitória Decisiva: ${fighterASelect.options[fighterASelect.selectedIndex].text.split(' ')[0]}`;
-          verdictReason.textContent = challengeKey === 'owasp'
-            ? 'O modelo 1 utilizou html.escape com rejeição ativa de padrões SQLi, enquanto o modelo 2 tentou replace ingênuo suscetível a bypass com tags aninhadas.'
-            : 'O modelo 1 implementou o algoritmo ideal com menor footprint de memória e sem recursão profunda suscetível a estouro de pilha.';
+
+          // Tailored reasoning explanation
+          if (challengeKey === 'owasp') {
+            verdictReason.textContent = isAWinner
+              ? `${metaA.name} neutralizou entidades HTML com html.escape e ativou regex de rejeição a injeções SQL, enquanto ${metaB.name} utilizou replace simples suscetível a bypass por tags aninhadas.`
+              : `${metaB.name} aplicou escape estrito de entidades e sanitização semântica contra vetores SQLi, superando a implementação de ${metaA.name}.`;
+          } else if (challengeKey === 'tokenbucket') {
+            verdictReason.textContent = isAWinner
+              ? `${metaA.name} garantiu concorrência segura usando asyncio.Lock e relógio monotônico, prevenindo race conditions sob alta carga de requisições simultâneas.`
+              : `${metaB.name} demonstrou controle assíncrono superior com bloqueio mutex atômico e recalibração temporal contínua.`;
+          } else {
+            verdictReason.textContent = isAWinner
+              ? `${metaA.name} implementou o algoritmo ideal de Kahn com fila BFS O(V+E) e consumo constante de memória, prevenindo o risco de estouro de pilha por recursão profunda presente no DFS.`
+              : `${metaB.name} comprovou invariantes Kahn com menor footprint de memória e ordenação estrita sem overhead recursivo.`;
+          }
 
           verdictEloBadges.innerHTML = `
-            <span class="elo-pill gain">+16 Elo (Novo: 1866)</span>
-            <span class="elo-pill loss">-16 Elo (Novo: 1764)</span>
+            <span class="elo-pill ${deltaA >= 0 ? 'gain' : 'loss'}">${metaA.name}: ${deltaA >= 0 ? '+' : ''}${deltaA} Elo (Novo: ${newEloA})</span>
+            <span class="elo-pill ${deltaB >= 0 ? 'gain' : 'loss'}">${metaB.name}: ${deltaB >= 0 ? '+' : ''}${deltaB} Elo (Novo: ${newEloB})</span>
           `;
 
           playCyberSound('success');
-          showToast('⚔️ Duelo Finalizado! Juiz do GAU emitiu a sentença.');
+          showToast(`⚔️ Duelo Finalizado! ${isAWinner ? metaA.name : metaB.name} venceu o desafio.`);
         }
-      }, 40);
+      }, 35);
     });
   }
 
