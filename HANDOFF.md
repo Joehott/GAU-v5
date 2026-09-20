@@ -1,7 +1,7 @@
 # HANDOFF — GAU v5 (Global Agentic Universe)
 
-**Versão**: 5.3.1  
-**Data da Última Atualização**: 19 de Setembro de 2026  
+**Versão**: 5.4.0  
+**Data da Última Atualização**: 20 de Setembro de 2026  
 **Status**: 100% Operacional, Suíte de Testes Passando (34/34), Deploy Ativo e Versionado em Git  
 **URL de Produção (Vercel)**: [https://gau-oficial.vercel.app](https://gau-oficial.vercel.app)  
 **URL Espelho (GitHub Pages)**: [https://joehott.github.io/GAU-v5/](https://joehott.github.io/GAU-v5/)  
@@ -20,7 +20,28 @@ O ecossistema implementa integralmente as **69 ideias aprovadas** no documento c
 
 ## 2. O Que Foi Concluído Recentemente (Estado Atual)
 
-### 2.1. Correção e Refinamento do Slider Comparativo (v5.3.1)
+### 2.1. Lançamento V4 (v5.4.0) — Experiência Mobile Automática & UI/UX Avançada
+* **1. Experiência Mobile 100% Automática (Sem aba "Modo Celular" no Desktop):**
+  * **Zero poluição no desktop:** Removidos todos os botões de simulação e banners da visualização de computador. O desktop é 100% desktop limpo.
+  * **Ativação Automática no Celular:** Visitantes em smartphones ou viewports $\le 768\text{px}$ entram imediatamente no layout móvel nativo.
+  * **Quick Stories/Chips Bar (`#mobileQuickBar`):** Faixa de atalhos horizontais deslizantes logo abaixo do header (`[ Início ] [ 🏛️ Arquitetura ] [ 🧪 Lab ] [ 🎬 Vídeo ] [ 🧮 Eficiência ] [ 🏆 Leaderboard ] [ 💡 69 Ideias ] [ ⚡ Instalar ]`) sincronizada via `IntersectionObserver` com a rolagem da página.
+  * **Ergonomia e Alvos de Toque:** Touch targets $\ge 48\text{px}$ calibrados para navegação com uma só mão e zona segura inferior (`env(safe-area-inset-bottom)`).
+* **2. 🌌 Canvas de Fundo Reativo Quântico (`#quantumCanvas`):**
+  * Constelação sutil de partículas quânticas conectadas por filamentos de laser ciano/violeta que reagem com atração suave ao mouse.
+  * Otimizado para desempenho: pausa automaticamente em smartphones ($\le 768\text{px}$) e quando a aba fica em segundo plano (`document.hidden`).
+* **3. 🪞 Efeito Holográfico 3D Tilt nos Cards com Glare Especular:**
+  * Inclinação tridimensional dinâmica (`perspective: 1000px`, `rotateX`, `rotateY`) em cards de arquitetura, pódio, calculadora e ideias, acompanhada por um brilho especular translúcido (`.tilt-glare`).
+  * Ativo exclusivamente em dispositivos com mouse (`hover: hover and pointer: fine`), sem interferir na rolagem touch.
+* **4. 💻 Terminal CLI Interativo ao Vivo ("Playground do GAU"):**
+  * Console interativo na seção `#deploy` com suporte a digitação livre e botões de sugestão rápida: `gau doctor`, `gau match 'auth'`, `/goal`, `gau leaderboard`, `help`, `clear`.
+  * Simula saída idêntica ao CLI real com cores ANSI cyberpunk e streaming de linhas.
+* **5. 🧮 Calculadora de Impacto Cognitivo & Eficiência de Tokens (`#roi`):**
+  * Slider intuitivo de tarefas semanais (5 a 100) que calcula instantaneamente horas salvas de debug por mês, milhões de tokens poupados em loops e garantia de 100% de saída com código 0.
+* **6. 🔊 Feedback Sonoro Cyberpunk Sintetizado (Web Audio API):**
+  * Síntese de áudio pura no navegador (~1.5KB, zero MP3/WAV externos): cliques de alta tecnologia, swoosh ao abrir o Spotlight e confirmação no terminal.
+  * Controle com botão `[ 🔊 Som ]` / `[ 🔇 Som ]` na topbar com persistência em `localStorage`. Padrão mudo por cortesia.
+
+### 2.2. Correção e Refinamento do Slider Comparativo (v5.3.1)
 * **1. Eliminação do Clamp Artificial (0% a 100% de Amplitude Real):**
   * O divisor agora move-se livremente de `0%` (100% Com GAU v5 visível) até `100%` (100% Sem GAU visível), eliminando o limite que travava o divisor em 5% e 95%.
   * O botão do divisor utiliza `clamp(20px, ${currentPct}%, calc(100% - 20px))` para navegar por toda a extensão sem ser cortado nas bordas do card.
