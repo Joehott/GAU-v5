@@ -35,7 +35,7 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.5.3" />
+  <link rel="stylesheet" href="styles.css?v=5.5.4" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
@@ -74,6 +74,35 @@
     .whatsapp-modal.open,
     .whatsapp-modal.active {
       display: block !important;
+    }
+    .discord-floating {
+      position: fixed !important;
+      bottom: 26px !important;
+      left: 26px !important;
+      z-index: 99999 !important;
+      display: block !important;
+    }
+    @media (max-width: 768px) {
+      .discord-floating {
+        bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 16px !important;
+      }
+    }
+    .discord-pulse-btn {
+      width: 58px !important;
+      height: 58px !important;
+      border-radius: 50% !important;
+      background: linear-gradient(135deg, #5865F2, #4752C4) !important;
+      border: none !important;
+      cursor: pointer !important;
+      display: grid !important;
+      place-items: center !important;
+      box-shadow: 0 8px 30px rgba(88, 101, 242, 0.45) !important;
+      position: relative !important;
+    }
+    .discord-modal.open,
+    .discord-modal.active {
+      display: flex !important;
     }
   </style>
 </head>
@@ -1197,7 +1226,11 @@
     <div style="display: flex; gap: 1.5rem; align-items: center;">
       <a class="footer-whatsapp-link" id="footerWhatsappBtn" href="https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V" target="_blank" rel="noopener noreferrer">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366" style="vertical-align: middle; margin-right: 4px;"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824zm-3.423-14.416c-6.627 0-12 5.373-12 12 0 2.126.556 4.12 1.528 5.856l-1.624 5.928 6.074-1.593c1.666.91 3.567 1.42 5.586 1.42 6.627 0 12-5.373 12-12 0-6.627-5.373-12-12-12z"/></svg>
-        <span>Canal WhatsApp</span>
+        <span>WhatsApp</span>
+      </a>
+      <a class="footer-discord-link" id="footerDiscordBtn" href="https://discord.com/channels/1553092110410842143/1553092190778032268" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; color: #5865F2;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#5865F2" style="vertical-align: middle; margin-right: 4px;"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028z"/></svg>
+        <span>Discord Oficial</span>
       </a>
       <a href="https://github.com/Joehott/GAU-v5" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
       <a href="#top">Voltar ao topo ↑</a>
@@ -1266,6 +1299,91 @@
             <span>Acessar Canal no WhatsApp ↗</span>
           </a>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Discord Action Widget & Interactive Modal (Onde aponta a seta: Canto Inferior Esquerdo) -->
+  <div class="discord-floating" id="discordFloating">
+    <div class="discord-tooltip" id="discordTooltip">
+      <span>Comunidade Oficial no Discord! 🎮💬</span>
+      <button class="discord-tooltip-close" id="discordTooltipClose" aria-label="Fechar">&times;</button>
+    </div>
+    <button class="discord-pulse-btn" id="discordToggleBtn" aria-label="Abrir Discord da Comunidade" title="Discord Oficial GAU v5">
+      <span class="discord-pulse-ring"></span>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff">
+        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+      </svg>
+    </button>
+
+    <div class="discord-modal" id="discordModal">
+      <div class="discord-modal-head">
+        <div class="discord-head-info">
+          <div class="discord-avatar">
+            <img src="assets/gau-avatar.png" alt="GAU v5" width="40" height="40">
+            <span class="discord-online-indicator"></span>
+          </div>
+          <div>
+            <strong>Comunidade Oficial GAU v5</strong>
+            <small>Discord • Suporte & Devs</small>
+          </div>
+        </div>
+        <button class="discord-close-btn" id="discordCloseBtn" aria-label="Fechar">&times;</button>
+      </div>
+      <div class="discord-modal-body">
+        <div class="discord-chat-bubble">
+          <div class="discord-bubble-sender">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028z"/></svg>
+            <span>GAU v5 Comunidade Oficial</span>
+          </div>
+          <p>Bem-vindo à nossa comunidade no Discord! Aqui você encontra programadores, novidades e suporte para o ecossistema GAU v5.</p>
+        </div>
+
+        <!-- ALERTA GIGANTE: NÃO USE CALL -->
+        <div class="discord-rules-alert">
+          <div class="discord-rules-alert-head">
+            <span class="rules-alert-icon">🚫</span>
+            <strong>REGRA OBRIGATÓRIA: NÃO USE CALL!</strong>
+          </div>
+          <p>Nosso suporte e comunidade operam <strong>100% via CHAT e TEXTO</strong>. Chamadas de voz estão permanentemente desativadas para que todas as dúvidas, comandos e códigos fiquem registrados para todos!</p>
+        </div>
+
+        <!-- GUIA DE CANAIS -->
+        <div class="discord-channels-list">
+          <div class="discord-chan-item">
+            <span class="chan-hash">#</span>
+            <div class="chan-info">
+              <strong>duvidas-gau</strong>
+              <small>Perguntas sobre agentes, skills e /goal</small>
+            </div>
+          </div>
+          <div class="discord-chan-item">
+            <span class="chan-hash">#</span>
+            <div class="chan-info">
+              <strong>suporte-tecnico</strong>
+              <small>Resolução de erros com logs e evidências</small>
+            </div>
+          </div>
+          <div class="discord-chan-item">
+            <span class="chan-hash">#</span>
+            <div class="chan-info">
+              <strong>chat-geral</strong>
+              <small>Bate-papo da comunidade (apenas texto)</small>
+            </div>
+          </div>
+          <div class="discord-chan-item">
+            <span class="chan-hash">#</span>
+            <div class="chan-info">
+              <strong>avisos-e-regras</strong>
+              <small>Atualizações oficiais e novidades</small>
+            </div>
+          </div>
+        </div>
+
+        <a class="discord-join-btn" id="discordJoinBtn" href="https://discord.com/channels/1553092110410842143/1553092190778032268" target="_blank" rel="noopener noreferrer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028z"/></svg>
+          <span>Entrar no Discord Oficial GAU v5 ↗</span>
+        </a>
       </div>
     </div>
   </div>
@@ -1454,7 +1572,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.5.3"></script>
-  <script src="app.js?v=5.5.3"></script>
+  <script src="ideas.js?v=5.5.4"></script>
+  <script src="app.js?v=5.5.4"></script>
 </body>
 </html>

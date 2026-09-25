@@ -814,6 +814,303 @@
   box-shadow: 0 6px 24px rgba(37, 211, 102, 0.6);
 }
 
+/* ==========================================================================
+   FLOATING DISCORD BUTTON & INTERACTIVE MODAL (CANTO INFERIOR ESQUERDO)
+   ========================================================================== */
+.discord-floating {
+  position: fixed;
+  bottom: 26px;
+  left: 26px;
+  z-index: 9999;
+}
+.discord-pulse-btn {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5865F2, #4752C4);
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 30px rgba(88, 101, 242, 0.45);
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.discord-pulse-btn:hover {
+  transform: scale(1.08);
+}
+.discord-pulse-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(88, 101, 242, 0.55);
+  animation: pulseRingDiscord 2s infinite ease-out;
+  pointer-events: none;
+}
+@keyframes pulseRingDiscord {
+  0% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+.discord-tooltip {
+  position: absolute;
+  left: 70px;
+  top: 12px;
+  background: rgba(14, 18, 30, 0.95);
+  border: 1px solid rgba(88, 101, 242, 0.35);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
+  animation: tooltipFadeDiscord 0.4s ease forwards;
+}
+@keyframes tooltipFadeDiscord {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.discord-tooltip-close {
+  background: none;
+  border: none;
+  color: #798ba7;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0;
+}
+.discord-tooltip-close:hover {
+  color: #fff;
+}
+
+.discord-modal {
+  position: absolute;
+  bottom: 74px;
+  left: 0;
+  width: 370px;
+  max-width: calc(100vw - 32px);
+  background: rgba(12, 16, 27, 0.98);
+  border: 1px solid rgba(88, 101, 242, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(88, 101, 242, 0.15);
+  backdrop-filter: blur(24px);
+  overflow: hidden;
+  display: none;
+  transform-origin: bottom left;
+}
+.discord-modal.open,
+.discord-modal.active {
+  display: flex !important;
+  flex-direction: column;
+  animation: modalInDiscord 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes modalInDiscord {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.discord-modal-head {
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #5865F2, #404eed);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.discord-head-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.discord-avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #080b12;
+  display: grid;
+  place-items: center;
+  border: 2px solid #5865F2;
+  box-shadow: 0 0 14px rgba(88, 101, 242, 0.45);
+  flex-shrink: 0;
+}
+.discord-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+.discord-online-indicator {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 11px;
+  height: 11px;
+  background: #23a55a;
+  border: 2px solid #404eed;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #23a55a;
+}
+.discord-head-info strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.2;
+}
+.discord-head-info small {
+  display: block;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.88);
+}
+.discord-close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+.discord-close-btn:hover {
+  opacity: 1;
+}
+
+.discord-modal-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: radial-gradient(circle at bottom, rgba(88, 101, 242, 0.05), transparent 70%), #0d121f;
+}
+.discord-chat-bubble {
+  border-radius: 14px;
+  padding: 12px 14px;
+  position: relative;
+  word-break: break-word;
+  background: #192238;
+  border-bottom-left-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.discord-bubble-sender {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 5px;
+  font-size: 10.5px;
+  color: #9a8bff;
+  font-weight: 700;
+}
+.discord-chat-bubble p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #e2e8f0;
+}
+
+/* ALERTA REGRAS DISCORD (NÃO USE CALL) */
+.discord-rules-alert {
+  background: linear-gradient(135deg, rgba(237, 66, 69, 0.15), rgba(240, 71, 71, 0.08));
+  border: 1px solid rgba(237, 66, 69, 0.4);
+  border-radius: 12px;
+  padding: 11px 13px;
+  box-shadow: 0 4px 16px rgba(237, 66, 69, 0.15);
+}
+.discord-rules-alert-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 4px;
+}
+.rules-alert-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+.discord-rules-alert-head strong {
+  font-size: 11.5px;
+  color: #ff6b6e;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.discord-rules-alert p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.45;
+  color: #cbd5e1;
+}
+.discord-rules-alert p strong {
+  color: #fff;
+}
+
+/* LISTA DE CANAIS */
+.discord-channels-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.discord-chan-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.2s ease;
+}
+.discord-chan-item:hover {
+  background: rgba(88, 101, 242, 0.12);
+}
+.chan-hash {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 800;
+  font-size: 14px;
+  color: #5865F2;
+  width: 14px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.chan-info strong {
+  display: block;
+  font-size: 11.5px;
+  color: #f1f5f9;
+}
+.chan-info small {
+  display: block;
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
+/* BOTÃO DE ENTRAR NO DISCORD */
+.discord-join-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 11px 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(88, 101, 242, 0.45);
+  transition: all 0.2s ease;
+}
+.discord-join-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(88, 101, 242, 0.65);
+  background: linear-gradient(135deg, #6774f4 0%, #525ddc 100%);
+}
+
 /* Toast notification */
 .toast-notification {
   position: fixed;
@@ -1000,6 +1297,10 @@
     bottom: 76px !important;
     right: 14px !important;
   }
+  .discord-floating {
+    bottom: 76px !important;
+    left: 14px !important;
+  }
   body {
     padding-bottom: 70px;
   }
@@ -1013,11 +1314,13 @@
   .whatsapp-direct-btn {
     width: 100%;
   }
-  .whatsapp-pulse-btn {
+  .whatsapp-pulse-btn,
+  .discord-pulse-btn {
     width: 50px;
     height: 50px;
   }
-  .whatsapp-tooltip {
+  .whatsapp-tooltip,
+  .discord-tooltip {
     display: none;
   }
   .topbar-actions .whatsapp-btn-header span {
@@ -1830,9 +2133,10 @@
   }
 }
 
-/* Native Bottom Sheet for WhatsApp on Mobile Screens (<= 620px) */
+/* Native Bottom Sheet for WhatsApp & Discord on Mobile Screens (<= 620px) */
 @media (max-width: 620px) {
-  .whatsapp-modal {
+  .whatsapp-modal,
+  .discord-modal {
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
@@ -1845,7 +2149,8 @@
     z-index: 100000 !important;
     box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.85) !important;
   }
-  .whatsapp-modal-head {
+  .whatsapp-modal-head,
+  .discord-modal-head {
     position: sticky;
     top: 0;
     z-index: 5;

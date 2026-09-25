@@ -897,6 +897,71 @@ ${stepsTable}
     });
   }
 
+  // Discord Modal & Floating Widget Handling (Canto Inferior Esquerdo)
+  const discordModal = document.getElementById('discordModal');
+  const discordToggleBtn = document.getElementById('discordToggleBtn');
+  const discordCloseBtn = document.getElementById('discordCloseBtn');
+  const discordTooltip = document.getElementById('discordTooltip');
+  const discordTooltipClose = document.getElementById('discordTooltipClose');
+  const footerDiscordBtn = document.getElementById('footerDiscordBtn');
+  const discordJoinBtn = document.getElementById('discordJoinBtn');
+
+  function openDiscordModal() {
+    if (!discordModal) return;
+    discordModal.classList.add('active');
+    discordModal.classList.add('open');
+    if (discordTooltip) {
+      discordTooltip.style.display = 'none';
+    }
+  }
+
+  function closeDiscordModal() {
+    if (discordModal) {
+      discordModal.classList.remove('active');
+      discordModal.classList.remove('open');
+    }
+  }
+
+  if (discordToggleBtn) {
+    discordToggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (discordModal && (discordModal.classList.contains('active') || discordModal.classList.contains('open'))) {
+        closeDiscordModal();
+      } else {
+        openDiscordModal();
+      }
+    });
+  }
+
+  if (discordCloseBtn) {
+    discordCloseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeDiscordModal();
+    });
+  }
+
+  if (discordTooltipClose) {
+    discordTooltipClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (discordTooltip) {
+        discordTooltip.style.display = 'none';
+      }
+    });
+  }
+
+  if (footerDiscordBtn) {
+    footerDiscordBtn.addEventListener('click', () => {
+      showToast('Conectando à Comunidade Discord do GAU v5...');
+    });
+  }
+
+  if (discordJoinBtn) {
+    discordJoinBtn.addEventListener('click', () => {
+      showToast('Conectando ao Discord Oficial GAU v5 (Lembre-se: NÃO USE CALL!)...');
+      closeDiscordModal();
+    });
+  }
+
   // Close modal when clicking outside
   document.addEventListener('click', (e) => {
     if (whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
@@ -906,12 +971,23 @@ ${stepsTable}
         closeWhatsappModal();
       }
     }
+    if (discordModal && (discordModal.classList.contains('active') || discordModal.classList.contains('open'))) {
+      if (!discordModal.contains(e.target) && 
+          !(discordToggleBtn && discordToggleBtn.contains(e.target))) {
+        closeDiscordModal();
+      }
+    }
   });
 
   // Escape key to close modal
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
-      closeWhatsappModal();
+    if (e.key === 'Escape') {
+      if (whatsappModal && (whatsappModal.classList.contains('active') || whatsappModal.classList.contains('open'))) {
+        closeWhatsappModal();
+      }
+      if (discordModal && (discordModal.classList.contains('active') || discordModal.classList.contains('open'))) {
+        closeDiscordModal();
+      }
     }
   });
 
