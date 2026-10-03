@@ -972,6 +972,12 @@ ${stepsTable}
     link.addEventListener('click', closeMobileDrawer);
   });
 
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileNavDrawer && mobileNavDrawer.classList.contains('open')) {
+      closeMobileDrawer();
+    }
+  });
+
   // Dock WhatsApp Button
   const dockWhatsappBtn = document.getElementById('dockWhatsappBtn');
   if (dockWhatsappBtn) {
@@ -3084,6 +3090,11 @@ ${stepsTable}
     toggleBtn.addEventListener('click', openCockpit);
     closeBtn.addEventListener('click', closeCockpit);
     backdrop.addEventListener('click', closeCockpit);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display !== 'none') {
+        closeCockpit();
+      }
+    });
 
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
@@ -3220,6 +3231,12 @@ ${stepsTable}
     if (startTopBtn) startTopBtn.addEventListener('click', startTour);
     if (startHeroBtn) startHeroBtn.addEventListener('click', startTour);
     closeBtn.addEventListener('click', stopTour);
+    if (backdrop) backdrop.addEventListener('click', stopTour);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && card.style.display !== 'none') {
+        stopTour();
+      }
+    });
     nextBtn.addEventListener('click', () => {
       nextStep();
       startAutoTimer();

@@ -35,15 +35,19 @@
   <link rel="icon" href="assets/gau-icon.png" type="image/png" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css?v=5.5.5" />
+  <link rel="stylesheet" href="styles.css?v=5.5.6" />
 
   <!-- Vercel Web Analytics & Speed Insights -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    // Os endpoints /_vercel/* so existem quando o site e servido pela Vercel (evita 404 no GitHub Pages)
+    if (/\.vercel\.app$/i.test(location.hostname)) {
+      ['/_vercel/insights/script.js', '/_vercel/speed-insights/script.js'].forEach(function (src) {
+        var s = document.createElement('script'); s.defer = true; s.src = src; document.head.appendChild(s);
+      });
+    }
   </script>
-  <script defer src="/_vercel/insights/script.js"></script>
-  <script defer src="/_vercel/speed-insights/script.js"></script>
   <style>
     /* Critical inline styles to guarantee instant rendering of WhatsApp & Mobile elements */
     .whatsapp-floating {
@@ -1029,7 +1033,7 @@
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
               Baixar GAU-v5.zip (45.6 MB) <span>↓</span>
             </a>
-            <a class="button ghost" href="downloads/GAU-v5.zip.sha256" target="_blank">Checksum SHA256</a>
+            <a class="button ghost" href="downloads/GAU-v5.zip.sha256" target="_blank" rel="noopener noreferrer">Checksum SHA256</a>
           </div>
 
           <div class="hash-fingerprint-box">
@@ -1115,7 +1119,7 @@
             </div>
             <div class="terminal-input-bar">
               <span class="t-prompt">gau&gt;</span>
-              <input type="text" id="terminalInput" placeholder="Digite um comando aqui... (ex: gau doctor, /goal)" autocomplete="off" />
+              <input type="text" id="terminalInput" aria-label="Comando do terminal GAU" placeholder="Digite um comando aqui... (ex: gau doctor, /goal)" autocomplete="off" />
               <button type="button" id="terminalSendBtn" class="terminal-enter-btn" title="Executar">↵</button>
             </div>
           </div>
@@ -1334,7 +1338,7 @@
   <div class="spotlight-modal" id="spotlightModal" role="dialog" aria-modal="true" aria-label="Busca Rápida GAU v5" style="display: none;">
     <div class="spotlight-header">
       <svg class="spotlight-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" id="spotlightInput" placeholder="Buscar ideias, agentes, comandos ou skills... (ex: router, memory, /goal)" autocomplete="off" />
+      <input type="text" id="spotlightInput" aria-label="Busca rápida" placeholder="Buscar ideias, agentes, comandos ou skills... (ex: router, memory, /goal)" autocomplete="off" />
       <kbd class="spotlight-esc" id="spotlightEscBtn">ESC</kbd>
     </div>
     <div class="spotlight-body" id="spotlightResults">
@@ -1453,7 +1457,7 @@
 
   <div id="toastNotification" class="toast-notification" aria-live="polite"></div>
 
-  <script src="ideas.js?v=5.5.5"></script>
-  <script src="app.js?v=5.5.5"></script>
+  <script src="ideas.js?v=5.5.6"></script>
+  <script src="app.js?v=5.5.6"></script>
 </body>
 </html>
