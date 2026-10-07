@@ -4627,3 +4627,577 @@ body.matrix-mode .interactive-terminal-card {
   gap: 8px;
 }
 
+/* ============================================================
+   GAU v5.6 — Mission Runner, Global Skills Hub (1.320 Skills),
+   Prompt Studio, Genomas (#128), Business & Tribunal A/B
+   ============================================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.group-tabs {
+  margin-bottom: 10px;
+}
+
+/* 1. MISSION RUNNER */
+.runner-shell {
+  background: linear-gradient(180deg, rgba(13, 18, 34, 0.92), rgba(7, 10, 20, 0.96));
+  border: 1px solid rgba(98, 230, 255, 0.25);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 100%;
+  overflow: hidden;
+}
+.runner-presets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+.runner-preset {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+}
+.runner-preset:hover,
+.runner-preset.active {
+  border-color: var(--cyan);
+  background: rgba(98, 230, 255, 0.12);
+  color: #fff;
+}
+.runner-input-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.runner-input-row input {
+  flex: 1 1 240px;
+  min-width: 0;
+  background: #050811;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #fff;
+  font-size: 14px;
+}
+.runner-input-row input:focus {
+  outline: 2px solid var(--cyan);
+  border-color: transparent;
+}
+.runner-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.runner-phases {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.runner-phases li {
+  font-size: 11.5px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+.runner-phases li.active {
+  border-color: var(--cyan);
+  background: rgba(98, 230, 255, 0.16);
+  color: #fff;
+  font-weight: 700;
+}
+.runner-phases li.done {
+  border-color: rgba(128, 255, 212, 0.45);
+  background: rgba(128, 255, 212, 0.12);
+  color: var(--mint);
+}
+.runner-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.runner-status {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cbd5e1;
+}
+.runner-status[data-state="exec"] {
+  background: rgba(98, 230, 255, 0.16);
+  color: var(--cyan);
+}
+.runner-status[data-state="ok"] {
+  background: rgba(37, 211, 102, 0.18);
+  color: #25D366;
+}
+.runner-progress {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.runner-progress span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--cyan), var(--mint));
+  transition: width 0.25s ease;
+}
+.runner-console {
+  background: #04070f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 14px 16px;
+  min-height: 240px;
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: #cbd5e1;
+}
+.runner-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.runner-line.head { color: #c4b5fd; font-weight: 700; margin-top: 6px; }
+.runner-line.ok { color: #80ffd4; }
+.runner-line.info { color: #62e6ff; }
+.runner-line.warn { color: #fcd34d; }
+.runner-line.agent { color: #e2e8f0; }
+.runner-line.term { color: #a5f3fc; }
+.runner-line.final { color: #25D366; font-weight: 800; margin-top: 6px; }
+.runner-line.hash { color: #62e6ff; word-break: break-all; }
+
+/* 2. GLOBAL SKILLS HUB (1.320 SKILLS) */
+.skills-quick-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.skills-quick-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.skills-quick-tag {
+  background: rgba(98, 230, 255, 0.08);
+  border: 1px solid rgba(98, 230, 255, 0.25);
+  color: #e2e8f0;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+.skills-quick-tag:hover {
+  background: rgba(98, 230, 255, 0.18);
+  border-color: var(--cyan);
+}
+.skills-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+.skill-hub-card {
+  background: rgba(12, 17, 32, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.skill-hub-card:hover {
+  border-color: rgba(98, 230, 255, 0.45);
+  transform: translateY(-2px);
+}
+.skill-hub-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.skill-hub-slug {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--cyan);
+  word-break: break-word;
+}
+.skill-hub-cat {
+  font-size: 10.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(167, 139, 250, 0.14);
+  color: #c4b5fd;
+  white-space: nowrap;
+}
+.skill-hub-desc {
+  font-size: 13px;
+  color: #cbd5e1;
+  line-height: 1.45;
+  margin: 0;
+  word-break: break-word;
+}
+.skill-hub-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.skill-hub-actions .button {
+  flex: 1 1 110px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  justify-content: center;
+}
+.skills-hub-footer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* 3. PROMPT STUDIO & GENOMES */
+.studio-grid,
+.biz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.studio-form,
+.biz-form,
+.studio-result,
+.biz-summary-card {
+  background: rgba(12, 17, 32, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 20px;
+  min-width: 0;
+  max-width: 100%;
+}
+.studio-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 16px 0;
+}
+.studio-fieldset legend,
+.studio-goal-label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+.studio-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.studio-chip {
+  position: relative;
+  cursor: pointer;
+}
+.studio-chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.studio-chip span {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  transition: all 0.18s ease;
+}
+.studio-chip input:checked + span {
+  background: rgba(98, 230, 255, 0.16);
+  border-color: var(--cyan);
+  color: #fff;
+  font-weight: 600;
+}
+.studio-chip input:focus-visible + span {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.studio-form textarea,
+.biz-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: #050811;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 13.5px;
+  resize: vertical;
+}
+.studio-result-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+.studio-output,
+.biz-brief-preview {
+  background: #04070f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px;
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #80ffd4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  max-height: 360px;
+}
+.studio-copy.pop {
+  transform: scale(1.04);
+}
+
+.genome-heading {
+  margin-top: 40px;
+}
+.genome-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+}
+.genome-card {
+  background: rgba(12, 17, 32, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 16px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.genome-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.genome-icon {
+  font-size: 22px;
+}
+.genome-ver {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(128, 255, 212, 0.12);
+  color: var(--mint);
+}
+.genome-steps {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+.genome-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+/* 4. BUSINESS CONFIGURATOR */
+.biz-summary-card {
+  border-color: rgba(37, 211, 102, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.biz-pill {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(37, 211, 102, 0.15);
+  color: #25D366;
+  margin-bottom: 6px;
+}
+.biz-summary-top h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #fff;
+}
+.biz-block small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+.biz-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.biz-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.biz-badge.agent {
+  background: rgba(98, 230, 255, 0.12);
+  color: var(--cyan);
+}
+.biz-badge.skill {
+  background: rgba(167, 139, 250, 0.14);
+  color: #c4b5fd;
+}
+.biz-deliverables {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #e2e8f0;
+}
+.biz-cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* 5. TRIBUNAL DE EVIDÊNCIAS */
+.tribunal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 18px;
+}
+.tribunal-col {
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 17, 32, 0.88);
+  min-width: 0;
+}
+.tribunal-col h3 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tribunal-col h3 small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.tribunal-bad {
+  border-color: rgba(255, 107, 129, 0.35);
+}
+.tribunal-good {
+  border-color: rgba(128, 255, 212, 0.4);
+}
+.tribunal-col ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #e2e8f0;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.tribunal-metrics {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 14px;
+}
+.tribunal-metric {
+  background: rgba(12, 17, 32, 0.9);
+  border: 1px solid rgba(98, 230, 255, 0.22);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+.tribunal-metric strong {
+  display: block;
+  font-size: 28px;
+  color: var(--cyan);
+  font-weight: 800;
+}
+.tribunal-metric span {
+  font-size: 12.5px;
+  color: #cbd5e1;
+}
+.tribunal-note {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner-progress span,
+  .studio-copy.pop,
+  .skill-hub-card {
+    transition: none !important;
+  }
+}
+

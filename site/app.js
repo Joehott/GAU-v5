@@ -5,9 +5,29 @@
   const filters = document.getElementById('ideaFilters');
   const count = document.getElementById('ideaCount');
   let activeCategory = 'Todas';
+  let activeGroup = 'Todos';
+  const groupsEl = document.getElementById('ideaGroups');
+  const GROUPS = ['Governança Cognitiva', 'Resiliência Ciber-Física', 'Intent-to-Reality'];
+  const GROUP_HINT = { 'Governança Cognitiva': '#01–#100', 'Resiliência Ciber-Física': '#101–#120', 'Intent-to-Reality': '#121–#130' };
+  function getGroup(id){ return id <= 100 ? GROUPS[0] : (id <= 120 ? GROUPS[1] : GROUPS[2]); }
 
   const escapeHtml = (value='') => value.replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const categories = ['Todas', ...new Set(ideas.map(i => i.category))];
+
+  function renderGroups(){
+    if (!groupsEl) return;
+    const items = ['Todos', ...GROUPS];
+    groupsEl.innerHTML = items.map(g => {
+      const cnt = g === 'Todos' ? ideas.length : ideas.filter(i => getGroup(i.id) === g).length;
+      const label = g === 'Todos' ? 'Todos os grupos' : g;
+      const hint = GROUP_HINT[g] ? ` <small style="opacity:0.75; font-size:9px;">${GROUP_HINT[g]}</small>` : '';
+      return `<button type="button" class="filter-btn ${g === activeGroup ? 'active' : ''}" aria-pressed="${g === activeGroup}" data-group="${escapeHtml(g)}">${escapeHtml(label)}${hint} <small style="opacity:0.75; font-size:9px;">(${cnt})</small></button>`;
+    }).join('');
+    groupsEl.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+      activeGroup = btn.dataset.group;
+      renderGroups(); renderIdeas();
+    }));
+  }
 
   function renderFilters(){
     filters.innerHTML = categories.map(cat => {
@@ -25,7 +45,7 @@
     return `gau-${num}-${clean}`;
   }
 
-  // Detailed metadata generator for the 69 ideas
+  // Detailed metadata generator for the 130 ideas
   function getIdeaDetails(item) {
     const slug = getSkillSlug(item.id, item.name);
     const categoryMechanisms = {
@@ -34,7 +54,9 @@
       'Raciocínio': 'Desacopla o problema em linhas independentes de raciocínio, formulando hipóteses concorrentes testadas por experimentos discriminatórios com decaimento temporal para as sem evidência física.',
       'Memória': 'Grava checkpoints e fatos canônicos com hashes SHA-256 no banco local SQLite em modo WAL. Implementa auto-pruning para eliminar ruídos de log e preservar contratos de interface e caminhos rejeitados.',
       'Execução': 'Paraleliza a codificação em worktrees isoladas do Git via Coding Swarm. Cada coder opera com interfaces congeladas, e apenas implementações aprovadas na suíte de testes são integradas à árvore principal.',
-      'Governança': 'Dimensiona compute proporcionalmente ao risco da tarefa (Risk-Based Compute). Aplica tetos orçamentários rígidos e interrompe o consumo assim que a prova física de conclusão for atingida.'
+      'Governança': 'Dimensiona compute proporcionalmente ao risco da tarefa (Risk-Based Compute). Aplica tetos orçamentários rígidos e interrompe o consumo assim que a prova física de conclusão for atingida.',
+      'Resiliência': 'Opera no runtime ciber-físico: eventos no Event Spine (SQLite WAL), snapshots atômicos com SHA-256, leases com TTL, cofre de segredos e travas de emergência no disco, com restauração física garantida.',
+      'Intent-to-Reality': 'Transforma intenção humana em realidade verificável: decompõe o pedido em KNOWN, INFERABLE e MUST_ASK, avança em loop Ação-Teste-Reparo e só encerra após auditoria do contrato de conclusão.'
     };
 
     const categoryRules = {
@@ -43,7 +65,9 @@
       'Raciocínio': 'Regra Inviolável: Proibido assumir hipóteses sem teste discriminatório. Toda premissa deve ser rotulada como comprovada ou especulativa.',
       'Memória': 'Regra Inviolável: Memória não altera a realidade física do disco. Toda suposição vinda do histórico deve ser revalidada contra o workspace atual.',
       'Execução': 'Regra Inviolável: Nenhum código é integrado na branch principal sem execução física e código de saída 0 no terminal.',
-      'Governança': 'Regra Inviolável: Compute é interrompido imediatamente após satisfação do gate formal. Overengineering e desperdício de tokens são censurados.'
+      'Governança': 'Regra Inviolável: Compute é interrompido imediatamente após satisfação do gate formal. Overengineering e desperdício de tokens são censurados.',
+      'Resiliência': 'Regra Inviolável: Toda mutação é reversível por checkpoint físico e bloqueada pela trava de emergência. Segredos nunca entram no contexto do LLM.',
+      'Intent-to-Reality': 'Regra Inviolável: O orçamento de perguntas é fixo; o que pode ser inferido não é perguntado, e nada é entregue sem contrato de conclusão verificado.'
     };
 
     return {
@@ -134,7 +158,7 @@
 
   function renderIdeas(){
     const q = (search.value || '').toLocaleLowerCase('pt-BR').trim();
-    const filtered = ideas.filter(i => (activeCategory === 'Todas' || i.category === activeCategory) && (`${i.id} ${i.name} ${i.summary} ${i.category}`.toLocaleLowerCase('pt-BR').includes(q)));
+    const filtered = ideas.filter(i => (activeGroup === 'Todos' || getGroup(i.id) === activeGroup) && (activeCategory === 'Todas' || i.category === activeCategory) && (`${i.id} ${i.name} ${i.summary} ${i.category}`.toLocaleLowerCase('pt-BR').includes(q)));
     grid.innerHTML = filtered.map(i => {
       const slug = getSkillSlug(i.id, i.name);
       return `<article class="idea-card" data-ideaid="${i.id}" title="Clique para abrir detalhes da ideia ${escapeHtml(i.name)}">
@@ -160,7 +184,7 @@
     }
   }
   search.addEventListener('input', renderIdeas);
-  renderFilters(); renderIdeas();
+  renderGroups(); renderFilters(); renderIdeas();
 
   const observer = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible'); observer.unobserve(e.target);} }), {threshold:.12});
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -686,7 +710,7 @@ ${stepsTable}
     orbitalCoreNode.addEventListener('click', () => {
       satellites.forEach(s => s.classList.remove('active'));
       if (capsuleTitle) capsuleTitle.textContent = 'Núcleo Central GAU v5 (Global Agentic Universe)';
-      if (capsuleDesc) capsuleDesc.textContent = 'Orquestrador quântico unificado operando no Antigravity com 16 agentes, 69 ideias aprovadas e tolerância zero a alucinação.';
+      if (capsuleDesc) capsuleDesc.textContent = 'Orquestrador quântico unificado operando no Antigravity com 16 agentes, 130 ideias operacionais, 1.320 skills e tolerância zero a alucinação.';
       if (capsuleIcon) capsuleIcon.textContent = '⚡';
       if (orbitalLiveStatus) orbitalLiveStatus.innerHTML = '<i></i> QUANTUM CORE 100%';
     });
@@ -1503,7 +1527,7 @@ ${stepsTable}
           <span class="t-green">✔ SQLite WAL journal mode verified (.gau/events.sqlite3)</span><br>
           <span class="t-green">✔ Git Worktree Swarm isolated and healthy</span><br>
           <span class="t-green">✔ JEV Decision Fabric: Loop Sentinel & Verifier online</span><br>
-          <span class="t-cyan">🛡️ 69 Ideias, 16 Subagentes e Provas E0-E5 ativas. Runtime operacional!</span>
+          <span class="t-cyan">🛡️ 130 Ideias, 1.320 Skills, 31 Subagentes e Provas E0-E5 ativas. Runtime operacional!</span>
         `);
         return;
       }
@@ -3156,8 +3180,8 @@ ${stepsTable}
       },
       {
         target: '#ideas',
-        title: '7. O Atlas das 69 Ideias Aprovadas',
-        text: 'Do Roteamento Adaptativo ao Tribunal de Evidências, 69 mecanismos cognitivos prontos para consulta com regras invioláveis de governança.'
+        title: '7. O Atlas das 130 Ideias & 1.320 Skills',
+        text: 'Do Roteamento Adaptativo ao Tribunal de Evidências, 130 mecanismos operacionais e 1.320 skills prontos para consulta com regras invioláveis de governança.'
       },
       {
         target: '#deploy',
@@ -3266,4 +3290,730 @@ ${stepsTable}
   initSquadBuilder();
   initCockpitHud();
   initGuidedTour();
+})();
+
+
+/* ============================================================
+   GAU v5.6 — Mission Runner, Prompt Studio, Genomas (#128),
+   Global Skills Hub (1.320 Skills) & Business Configurator
+   ============================================================ */
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function toast(message, duration = 2400) {
+    const el = $('toastNotification');
+    if (!el) return;
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => el.classList.remove('show'), duration);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand('copy');
+        ta.remove();
+        return ok;
+      } catch { return false; }
+    }
+  }
+
+  async function sha256Hex(text) {
+    try {
+      if (window.crypto && crypto.subtle) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+        return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+    } catch { /* fallback */ }
+    let h = 2166136261 >>> 0, out = '';
+    for (let r = 0; r < 8; r++) {
+      for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; }
+      out += h.toString(16).padStart(8, '0');
+    }
+    return out;
+  }
+
+  /* ---------------------------------------------------------
+     1. MISSION RUNNER
+     --------------------------------------------------------- */
+  const PRESETS = {
+    saas: {
+      label: 'SaaS Fullstack com Stripe & Docker',
+      known: ['stack: Node + Postgres + Stripe', 'entrega em containers Docker', 'pagamentos exigem modo teste'],
+      inferable: ['webhook do Stripe com verificação de assinatura', 'migrations versionadas', 'docker compose com healthcheck'],
+      ask: ['Qual plano de preços inicial?', 'Cobrança mensal, anual ou ambas?'],
+      route: ['implementação → gau-implementer (modelo barato)', 'pagamentos → gau-security (modelo forte)', 'infra → gau-computer-layer'],
+      debate: [
+        ['gau-architect', 'Proponho API REST + worker de webhooks isolado. Contrato de interfaces congelado antes do swarm.'],
+        ['gau-devil-advocate', 'E se o webhook chegar duplicado ou fora de ordem? Exijo idempotência por event.id.'],
+        ['gau-implementer', 'Chave de idempotência em tabela própria; teste de replay incluído no escopo.'],
+        ['gau-security', 'Segredos só via Secret Broker (SEC_TOKEN). Nenhuma chave Stripe no contexto do LLM.']
+      ],
+      tests: ['migrations aplicam e revertem', 'checkout em modo teste', 'webhook idempotente (replay x3)', 'docker compose up healthy', 'lint + tipos', 'varredura de segredos', 'suíte de integração', 'smoke test E2E']
+    },
+    owasp: {
+      label: 'Auditoria OWASP & Pentest Automatizado',
+      known: ['escopo: apenas alvo autorizado', 'referência: OWASP Top 10', 'relatório com evidência reproduzível'],
+      inferable: ['inventário de rotas e entradas', 'checagem de headers e cookies', 'dependências com CVE conhecida'],
+      ask: ['O alvo é staging ou produção?', 'Há janela de teste combinada?'],
+      route: ['reconhecimento → gau-web-scout (A0, só leitura)', 'ataque controlado → gau-adversarial', 'ação destrutiva → A2 (pausa humana)'],
+      debate: [
+        ['gau-architect', 'Superfície mapeada: 14 rotas, 3 formulários, 1 upload. Priorizo injeção e controle de acesso.'],
+        ['gau-devil-advocate', 'Achado sem prova reproduzível não conta. Cada falha precisa de request e resposta guardados.'],
+        ['gau-implementer', 'Gero scripts de verificação somente leitura e patches mínimos para cada achado confirmado.'],
+        ['gau-security', 'Qualquer exploit que altere dados é bloqueado: exige lease A2 com TTL e confirmação do Joe.']
+      ],
+      tests: ['headers de segurança', 'injeção em parâmetros', 'controle de acesso (IDOR)', 'XSS refletido e armazenado', 'rate limit e brute force', 'dependências vulneráveis', 'segredos expostos', 'reteste pós-correção']
+    },
+    refactor: {
+      label: 'Refatoração Backend e Otimização O(n)',
+      known: ['comportamento externo não pode mudar', 'baseline de desempenho medido antes', 'testes existentes são a rede de segurança'],
+      inferable: ['gargalo é laço aninhado O(n²)', 'índice ausente em coluna filtrada', 'cache de resultado idempotente'],
+      ask: ['Qual o SLA de latência alvo?', 'Aceita mudar a assinatura interna?'],
+      route: ['perfil → gau-performance', 'reescrita → gau-implementer em worktree isolada', 'equivalência → gau-verifier (metamórfico)'],
+      debate: [
+        ['gau-architect', 'Troco busca linear por índice hash; complexidade cai de O(n²) para O(n).'],
+        ['gau-devil-advocate', 'Prove a equivalência. Teste metamórfico com 10 mil entradas aleatórias, mesma semente.'],
+        ['gau-implementer', 'Refatoração em passos pequenos, cada passo com a suíte verde antes do próximo.'],
+        ['gau-performance', 'Benchmark antes/depois sob a mesma carga; só aceito ganho acima do ruído medido.']
+      ],
+      tests: ['suíte legada 100% verde', 'teste metamórfico (10k entradas)', 'benchmark antes', 'benchmark depois', 'uso de memória', 'regressão por diff', 'lint + tipos', 'checkpoint físico salvo']
+    },
+    qa: {
+      label: 'Auto-QA no Browser com Chrome DevTools',
+      known: ['alvo: aplicação em localhost', 'console deve ficar com 0 erros', 'responsivo de 320px a 1366px'],
+      inferable: ['fluxos críticos: navegação, formulário, modal', 'overflow horizontal em mobile', 'recursos 404 na aba Network'],
+      ask: ['Existe usuário de teste para o login?', 'Quais fluxos são críticos?'],
+      route: ['observação → gau-web-scout (A0)', 'cliques e formulários → gau-web-actor (A1)', 'consenso → gau-cross-sensor'],
+      debate: [
+        ['gau-architect', 'Ciclo Build → Test → Repair → Retest, com captura de tela a cada falha.'],
+        ['gau-devil-advocate', 'Console limpo não basta: valide também DOM, rede e a tela renderizada.'],
+        ['gau-implementer', 'Corrijo apenas o que o teste reproduziu e rodo o reteste na mesma rota.'],
+        ['gau-cross-sensor', 'Sucesso só com consenso: DOM + captura + logs de rede + hash do disco.']
+      ],
+      tests: ['carga da página sem erros', 'console: 0 erros', 'network: 0 recursos 404', 'overflow em 8 viewports', 'foco e teclado (Tab/Esc)', 'fluxo do formulário', 'captura de tela por viewport', 'consenso multi-sensor']
+    }
+  };
+
+  function genericPreset(text) {
+    const t = (text || '').trim().slice(0, 120) || 'missão livre';
+    return {
+      label: t,
+      known: ['objetivo: ' + t, 'verificação física obrigatória', 'workspace do usuário preservado'],
+      inferable: ['estrutura mínima de arquivos', 'testes automatizados para o núcleo', 'documentação curta de uso'],
+      ask: ['Qual o critério de pronto mais importante?', 'Há restrição de tecnologia?'],
+      route: ['classificação → Agent Router (modelo barato)', 'execução → gau-implementer', 'prova → gau-verifier'],
+      debate: [
+        ['gau-architect', 'Quebro o objetivo em etapas pequenas, com interfaces congeladas antes de codar.'],
+        ['gau-devil-advocate', 'Qual é o caso de borda que quebra isso? Quero um contraexemplo antes do código.'],
+        ['gau-implementer', 'Implemento o mínimo para passar o teste que falha primeiro (TDD).'],
+        ['gau-verifier', 'Só aceito evidência executada no terminal, não relato do autor.']
+      ],
+      tests: ['teste de falha escrito primeiro', 'implementação mínima', 'suíte unitária', 'lint + tipos', 'regressão', 'revisão cega', 'varredura de segredos', 'checkpoint físico salvo']
+    };
+  }
+
+  function initMissionRunner() {
+    const con = $('runnerConsole');
+    const input = $('runnerInput');
+    const runBtn = $('runnerRun');
+    const pauseBtn = $('runnerPause');
+    const copyBtn = $('runnerCopy');
+    const bar = $('runnerBar');
+    const statusEl = $('runnerStatus');
+    const phaseEls = document.querySelectorAll('#runnerPhases [data-phase]');
+    const presetBtns = document.querySelectorAll('.runner-preset');
+    if (!con || !input || !runBtn || !pauseBtn || !copyBtn) return;
+
+    let selectedPreset = null;
+    let steps = [];
+    let idx = 0;
+    let timer = null;
+    let paused = false;
+    let running = false;
+    let log = [];
+    let runId = 0;
+
+    const STATUS_CLASS = { IDLE: 'idle', PLANNED: 'planned', EXECUTING: 'exec', EXECUTED: 'exec', VERIFYING: 'exec', VERIFIED: 'ok' };
+    function setStatus(s) {
+      if (!statusEl) return;
+      statusEl.textContent = s;
+      statusEl.dataset.state = STATUS_CLASS[s] || 'idle';
+    }
+    function setPhase(n) {
+      phaseEls.forEach(el => {
+        const p = Number(el.dataset.phase);
+        el.classList.toggle('active', p === n);
+        el.classList.toggle('done', p < n);
+      });
+    }
+    function addLine(cls, text) {
+      const d = document.createElement('div');
+      d.className = 'runner-line ' + cls;
+      d.textContent = text;
+      con.appendChild(d);
+      con.scrollTop = con.scrollHeight;
+      log.push(text);
+    }
+    const sleepMs = (ms) => reduceMotion ? Math.min(ms, 30) : ms;
+
+    function buildSteps(p, goal) {
+      const s = [];
+      const add = (delay, cls, text, extra = {}) => s.push({ delay, cls, text, ...extra });
+      add(220, 'sys', '$ gau /goal "' + goal + '"', { status: 'PLANNED', phase: 0 });
+      add(280, 'sys', '[boot] pré-flight ok · runtime v5.3.0 · 1.320 skills indexadas · Event Spine ativo', { status: 'EXECUTING' });
+      add(380, 'head', '── FASE 1 · Intent Capsule #121 ──', { phase: 1 });
+      p.known.forEach(k => add(240, 'ok', '  KNOWN       ✔ ' + k));
+      p.inferable.forEach(k => add(240, 'info', '  INFERABLE   ≈ ' + k));
+      p.ask.forEach(k => add(240, 'warn', '  MUST_ASK    ? ' + k));
+      add(260, 'sys', '  Clarification Budget #123: ' + p.ask.length + '/2 perguntas usadas · compressão ≈ 94%');
+      add(380, 'head', '── FASE 2 · JEV Decision Fabric ──', { phase: 2 });
+      p.route.forEach((r, i) => add(240, 'info', '  [router ' + (74 + i * 61) + 'ms] ' + r));
+      add(240, 'info', '  [failure-classifier] 0 erros · classe dominante: nenhuma');
+      add(240, 'ok', '  [loop-sentinel] 0 loops detectados · tentativas repetidas: 0/3');
+      add(380, 'head', '── FASE 3 · Debate Multi-Agente ──', { phase: 3 });
+      p.debate.forEach(([who, msg]) => add(420, who === 'gau-devil-advocate' ? 'warn' : 'agent', '  <' + who + '> ' + msg));
+      add(300, 'ok', '  [gau-judge] consenso sintetizado · objeção minoritária preservada até o teste');
+      add(380, 'head', '── FASE 4 · Terminal de Testes Ciber-Físicos ──', { phase: 4, status: 'EXECUTED' });
+      const total = p.tests.length;
+      p.tests.forEach((t, i) => {
+        const filled = Math.round(((i + 1) / total) * 20);
+        const barTxt = '[' + '█'.repeat(filled) + '░'.repeat(20 - filled) + ']';
+        add(300, 'term', '  ' + barTxt + ' ' + String(i + 1) + '/' + total + '  PASS  ' + t);
+      });
+      add(300, 'ok', '  $ exit code = 0  (' + total + '/' + total + ' verificações)', { status: 'VERIFYING' });
+      add(380, 'head', '── FASE 5 · Universal Status Gate ──', { phase: 5 });
+      add(260, 'sys', '  PLANNED → EXECUTING → EXECUTED → VERIFYING …');
+      add(400, 'final', 'hash', { hash: true, status: 'VERIFIED', phase: 6 });
+      return s;
+    }
+
+    function finishUI() {
+      running = false; paused = false;
+      runBtn.disabled = false;
+      pauseBtn.disabled = true;
+      pauseBtn.textContent = '⏸ Pausar';
+      pauseBtn.setAttribute('aria-pressed', 'false');
+      copyBtn.disabled = log.length === 0;
+    }
+
+    async function tick(myRun) {
+      if (myRun !== runId || paused) return;
+      if (idx >= steps.length) { finishUI(); return; }
+      const st = steps[idx++];
+      if (st.status) setStatus(st.status);
+      if (st.phase !== undefined) setPhase(st.phase);
+      if (st.hash) {
+        const body = log.join('\n') + '\n' + Date.now();
+        const hex = await sha256Hex(body);
+        if (myRun !== runId) return;
+        addLine('final', '  ✔ STATUS: VERIFIED · evidência física comprovada');
+        addLine('hash', '  SHA-256: ' + hex);
+        addLine('sys', '  (simulação interativa no navegador — pronta para execução no Antigravity)');
+      } else {
+        addLine(st.cls, st.text);
+      }
+      if (bar) bar.style.width = Math.min(100, Math.round((idx / steps.length) * 100)) + '%';
+      const next = idx < steps.length ? sleepMs(steps[idx].delay) : 0;
+      timer = setTimeout(() => tick(myRun), next);
+    }
+
+    function start() {
+      clearTimeout(timer);
+      runId++;
+      const typed = input.value.trim();
+      const p = typed ? (selectedPreset && PRESETS[selectedPreset].label === typed ? PRESETS[selectedPreset] : genericPreset(typed))
+                      : (selectedPreset ? PRESETS[selectedPreset] : PRESETS.qa);
+      const goal = typed || p.label;
+      if (!typed) input.value = p.label;
+      con.textContent = '';
+      log = []; idx = 0; paused = false; running = true;
+      steps = buildSteps(p, goal);
+      setStatus('IDLE'); setPhase(0);
+      if (bar) bar.style.width = '0%';
+      runBtn.disabled = true;
+      pauseBtn.disabled = false;
+      copyBtn.disabled = true;
+      const myRun = runId;
+      timer = setTimeout(() => tick(myRun), sleepMs(180));
+    }
+
+    presetBtns.forEach(btn => btn.addEventListener('click', () => {
+      selectedPreset = btn.dataset.preset;
+      input.value = PRESETS[selectedPreset].label;
+      presetBtns.forEach(b => { const on = b === btn; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+      start();
+    }));
+    input.addEventListener('input', () => {
+      if (selectedPreset && PRESETS[selectedPreset].label !== input.value.trim()) {
+        selectedPreset = null;
+        presetBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+      }
+    });
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); start(); } });
+    runBtn.addEventListener('click', start);
+    pauseBtn.addEventListener('click', () => {
+      if (!running) return;
+      paused = !paused;
+      pauseBtn.textContent = paused ? '▶ Retomar' : '⏸ Pausar';
+      pauseBtn.setAttribute('aria-pressed', String(paused));
+      if (!paused) tick(runId);
+      else clearTimeout(timer);
+    });
+    copyBtn.addEventListener('click', async () => {
+      const ok = await copyText(log.join('\n'));
+      toast(ok ? 'Log da missão copiado ✓' : 'Não foi possível copiar.');
+    });
+    pauseBtn.disabled = true;
+    copyBtn.disabled = true;
+    setStatus('IDLE');
+  }
+
+  /* ---------------------------------------------------------
+     2. PROMPT STUDIO
+     --------------------------------------------------------- */
+  const DOMAINS = {
+    frontend: {
+      name: 'Frontend Moderno',
+      known: ['interface existente e design system devem ser preservados', 'mobile first, 60fps, acessibilidade (teclado, foco, aria)'],
+      inferable: ['componentes reutilizáveis', 'estados de loading, vazio e erro', 'prefers-reduced-motion respeitado'],
+      agents: ['gau-ux', 'gau-auto-qa', 'gau-web-scout'],
+      skills: ['react-patterns', 'tailwind-patterns', 'minimalist-ui'],
+      proof: 'Chrome DevTools: 0 erros no console, 0 recursos 404 e sem overflow horizontal de 320px a 1366px.'
+    },
+    backend: {
+      name: 'Backend de Alta Performance',
+      known: ['contratos de API não podem quebrar', 'medir baseline antes de otimizar'],
+      inferable: ['índices e consultas parametrizadas', 'complexidade assintótica das rotas quentes', 'timeouts e retries com backoff'],
+      agents: ['gau-architect', 'gau-performance', 'gau-database'],
+      skills: ['backend-architect', 'fastapi-pro', 'database-optimizer'],
+      proof: 'Benchmark antes/depois sob a mesma carga, suíte de integração verde e migrations reversíveis.'
+    },
+    pentest: {
+      name: 'Pentest & Segurança',
+      known: ['somente alvos autorizados', 'achado sem prova reproduzível não conta'],
+      inferable: ['OWASP Top 10 como checklist', 'segredos e dependências vulneráveis', 'cabeçalhos e cookies'],
+      agents: ['gau-security', 'gau-adversarial', 'gau-web-scout'],
+      skills: ['vulnerability-scanner', 'hunt-sqli', 'hunt-xss'],
+      proof: 'Cada achado com request/resposta guardados, patch mínimo e reteste confirmando a correção.'
+    },
+    debug: {
+      name: 'Bug Caótico & Debugging',
+      known: ['reproduzir o bug antes de corrigir', 'causa-raiz provada por evidência, não por palpite'],
+      inferable: ['bisect do commit suspeito', 'classificar erro: CODE_BUG, TOOL_ERROR ou NETWORK', 'teste de regressão para o bug'],
+      agents: ['gau-investigator', 'gau-inquisitor', 'gau-verifier'],
+      skills: ['systematic-debugging', 'gau-06-hypothesis-laboratory', 'debugger'],
+      proof: 'Teste que falhava passa (exit code 0) e a suíte completa não regride.'
+    },
+    windows: {
+      name: 'Automação Windows',
+      known: ['PowerShell com ; (nunca &&)', 'nada é apagado nem alterado no registro sem confirmação'],
+      inferable: ['scripts idempotentes', 'logs e código de saída por etapa', 'checkpoint antes de mutações'],
+      agents: ['gau-computer-layer', 'gau-cross-sensor', 'gau-evidence'],
+      skills: ['powershell-windows', 'computer-use', 'screen-vision'],
+      proof: 'Exit code 0 por etapa, hashes SHA-256 dos artefatos e estado do disco reconciliado.'
+    }
+  };
+  const AUTONOMY = {
+    A0: { name: 'A0 · Leitura/Inspeção', cmds: ['/start', '/goal'], rule: 'Somente observar: ler, inspecionar, capturar tela e logs. NENHUMA escrita em disco, rede externa ou processo.' },
+    A1: { name: 'A1 · Execução Regrada', cmds: ['/start', '/goal'], rule: 'Pode editar arquivos do workspace, baixar e rodar testes locais. Exclusões, pagamentos, registro e envios externos exigem confirmação (A2).' },
+    A2: { name: 'A2 · Missão Crítica', cmds: ['/start', '/ultra', '/gau-council'], rule: 'Estado crítico com as 116 ideias: council deliberativo, checkpoint físico antes de cada mutação e PAUSA obrigatória para confirmação humana em ações irreversíveis.' }
+  };
+
+  let studioExtraSkill = '';
+  let compileStudioRef = null;
+
+  function initPromptStudio() {
+    const out = $('studioOutput');
+    const copyBtn = $('studioCopy');
+    if (!out || !copyBtn) return;
+    const val = (name, fallback) => { const el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : fallback; };
+    const chk = (id) => { const el = $(id); return !!(el && el.checked); };
+
+    function compile() {
+      const d = DOMAINS[val('studioDomain', 'frontend')] || DOMAINS.frontend;
+      const a = AUTONOMY[val('studioAuto', 'A1')] || AUTONOMY.A1;
+      const goalEl = $('studioGoal');
+      const goal = goalEl ? goalEl.value.trim() : '';
+      const tdd = chk('optTdd'), devil = chk('optDevil'), exit0 = chk('optExit');
+      const skillsList = [...d.skills];
+      if (studioExtraSkill && !skillsList.includes(studioExtraSkill)) skillsList.unshift(studioExtraSkill);
+      const L = [];
+      L.push(a.cmds.join('\n'));
+      L.push('');
+      L.push('# INTENT CAPSULE · domínio: ' + d.name + ' · autonomia: ' + a.name);
+      L.push('OBJETIVO: ' + (goal || '[descreva aqui o que você quer entregar]'));
+      L.push('');
+      L.push('KNOWN:');
+      d.known.forEach(k => L.push('- ' + k));
+      L.push('INFERABLE (decida sozinho, não pergunte):');
+      d.inferable.forEach(k => L.push('- ' + k));
+      L.push('MUST_ASK (orçamento: no máximo 2 perguntas, só se bloquear a entrega):');
+      L.push('- critério de pronto mais importante e restrições de tecnologia');
+      L.push('');
+      L.push('REGRAS INVIOLÁVEIS:');
+      L.push('- Evidência antes de afirmação: nunca declare sucesso sem executar no terminal.');
+      L.push('- Autonomia ' + a.name + ': ' + a.rule);
+      if (tdd) L.push('- TDD estrito: teste que falha primeiro, código mínimo, depois refatoração (Red-Green-Refactor).');
+      if (devil) L.push("- Devil's Advocate cego: revisão sem identificação de autor para eliminar adulação e viés de concordância.");
+      if (exit0) L.push('- Exigir Exit Code 0: toda etapa só vale com saída 0 comprovada no terminal.');
+      L.push('- Não repetir a mesma tentativa mais de 3 vezes sem informação nova (Loop Sentinel).');
+      L.push('');
+      L.push('SUBAGENTES: ' + d.agents.join(', ') + (devil ? ', gau-devil-advocate' : '') + ', gau-verifier');
+      L.push('SKILLS ATIVAS: ' + skillsList.join(', '));
+      L.push('');
+      L.push('CONTRATO DE CONCLUSÃO (#125):');
+      L.push('- ' + d.proof);
+      if (exit0) L.push('- Exit code 0 em todas as etapas de verificação.');
+      L.push('- Status final: PLANNED → EXECUTING → EXECUTED → VERIFYING → VERIFIED, com hash SHA-256 e logs anexados.');
+      out.textContent = L.join('\n');
+    }
+
+    compileStudioRef = compile;
+    document.querySelectorAll('#studio input, #studio textarea').forEach(el => {
+      if (el.id === 'studioOutput') return;
+      el.addEventListener('input', compile);
+      el.addEventListener('change', compile);
+    });
+    copyBtn.addEventListener('click', async () => {
+      const ok = await copyText(out.textContent);
+      copyBtn.classList.remove('pop'); void copyBtn.offsetWidth; copyBtn.classList.add('pop');
+      const old = copyBtn.dataset.label || copyBtn.textContent;
+      copyBtn.dataset.label = old;
+      if (ok) { copyBtn.textContent = 'Copiado ✓'; setTimeout(() => { copyBtn.textContent = old; }, 1800); }
+      toast(ok ? 'Prompt Mestre copiado ✓ Cole no Antigravity.' : 'Não foi possível copiar.');
+    });
+    compile();
+  }
+
+  /* ---------------------------------------------------------
+     3. GENOMAS DE WORKFLOW (#128)
+     --------------------------------------------------------- */
+  const GENOMES = [
+    { id: 'bugfix-evidencia', version: 3, parent: 'v2', icon: '🐛', title: 'Bugfix com Evidência', desc: 'Reproduz, prova a causa-raiz e corrige com teste de regressão.',
+      steps: ['reproduzir o bug', 'formular hipóteses', 'teste discriminatório', 'teste de falha (RED)', 'correção mínima (GREEN)', 'suíte completa'], gates: ['exit code 0', 'regressão = 0'], rollback: 'checkpoint-rollback --last' },
+    { id: 'feature-tdd', version: 2, parent: 'v1', icon: '🧪', title: 'Feature com TDD', desc: 'Contrato congelado, teste primeiro e revisão cega.',
+      steps: ['congelar interface', 'teste de falha', 'implementação mínima', 'refatorar', 'revisão cega', 'integrar'], gates: ['exit code 0', 'cobertura do núcleo'], rollback: 'git revert + checkpoint-rollback' },
+    { id: 'auditoria-seguranca', version: 2, parent: 'v1', icon: '🛡️', title: 'Auditoria de Segurança', desc: 'OWASP somente leitura, prova reproduzível e reteste.',
+      steps: ['mapear superfície (A0)', 'checklist OWASP', 'provar achados', 'patch mínimo', 'reteste', 'relatório'], gates: ['achado com prova', 'A2 para ação destrutiva'], rollback: 'lease-revoke + checkpoint-rollback' },
+    { id: 'qa-browser-autonomo', version: 1, parent: 'v0', icon: '🌐', title: 'QA de Browser Autônomo', desc: 'Build, Test, Repair, Retest com Chrome DevTools.',
+      steps: ['abrir localhost', 'capturar console e rede', 'testar 8 viewports', 'reparar falha', 'retestar', 'consenso multi-sensor'], gates: ['console: 0 erros', 'sem overflow horizontal'], rollback: 'checkpoint-rollback --last' },
+    { id: 'refatoracao-segura', version: 2, parent: 'v1', icon: '♻️', title: 'Refatoração Segura', desc: 'Passos pequenos, suíte verde a cada passo e benchmark.',
+      steps: ['baseline de testes', 'benchmark antes', 'passo pequeno', 'suíte verde', 'benchmark depois', 'revisão'], gates: ['equivalência metamórfica', 'ganho acima do ruído'], rollback: 'checkpoint por passo' },
+    { id: 'deploy-verificado', version: 1, parent: 'v0', icon: '🚀', title: 'Deploy Verificado', desc: 'Testes, push, deploy e checagem HTTP do site publicado.',
+      steps: ['testes locais', 'commit semântico', 'push', 'deploy', 'verificar HTTP 200', 'smoke test'], gates: ['exit code 0', 'HTTP 200 nos domínios'], rollback: 'git revert + redeploy' }
+  ];
+
+  function genomeJson(g) {
+    return JSON.stringify({ genome: g.id, version: 'v' + g.version, parent: g.parent, steps: g.steps, gates: g.gates, rollback: g.rollback }, null, 2);
+  }
+
+  function initGenomes() {
+    const grid = $('genomeGrid');
+    if (!grid) return;
+    grid.innerHTML = GENOMES.map(g => `
+      <article class="genome-card">
+        <div class="genome-top"><span class="genome-icon" aria-hidden="true">${g.icon}</span><span class="genome-ver">v${g.version}</span></div>
+        <h3>${esc(g.title)}</h3>
+        <p>${esc(g.desc)}</p>
+        <ol class="genome-steps">${g.steps.map(s => '<li>' + esc(s) + '</li>').join('')}</ol>
+        <div class="genome-actions">
+          <button type="button" class="button ghost genome-copy" data-genome="${esc(g.id)}">Copiar JSON</button>
+          <button type="button" class="button ghost genome-dl" data-genome="${esc(g.id)}">Baixar .json</button>
+        </div>
+      </article>`).join('');
+    grid.addEventListener('click', async (e) => {
+      const btn = e.target.closest('button[data-genome]');
+      if (!btn) return;
+      const g = GENOMES.find(x => x.id === btn.dataset.genome);
+      if (!g) return;
+      if (btn.classList.contains('genome-copy')) {
+        const ok = await copyText(genomeJson(g));
+        toast(ok ? 'Genoma "' + g.id + '" copiado ✓' : 'Não foi possível copiar.');
+      } else {
+        const blob = new Blob([genomeJson(g)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = g.id + '.v' + g.version + '.genome.json';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        toast('Download iniciado: ' + a.download);
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------
+     4. GLOBAL SKILLS HUB (1.320 SKILLS REAIS)
+     --------------------------------------------------------- */
+  function initSkillsHub() {
+    const catalog = window.GAU_SKILLS_CATALOG || [];
+    const cats = window.GAU_SKILL_CATS || [];
+    const grid = $('skillsHubGrid');
+    const searchInput = $('skillsHubSearch');
+    const filtersEl = $('skillsHubFilters');
+    const countEl = $('skillsHubCount');
+    const moreBtn = $('skillsHubMore');
+    const quickTags = document.querySelectorAll('.skills-quick-tag');
+    if (!grid || !filtersEl || !catalog.length) return;
+
+    const BATCH = 24;
+    let activeCat = -1;
+    let visibleLimit = BATCH;
+    let currentFiltered = catalog;
+
+    function renderCatFilters() {
+      const allBtn = `<button type="button" class="filter-btn ${activeCat === -1 ? 'active' : ''}" data-scat="-1" aria-pressed="${activeCat === -1}">🌍 Todas as Skills <small style="opacity:0.75;font-size:9px;">(${catalog.length})</small></button>`;
+      const catBtns = cats.map((c, idx) => {
+        const cnt = catalog.filter(x => x[2] === idx).length;
+        return `<button type="button" class="filter-btn ${activeCat === idx ? 'active' : ''}" data-scat="${idx}" aria-pressed="${activeCat === idx}">${esc(c)} <small style="opacity:0.75;font-size:9px;">(${cnt})</small></button>`;
+      }).join('');
+      filtersEl.innerHTML = allBtn + catBtns;
+      filtersEl.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCat = parseInt(btn.dataset.scat, 10);
+          visibleLimit = BATCH;
+          renderCatFilters();
+          filterAndRender();
+        });
+      });
+    }
+
+    function filterAndRender() {
+      const q = (searchInput ? searchInput.value : '').toLocaleLowerCase('pt-BR').trim();
+      currentFiltered = catalog.filter(item => {
+        if (activeCat !== -1 && item[2] !== activeCat) return false;
+        if (!q) return true;
+        const catName = (cats[item[2]] || '').toLocaleLowerCase('pt-BR');
+        return item[0].toLowerCase().includes(q) || item[1].toLocaleLowerCase('pt-BR').includes(q) || catName.includes(q);
+      });
+      renderSlice();
+    }
+
+    function renderSlice() {
+      const slice = currentFiltered.slice(0, visibleLimit);
+      grid.innerHTML = slice.map(item => {
+        const slug = item[0];
+        const desc = item[1];
+        const catName = cats[item[2]] || 'Skill';
+        return `<article class="skill-hub-card" data-skill="${esc(slug)}">
+          <div class="skill-hub-top">
+            <span class="skill-hub-slug">⚙ ${esc(slug)}</span>
+            <span class="skill-hub-cat">${esc(catName)}</span>
+          </div>
+          <p class="skill-hub-desc">${esc(desc)}</p>
+          <div class="skill-hub-actions">
+            <button type="button" class="button ghost skill-copy-cmd" data-skill="${esc(slug)}">📋 Copiar Skill</button>
+            <button type="button" class="button ghost skill-to-studio" data-skill="${esc(slug)}">⚡ Usar no Studio</button>
+          </div>
+        </article>`;
+      }).join('');
+      if (countEl) {
+        countEl.textContent = `Exibindo ${slice.length} de ${currentFiltered.length} skills (acervo total: ${catalog.length} skills)`;
+      }
+      if (moreBtn) {
+        const remaining = currentFiltered.length - slice.length;
+        if (remaining > 0) {
+          moreBtn.style.display = 'inline-flex';
+          moreBtn.textContent = `Carregar mais skills (+${Math.min(BATCH, remaining)} de ${remaining} restantes)`;
+        } else {
+          moreBtn.style.display = 'none';
+        }
+      }
+    }
+
+    grid.addEventListener('click', async (e) => {
+      const copyBtn = e.target.closest('.skill-copy-cmd');
+      if (copyBtn) {
+        const slug = copyBtn.dataset.skill;
+        const promptCmd = `Ative e siga a skill "${slug}" (.agents/skills/${slug}/SKILL.md) no protocolo GAU v5 para executar a tarefa com verificação física (exit code 0).`;
+        const ok = await copyText(promptCmd);
+        const old = copyBtn.textContent;
+        if (ok) {
+          copyBtn.textContent = 'Copiado ✓';
+          setTimeout(() => { copyBtn.textContent = old; }, 1500);
+        }
+        toast(ok ? `Skill "${slug}" copiada ✓` : 'Não foi possível copiar.');
+        return;
+      }
+      const studioBtn = e.target.closest('.skill-to-studio');
+      if (studioBtn) {
+        const slug = studioBtn.dataset.skill;
+        studioExtraSkill = slug;
+        const goalEl = $('studioGoal');
+        if (goalEl && !goalEl.value.trim()) {
+          goalEl.value = `Executar missão utilizando a skill especializada ${slug}`;
+        }
+        if (typeof compileStudioRef === 'function') compileStudioRef();
+        const studioSec = $('studio');
+        if (studioSec) studioSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        toast(`Skill "${slug}" adicionada ao Prompt Studio ⚡`);
+      }
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        visibleLimit = BATCH;
+        filterAndRender();
+      });
+    }
+    if (moreBtn) {
+      moreBtn.addEventListener('click', () => {
+        visibleLimit += BATCH;
+        renderSlice();
+      });
+    }
+    quickTags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        if (!searchInput) return;
+        searchInput.value = tag.dataset.q || '';
+        visibleLimit = BATCH;
+        filterAndRender();
+      });
+    });
+
+    renderCatFilters();
+    filterAndRender();
+  }
+
+  /* ---------------------------------------------------------
+     5. BUSINESS & CLIENT CONFIGURATOR (ATRAÇÃO DE NEGÓCIOS)
+     --------------------------------------------------------- */
+  const BIZ_SOLUTIONS = {
+    mvp: {
+      title: 'SaaS / Produto Digital Completo (Web & Mobile)',
+      squad: ['gau-architect', 'gau-implementer', 'gau-ux', 'gau-database', 'gau-auto-qa'],
+      skills: ['nextjs-best-practices', 'fastapi-pro', 'stripe-integration', 'postgresql', 'tailwind-patterns'],
+      deliverables: [
+        'Arquitetura Fullstack pronta para produção + Banco de Dados modelado',
+        'Interface responsiva de alto padrão (Desktop & Mobile 60fps)',
+        'Integração de pagamentos, autenticação segura e painel administrativo',
+        'Suíte de testes automatizados + Deploy configurado na nuvem'
+      ]
+    },
+    sec: {
+      title: 'Auditoria de Cibersegurança & Pentest OWASP',
+      squad: ['gau-security', 'gau-adversarial', 'gau-web-scout', 'gau-evidence', 'gau-verifier'],
+      skills: ['vulnerability-scanner', 'hunt-sqli', 'hunt-xss', 'hunt-idor', 'hunt-auth-bypass', 'security-audit'],
+      deliverables: [
+        'Mapeamento completo de superfície de ataque e rotas críticas',
+        'Testes controlados contra OWASP Top 10 (SQLi, XSS, IDOR, Auth Bypass, SSRF)',
+        'Relatório executivo e técnico com provas reproduzíveis de cada achado',
+        'Patches de correção validados por reteste físico no terminal'
+      ]
+    },
+    ai: {
+      title: 'Agentes Autônomos & Automação de Processos com IA',
+      squad: ['gau-orchestrator', 'gau-intent-architect', 'gau-zero-prompt', 'gau-computer-layer', 'gau-integration'],
+      skills: ['pydantic-ai', 'langgraph', 'n8n-workflow-patterns', 'rag-agent-builder', 'mcp-builder'],
+      deliverables: [
+        'Agentes de IA customizados integrados aos sistemas da sua empresa',
+        'Automação de fluxos repetitivos, leitura de documentos e atendimento',
+        'Governança JEV anti-alucinação e cofre seguro de credenciais',
+        'Painel de acompanhamento e logs auditáveis de cada execução'
+      ]
+    },
+    scale: {
+      title: 'Resgate de Código, Otimização O(n) & Escala Cloud',
+      squad: ['gau-investigator', 'gau-performance', 'gau-database', 'gau-inquisitor', 'gau-verifier'],
+      skills: ['systematic-debugging', 'performance-optimizer', 'database-optimizer', 'ci-cd-and-automation'],
+      deliverables: [
+        'Diagnóstico científico de gargalos de CPU, memória e queries lentas',
+        'Eliminação de bugs críticos e refatoração segura sem quebrar contratos',
+        'Redução drástica de latência com benchmark comparativo antes/depois',
+        'Pipeline CI/CD com testes de regressão automatizados'
+      ]
+    }
+  };
+
+  const BIZ_URGENCY = {
+    sprint: 'Sprint Rápida (Entrega Ágil Focada)',
+    full: 'Projeto Estruturado Ponta a Ponta',
+    dedicated: 'Esquadrão GAU Dedicado (Missão Crítica)'
+  };
+
+  function initBusinessConfigurator() {
+    const outTitle = $('bizOutTitle');
+    const outSquad = $('bizOutSquad');
+    const outSkills = $('bizOutSkills');
+    const outDeliv = $('bizOutDeliverables');
+    const outBrief = $('bizBriefPreview');
+    const waDirectBtn = $('bizWhatsappSendBtn');
+    const copyBriefBtn = $('bizCopyBriefBtn');
+    if (!outTitle || !waDirectBtn) return;
+
+    const getRadio = (name, def) => {
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : def;
+    };
+
+    function updateBiz() {
+      const solKey = getRadio('bizSolution', 'mvp');
+      const urgKey = getRadio('bizUrgency', 'full');
+      const ctxEl = $('bizContext');
+      const ctx = ctxEl ? ctxEl.value.trim() : '';
+
+      const sol = BIZ_SOLUTIONS[solKey] || BIZ_SOLUTIONS.mvp;
+      const urg = BIZ_URGENCY[urgKey] || BIZ_URGENCY.full;
+
+      outTitle.textContent = sol.title;
+      if (outSquad) {
+        outSquad.innerHTML = sol.squad.map(a => `<span class="biz-badge agent">🤖 ${esc(a)}</span>`).join('');
+      }
+      if (outSkills) {
+        outSkills.innerHTML = sol.skills.map(s => `<span class="biz-badge skill">⚙ ${esc(s)}</span>`).join('');
+      }
+      if (outDeliv) {
+        outDeliv.innerHTML = sol.deliverables.map(d => `<li>✔ ${esc(d)}</li>`).join('');
+      }
+
+      const briefLines = [
+        `🚀 *SOLICITAÇÃO DE PROJETO / CONSULTORIA — GAU v5*`,
+        `• *Solução:* ${sol.title}`,
+        `• *Modalidade:* ${urg}`,
+        `• *Esquadrão Alocado:* ${sol.squad.join(', ')}`,
+        `• *Skills Principais:* ${sol.skills.join(', ')}`,
+        ctx ? `• *Objetivo / Contexto:* ${ctx}` : `• *Objetivo / Contexto:* [A detalhar na conversa]`,
+        `• *Garantia Técnica:* Execução auditada com testes reais (Exit Code 0) e prova SHA-256.`
+      ];
+      const briefText = briefLines.join('\n');
+      if (outBrief) outBrief.textContent = briefText;
+
+      const encoded = encodeURIComponent(briefText + '\n\n🔗 Gerado em: https://gau-oficial.vercel.app/#business');
+      waDirectBtn.href = `https://api.whatsapp.com/send?text=${encoded}`;
+    }
+
+    document.querySelectorAll('#business input, #business textarea').forEach(el => {
+      el.addEventListener('input', updateBiz);
+      el.addEventListener('change', updateBiz);
+    });
+
+    if (copyBriefBtn) {
+      copyBriefBtn.addEventListener('click', async () => {
+        const text = outBrief ? outBrief.textContent : '';
+        const ok = await copyText(text);
+        toast(ok ? 'Proposta copiada ✓ Abrindo Canal Oficial no WhatsApp...' : 'Abrindo Canal Oficial no WhatsApp...');
+        setTimeout(() => {
+          window.open('https://whatsapp.com/channel/0029Vb97dV88vd1KJxutZh3V', '_blank', 'noopener,noreferrer');
+        }, 500);
+      });
+    }
+
+    updateBiz();
+  }
+
+  initMissionRunner();
+  initPromptStudio();
+  initGenomes();
+  initSkillsHub();
+  initBusinessConfigurator();
 })();
